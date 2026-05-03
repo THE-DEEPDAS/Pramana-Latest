@@ -137,12 +137,16 @@ async def handle_user_message(
     prior_history = history[:-1]  # everything before the latest user turn
 
     # 3. Get assistant response
-    response_text, meta = await rag_chat(
-        messages=prior_history,
-        query=content,
-        pipeline=pipeline,
-    )
-
+    if pipeline is None:
+        response_text = f"(Mock) You said: {content}"
+        meta = {"mode": "mock"}
+        
+    else:
+        response_text, meta = await rag_chat(
+            messages=prior_history,
+            query=content,
+            pipeline=pipeline,
+        )
     # 4. Persist assistant message
     assistant_msg = ChatMessage(
         session_id=session_id,

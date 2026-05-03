@@ -398,11 +398,7 @@ Increase timeout for long-running queries:
 ```typescript
 const response = await fetch(`${API_URL}/chat/query`, {
   method: 'POST',
-<<<<<<< HEAD
-  
-=======
   body: JSON.stringify(data),
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
   timeout: 30000, // 30 seconds
 })
 ```
