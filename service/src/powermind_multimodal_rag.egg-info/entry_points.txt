@@ -1,0 +1,2 @@
+[console_scripts]
+powermind-rag = powermind_rag.cli:main

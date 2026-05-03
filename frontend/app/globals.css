@@ -1,0 +1,29 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+* {
+  @apply border-border;
+}
+
+body {
+  @apply bg-[#0f172a] text-foreground;
+}
+
+/* Scrollbar styling */
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+
+::-webkit-scrollbar-track {
+  @apply bg-[#1e293b];
+}
+
+::-webkit-scrollbar-thumb {
+  @apply bg-[#475569] rounded-full;
+}
+
+::-webkit-scrollbar-thumb:hover {
+  @apply bg-[#64748b];
+}

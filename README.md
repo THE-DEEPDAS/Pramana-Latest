@@ -3,23 +3,23 @@
 Strict implementation of the requested architecture:
 
 - Dual ingestion:
-  - Visual pages rendered to images, embedded with ColPali through `byaldi`, and stored in FAISS.
-  - Text plus Mistral OCR table Markdown converted into LLM-generated atomic propositions.
+	- Visual pages rendered to images, embedded with ColPali through `byaldi`, and stored in FAISS.
+	- Text plus Mistral OCR table Markdown converted into LLM-generated atomic propositions.
 - Dual indexing:
-  - Visual FAISS page index.
-  - Hybrid text index with BM25 plus dense FAISS.
+	- Visual FAISS page index.
+	- Hybrid text index with BM25 plus E5 Small dense FAISS.
 - Retrieval:
-  - Visual retrieval.
-  - BM25 retrieval.
-  - Dense retrieval.
-  - Reciprocal Rank Fusion using `1 / (60 + rank)` with no normalization or weighted averaging.
+	- Visual retrieval.
+	- BM25 retrieval.
+	- Dense retrieval.
+	- Reciprocal Rank Fusion using `1 / (60 + rank)` with no normalization or weighted averaging.
 - CRAG:
-  - Relevance grader before generation.
-  - LettuceDetect after generation.
+	- Relevance grader before generation.
+	- LettuceDetect after generation.
 - Generation:
-  - Local Qwen only.
-  - Citations like `[p3:c12]`.
-  - Unsupported answers return `Not found in the document.`
+	- Local Qwen only.
+	- Citations like `[p3:c12]`.
+	- Unsupported answers return `Not found in the document.`
 
 ## Runtime Requirements
 
@@ -75,11 +75,19 @@ Set Mistral OCR key:
 set MISTRAL_API_KEY=...
 ```
 
-Set Groq CRAG relevance grading key and model:
+Set Gemini CRAG relevance grading keys and model:
 
 ```cmd
-set GROQ_API_KEY=...
-set GROQ_RELEVANCE_MODEL=llama-3.1-8b-instant
+set POWERMIND_RELEVANCE_PROVIDER=gemini
+set GEMINI_API_KEY=...
+set GEMINI_API_KEY_2=...
+set GEMINI_RELEVANCE_MODEL=gemini-2.5-flash
+```
+
+Proposition embeddings use the local E5 Small model by default:
+
+```cmd
+set POWERMIND_DENSE_MODEL=E5_Small
 ```
 
 The `.env` file is loaded automatically.
@@ -127,3 +135,52 @@ The batch command writes:
 
 - `outputs/qa_results.md` for readable answers
 - `outputs/qa_results.json` with answers, citations, retrieved chunks, fallback flags, and verifier report
+
+### Run Test Cases from test_cases.json
+
+The `test_cases.json` file contains categorized test questions organized by type:
+- **TEXTUAL**: Factual and textual extraction questions (15 questions)
+- **IMAGE**: Chart and visual data extraction questions (10 questions)
+- **INFOGRAPHIC**: Infographic and visual element questions (10 questions)
+- **FLOWCHART**: Process flow and hierarchy questions (10 questions)
+- **TABULAR**: Table and data comparison questions (15 questions)
+- **BATCH**: Default batch loop questions (5 questions)
+
+To run the testcases and generate results, use the batch runner script. By default, it will run **3 questions from each category**:
+
+```cmd
+conda activate powermind_rtx5050
+set POWERMIND_LOCAL_ONLY=1
+set PYTHONDONTWRITEBYTECODE=1
+set POWERMIND_STORAGE_DIR=.\service\storage
+python .\scripts\run_batch_from_test_cases.py
+```
+
+The script will:
+1. Load all questions from `service/test_cases.json` organized by category
+2. Execute 3 questions from each category (customizable in the script)
+3. Generate two output files in `service/outputs/`:
+   - `qa_results.md`: Human-readable markdown format with answers and citations
+   - `qa_results.json`: Machine-readable JSON format with detailed metadata, timings, and verifier reports
+
+**To customize the number of questions per category**, edit `scripts/run_batch_from_test_cases.py` and change the `max_per_category` variable:
+
+```python
+max_per_category = 3  # Change this number
+```
+
+**To add more test questions**, simply add them to the appropriate section in `service/test_cases.json` following the same structure:
+
+```json
+{
+  "CATEGORY_NAME": [
+    {
+      "id": 1,
+      "question": "Your question here?",
+      "source": "Document reference",
+      "category": "Category name",
+      "type": "Question type"
+    }
+  ]
+}
+```
