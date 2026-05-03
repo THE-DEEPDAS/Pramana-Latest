@@ -3,7 +3,6 @@
 Strict implementation of the requested architecture:
 
 - Dual ingestion:
-<<<<<<< HEAD
   - Visual pages rendered to images, embedded with ColPali through `byaldi`, and stored in FAISS.
   - Text plus Mistral OCR table Markdown converted into LLM-generated atomic propositions.
 - Dual indexing:
@@ -21,25 +20,6 @@ Strict implementation of the requested architecture:
   - Local Qwen only.
   - Citations like `[p3:c12]`.
   - Unsupported answers return `Not found in the document.`
-=======
-	- Visual pages rendered to images, embedded with ColPali through `byaldi`, and stored in FAISS.
-	- Text plus Mistral OCR table Markdown converted into LLM-generated atomic propositions.
-- Dual indexing:
-	- Visual FAISS page index.
-	- Hybrid text index with BM25 plus E5 Small dense FAISS.
-- Retrieval:
-	- Visual retrieval.
-	- BM25 retrieval.
-	- Dense retrieval.
-	- Reciprocal Rank Fusion using `1 / (60 + rank)` with no normalization or weighted averaging.
-- CRAG:
-	- Relevance grader before generation.
-	- LettuceDetect after generation.
-- Generation:
-	- Local Qwen only.
-	- Citations like `[p3:c12]`.
-	- Unsupported answers return `Not found in the document.`
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 
 ## Runtime Requirements
 

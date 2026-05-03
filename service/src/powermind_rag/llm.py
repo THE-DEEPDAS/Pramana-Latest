@@ -1,28 +1,23 @@
 from __future__ import annotations
 
 import json
-<<<<<<< HEAD
 import re
-from urllib.error import HTTPError
+import base64
+from io import BytesIO
 from pathlib import Path
 from typing import Protocol
 from urllib import parse, request
-=======
-from pathlib import Path
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
+from urllib.error import HTTPError, URLError
 
 import torch
+from PIL import Image
 from transformers import AutoModelForCausalLM, AutoTokenizer
 
 
-<<<<<<< HEAD
 class ChatLLM(Protocol):
     def generate(self, system: str, user: str, max_new_tokens: int = 512) -> str:
         ...
 
-
-=======
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 class LocalQwen:
     def __init__(self, model_path: Path, device: str):
         self.model_path = model_path
@@ -68,7 +63,6 @@ class LocalQwen:
             raise RuntimeError(f"No completed Qwen weight files found in {self.model_path}.{hint}")
 
 
-<<<<<<< HEAD
 class GroqChatLLM:
     def __init__(self, api_key: str | None, model_name: str):
         if not api_key:
@@ -91,6 +85,124 @@ class GroqChatLLM:
             ],
         )
         return (response.choices[0].message.content or "").strip()
+
+
+class OpenRouterChatLLM:
+    def __init__(
+        self,
+        api_key: str | None,
+        model_name: str,
+        base_url: str = "https://openrouter.ai/api/v1",
+        http_referer: str = "http://localhost/powermind",
+        app_title: str = "PowerMind RAG",
+    ):
+        if not api_key:
+            raise RuntimeError("OPEN_ROUTER_API_KEY is required when POWERMIND_GENERATION_PROVIDER=openrouter.")
+        self.api_key = api_key
+        self.model_name = model_name
+        self.base_url = base_url.rstrip("/")
+        self.http_referer = http_referer
+        self.app_title = app_title
+
+    def generate(self, system: str, user: str, max_new_tokens: int = 512) -> str:
+        payload = {
+            "model": self.model_name,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": user},
+            ],
+            "temperature": 0,
+            "max_tokens": max_new_tokens,
+        }
+        req = request.Request(
+            f"{self.base_url}/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+                "HTTP-Referer": self.http_referer,
+                "X-Title": self.app_title,
+            },
+            method="POST",
+        )
+        try:
+            with request.urlopen(req, timeout=120) as response:
+                data = json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(
+                f"OpenRouter {self.model_name} request failed with HTTP {exc.code}: {body}"
+            ) from exc
+        except URLError as exc:
+            raise RuntimeError(f"OpenRouter {self.model_name} request failed: {exc.reason}") from exc
+
+        choices = data.get("choices")
+        if not choices:
+            raise RuntimeError(f"OpenRouter {self.model_name} returned no choices: {data}")
+        message = choices[0].get("message") or {}
+        return (message.get("content") or "").strip()
+
+
+class NvidiaChatLLM:
+    def __init__(
+        self,
+        api_key: str | None,
+        model_name: str,
+        base_url: str = "https://integrate.api.nvidia.com/v1",
+    ):
+        if not api_key:
+            raise RuntimeError("NVIDIA_KEY, NVIDIA_API_KEY, or NVIDIA_NIM_API_KEY is required for NVIDIA generation.")
+        self.api_key = api_key
+        self.model_name = model_name
+        self.base_url = base_url.rstrip("/")
+
+    def generate(self, system: str, user: str, max_new_tokens: int = 512) -> str:
+        return self.generate_with_images(system, user, [], max_new_tokens)
+
+    def generate_with_images(
+        self,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int = 512,
+    ) -> str:
+        content = user
+        for image_path in image_paths:
+            content += f'\n\n<img src="{_image_data_url(image_path)}" />'
+        payload = {
+            "model": self.model_name,
+            "messages": [
+                {"role": "system", "content": system},
+                {"role": "user", "content": content},
+            ],
+            "temperature": 0,
+            "max_tokens": max_new_tokens,
+        }
+        req = request.Request(
+            f"{self.base_url}/chat/completions",
+            data=json.dumps(payload).encode("utf-8"),
+            headers={
+                "Authorization": f"Bearer {self.api_key}",
+                "Content-Type": "application/json",
+            },
+            method="POST",
+        )
+        try:
+            with request.urlopen(req, timeout=120) as response:
+                data = json.loads(response.read().decode("utf-8"))
+        except HTTPError as exc:
+            body = exc.read().decode("utf-8", errors="replace")
+            raise RuntimeError(
+                f"NVIDIA {self.model_name} request failed with HTTP {exc.code}: {body}"
+            ) from exc
+        except URLError as exc:
+            raise RuntimeError(f"NVIDIA {self.model_name} request failed: {exc.reason}") from exc
+
+        choices = data.get("choices")
+        if not choices:
+            raise RuntimeError(f"NVIDIA {self.model_name} returned no choices: {data}")
+        message = choices[0].get("message") or {}
+        return (message.get("content") or "").strip()
 
 
 class GeminiChatLLM:
@@ -145,10 +257,6 @@ class FallbackChatLLM:
 
 class PropositionChunker:
     def __init__(self, llm: ChatLLM):
-=======
-class PropositionChunker:
-    def __init__(self, llm: LocalQwen):
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
         self.llm = llm
 
     def chunk(self, page_text: str, table_markdown: str, doc_type: str, section: str, context: str) -> list[str]:
@@ -167,8 +275,8 @@ Context: {context}
 SOURCE:
 {source}
 """.strip()
-<<<<<<< HEAD
         raw = ""
+        parsed = None
         for max_new_tokens in (4096, 8192):
             raw = self.llm.generate(
                 system="You produce faithful JSON only. No markdown fences.",
@@ -199,17 +307,31 @@ def _extract_json_array(text: str) -> str:
     if start >= 0 and end > start:
         return clean[start : end + 1]
     return clean
-=======
-        raw = self.llm.generate(
-            system="You produce faithful JSON only. No markdown fences.",
-            user=user,
-            max_new_tokens=1200,
-        )
-        try:
-            parsed = json.loads(raw)
-        except json.JSONDecodeError as exc:
-            raise RuntimeError(f"Proposition chunking did not return valid JSON: {raw[:500]}") from exc
-        if not isinstance(parsed, list) or not all(isinstance(item, str) for item in parsed):
-            raise RuntimeError("Proposition chunking must return a JSON array of strings.")
-        return [item.strip() for item in parsed if item.strip()]
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
+
+
+def _image_data_url(image_path: Path, target_bytes: int = 20_000) -> str:
+    with Image.open(image_path) as image:
+        image = image.convert("RGB")
+        max_side = 1200
+        quality = 80
+        while True:
+            candidate = _resize_image_to_max_side(image, max_side)
+            buffer = BytesIO()
+            candidate.save(buffer, format="JPEG", quality=quality, optimize=True)
+            data = buffer.getvalue()
+            if len(data) <= target_bytes or max_side <= 700:
+                break
+            max_side = int(max_side * 0.85)
+            quality = max(60, quality - 5)
+    encoded = base64.b64encode(data).decode("ascii")
+    return f"data:image/jpeg;base64,{encoded}"
+
+
+def _resize_image_to_max_side(image: Image.Image, max_side: int) -> Image.Image:
+    width, height = image.size
+    longest = max(width, height)
+    if longest <= max_side:
+        return image
+    scale = max_side / longest
+    size = (max(1, int(width * scale)), max(1, int(height * scale)))
+    return image.resize(size, Image.Resampling.LANCZOS)

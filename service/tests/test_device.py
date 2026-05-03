@@ -4,7 +4,6 @@ from powermind_rag.config import RAGConfig
 def test_default_device_is_gpu():
     assert RAGConfig().device == "cuda"
     assert RAGConfig().cuda_arch == "sm_120"
-<<<<<<< HEAD
 
 
 def test_defaults_use_e5_and_gemini_crag_only():
@@ -13,5 +12,3 @@ def test_defaults_use_e5_and_gemini_crag_only():
     assert config.dense_embedding_model == "E5_Small"
     assert config.relevance_provider == "gemini"
     assert config.chunking_fallback_provider == "none"
-=======
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553

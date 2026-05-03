@@ -125,7 +125,7 @@ class ColPaliVisualIndex:
             return []
         try:
             hits = self.model.search(query, k=top_k)
-        except TypeError:
+        except (TypeError, ValueError):
             return []
         retrieved: list[RetrievedChunk] = []
         for rank, hit in enumerate(hits, start=1):
@@ -228,7 +228,11 @@ class ColPaliVisualIndex:
             modality="image",
             rank=rank,
             score=score,
-            metadata={**record.metadata, "chunk_label": "image"},
+            metadata={
+                **record.metadata,
+                "chunk_label": "image",
+                "raw_image_path": str(record.raw_image_path),
+            },
         )
 
     def save_records(self, path: Path) -> None:

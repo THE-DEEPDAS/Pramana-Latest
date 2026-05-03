@@ -197,4 +197,5 @@ def _format_timing_summary(timings: dict[str, float]) -> str:
     return "; ".join(parts)
 
 
-main()
+if __name__ == "__main__":
+    main()

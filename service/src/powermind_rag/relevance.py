@@ -1,18 +1,14 @@
 from __future__ import annotations
 
 import json
-<<<<<<< HEAD
 from collections.abc import Sequence
 from urllib import parse, request
 from urllib.error import HTTPError, URLError
-=======
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 
 from powermind_rag.schema import RetrievedChunk
 
 
 class RelevanceGrader:
-<<<<<<< HEAD
     def __init__(self, provider: str, api_key: str | Sequence[str] | None, model_name: str):
         self.provider = provider
         self.api_keys = _normalize_api_keys(api_key)
@@ -34,22 +30,10 @@ class RelevanceGrader:
                 )
         else:
             raise RuntimeError("Unsupported POWERMIND_RELEVANCE_PROVIDER. Use 'groq' or 'gemini'.")
-=======
-    def __init__(self, api_key: str | None, model_name: str):
-        if not api_key:
-            raise RuntimeError("GROQ_API_KEY is required for CRAG relevance grading.")
-        try:
-            from groq import Groq
-        except ImportError as exc:
-            raise RuntimeError("Install groq to use the mandatory Groq CRAG relevance grader.") from exc
-        self.client = Groq(api_key=api_key)
-        self.model_name = model_name
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 
     def grade(self, query: str, chunks: list[RetrievedChunk]) -> list[tuple[RetrievedChunk, float]]:
         if not chunks:
             return []
-<<<<<<< HEAD
         prompt = f"""
 Return relevance scores for each chunk with respect to the query.
 Use 1.0 only when the chunk directly supports answering the query.
@@ -73,44 +57,20 @@ CHUNKS:
         except (json.JSONDecodeError, KeyError, AttributeError, TypeError, ValueError) as exc:
             raise RuntimeError(f"{self.provider} relevance grader returned invalid JSON: {content}") from exc
         return [(chunk, scores.get(str(index), 0.0)) for index, chunk in enumerate(chunks)]
-=======
-        return [(chunk, self._score(query, chunk)) for chunk in chunks]
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
-
-    def _score(self, query: str, chunk: RetrievedChunk) -> float:
-        prompt = f"""
-Return a relevance score for the chunk with respect to the query.
-Use 1.0 only when the chunk directly supports answering the query.
-Use 0.0 when unrelated.
-Return only JSON like {{"score": 0.73}}.
-
-QUERY:
-{query}
-
-CHUNK:
-{chunk.text}
-""".strip()
-<<<<<<< HEAD
-        content = self._complete_json(prompt, max_tokens=32)
-        try:
-            score = float(json.loads(_extract_json_object(content))["score"])
-        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-            raise RuntimeError(f"{self.provider} relevance grader returned invalid JSON: {content}") from exc
-        return max(0.0, min(1.0, score))
 
     def _complete_json(self, prompt: str, max_tokens: int) -> str:
         system = "You are a strict CRAG relevance grader. Return JSON only."
         if self.provider == "groq":
             assert self.client is not None
             response = self.client.chat.completions.create(
-            model=self.model_name,
-            temperature=0,
+                model=self.model_name,
+                temperature=0,
                 max_tokens=max_tokens,
-            messages=[
+                messages=[
                     {"role": "system", "content": system},
-                {"role": "user", "content": prompt},
-            ],
-        )
+                    {"role": "user", "content": prompt},
+                ],
+            )
             return response.choices[0].message.content or "{}"
 
         payload = {
@@ -122,14 +82,21 @@ CHUNK:
                 "responseMimeType": "application/json",
             },
         }
-        last_error: Exception | None = None
+        errors: list[str] = []
         for api_key in self.api_keys:
             try:
                 return self._complete_gemini_json(api_key, payload)
-            except (HTTPError, URLError, TimeoutError) as exc:
-                last_error = exc
-        if last_error is not None:
-            raise RuntimeError("All configured Gemini CRAG relevance API keys failed.") from last_error
+            except HTTPError as exc:
+                body = exc.read().decode("utf-8", errors="replace")
+                errors.append(f"HTTP {exc.code}: {body}")
+            except RuntimeError as exc:
+                errors.append(str(exc))
+            except (KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
+                errors.append(f"malformed response: {exc}")
+            except (URLError, TimeoutError) as exc:
+                errors.append(f"{type(exc).__name__}: {exc}")
+        if errors:
+            raise RuntimeError("All configured Gemini CRAG relevance API keys failed. " + " | ".join(errors))
         raise RuntimeError("No Gemini CRAG relevance API keys are configured.")
 
     def _complete_gemini_json(self, api_key: str, payload: dict) -> str:
@@ -146,7 +113,14 @@ CHUNK:
         )
         with request.urlopen(req, timeout=60) as response:
             data = json.loads(response.read().decode("utf-8"))
-        return data["candidates"][0]["content"]["parts"][0].get("text", "{}")
+        candidates = data.get("candidates") or []
+        if not candidates:
+            raise RuntimeError(f"Gemini {self.model_name} returned no candidates: {data}")
+        content = candidates[0].get("content") or {}
+        parts = content.get("parts") or []
+        if not parts:
+            raise RuntimeError(f"Gemini {self.model_name} returned no content parts: {data}")
+        return parts[0].get("text", "{}")
 
     @staticmethod
     def _format_chunks(chunks: list[RetrievedChunk]) -> str:
@@ -190,23 +164,3 @@ def _normalize_api_keys(api_key: str | Sequence[str] | None) -> list[str]:
         if key and key not in keys:
             keys.append(key)
     return keys
-=======
-        response = self.client.chat.completions.create(
-            model=self.model_name,
-            temperature=0,
-            max_tokens=32,
-            messages=[
-                {
-                    "role": "system",
-                    "content": "You are a strict CRAG relevance grader. Return JSON only.",
-                },
-                {"role": "user", "content": prompt},
-            ],
-        )
-        content = response.choices[0].message.content or "{}"
-        try:
-            score = float(json.loads(content)["score"])
-        except (json.JSONDecodeError, KeyError, TypeError, ValueError) as exc:
-            raise RuntimeError(f"Groq relevance grader returned invalid JSON: {content}") from exc
-        return max(0.0, min(1.0, score))
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
