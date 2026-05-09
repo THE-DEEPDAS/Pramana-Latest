@@ -258,11 +258,13 @@ class MultimodalRAGPipeline:
             timings["relevance_grading"] = perf_counter() - grade_start
         supported = [chunk for chunk, score in graded if score >= self.config.relevance_threshold]
         if not supported:
-            image_fallback = self._lazy_image_fallback_pages(candidates, [], text_page_hints)
-            if image_fallback:
-                image_answer = self._generate_image_fallback(query, image_fallback)
-                if image_answer.strip() != NOT_FOUND:
-                    return finalize(text=image_answer, retrieved=image_fallback, is_fallback=False)
+            image_answer = self._generate_image_fallback(query, candidates)
+            if image_answer.strip() != NOT_FOUND:
+                return finalize(
+                    text=image_answer,
+                    retrieved=candidates[:MAX_IMAGE_FALLBACK_PAGES],
+                    is_fallback=False,
+                )
             return finalize(text=NOT_FOUND, retrieved=candidates, is_fallback=False)
 
         text_evidence = [chunk for chunk in supported if chunk.modality == "text"]
@@ -300,11 +302,13 @@ class MultimodalRAGPipeline:
             timings["generation"] = perf_counter() - generation_start
             answer = self._extractive_local_answer(query, text_evidence, exc)
         if answer.strip() == NOT_FOUND:
-            image_fallback = self._lazy_image_fallback_pages(candidates, text_evidence, text_page_hints)
-            if image_fallback:
-                image_answer = self._generate_image_fallback(query, image_fallback)
-                if image_answer.strip() != NOT_FOUND:
-                    return finalize(text=image_answer, retrieved=image_fallback, is_fallback=False)
+            image_answer = self._generate_image_fallback(query, candidates)
+            if image_answer.strip() != NOT_FOUND:
+                return finalize(
+                    text=image_answer,
+                    retrieved=candidates[:MAX_IMAGE_FALLBACK_PAGES],
+                    is_fallback=False,
+                )
             return finalize(text=NOT_FOUND, retrieved=text_evidence, is_fallback=False)
 
         if self.config.local_only:
@@ -389,36 +393,33 @@ RETRIEVED CONTEXT:
             max_new_tokens=512,
         )
 
-    def _generate_image_fallback(self, query: str, image_chunks: list[RetrievedChunk]) -> str:
-        image_paths = [
-            Path(path)
-            for chunk in image_chunks
-            for path in [chunk.metadata.get("raw_image_path")]
-            if path
-        ][:MAX_IMAGE_FALLBACK_PAGES]
+    def _generate_image_fallback(self, query: str, chunks: list[RetrievedChunk]) -> str:
+        fallback_chunks = chunks[:MAX_IMAGE_FALLBACK_PAGES]
+        if not fallback_chunks:
+            return NOT_FOUND
+        image_paths = self._fallback_page_image_paths(fallback_chunks)
         if not image_paths:
             return NOT_FOUND
-        page_list = ", ".join(f"p{chunk.page_number}" for chunk in image_chunks[:len(image_paths)])
+        page_list = ", ".join(f"p{chunk.page_number}" for chunk in fallback_chunks)
         user = f"""
-Answer the query using ONLY the attached page images.
-The attached images are in order: {page_list}.
-Read embedded image text (titles, callouts, labels inside shapes, axis ticks, legends, and tables).
-Extract exact labels and numeric values shown in the image.
-If the answer is not explicitly visible in the images, return exactly: {NOT_FOUND}
+Re-check the top 3 most similar pages below and answer the exact query again.
+Use only the attached page images.
+The attached images, when present, are in order: {page_list}.
+If the answer is not explicitly visible in the pages, return exactly: {NOT_FOUND}
 
 QUERY:
 {query}
 """.strip()
         generator = self._image_llm()
         return generator.generate_with_images(
-                system=(
-                    "You are a grounded document QA model with zero hallucination tolerance. "
-                    "Use only the attached page images. "
-                    "Never guess or smooth numbers."
-                ),
-                user=user,
-                image_paths=image_paths,
-                max_new_tokens=512,
+            system=(
+                "You are a grounded document QA model with zero hallucination tolerance. "
+                "Use only the attached page images. "
+                "Never guess or smooth numbers."
+            ),
+            user=user,
+            image_paths=image_paths,
+            max_new_tokens=512,
         )
 
     def _can_generate_from_images(self) -> bool:
@@ -640,6 +641,19 @@ QUERY:
             self.config.storage_dir,
             limit=MAX_IMAGE_FALLBACK_PAGES,
         )
+
+    def _fallback_page_image_paths(self, chunks: list[RetrievedChunk]) -> list[Path]:
+        seen_pages: set[tuple[str, int]] = set()
+        image_paths: list[Path] = []
+        for chunk in chunks:
+            page_key = (chunk.document_id, chunk.page_number)
+            if page_key in seen_pages:
+                continue
+            seen_pages.add(page_key)
+            image_path = self.config.storage_dir / chunk.document_id / "pages" / f"page_{chunk.page_number:04d}.png"
+            if image_path.exists():
+                image_paths.append(image_path)
+        return image_paths
 
 
 def _local_propositions(text: str) -> list[str]:

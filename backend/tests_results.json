@@ -1,32 +1,574 @@
 {
-  "ran_at": "2026-05-04T01:57:33.710820+00:00",
+  "ran_at": "2026-05-09T17:48:58.775468+00:00",
   "tests_path": "D:\\PowerMind\\backend\\tests.json",
   "pinecone_index": "powermind-rag-final",
   "pinecone_namespace": "default",
   "total_questions": 12,
-  "total_elapsed_seconds": 105.49489670002367,
+  "total_elapsed_seconds": 212.41221009999936,
   "results": [
     {
       "index": 1,
       "question": "The ANIL slide shows a manufacturing facility image — what type of product appears to be manufactured there based on the visual?",
-      "answer": "",
+      "answer": "Not found in the Documents",
       "is_fallback": true,
-      "sources": [],
-      "chunks_found": 0,
-      "crag_report": {},
-      "elapsed_seconds": 16.82049690000713,
-      "error": "Run: pip install google-genai"
+      "sources": [
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p1:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 81,
+          "score": 0.8364342451095581,
+          "citation": "[p1:c81]",
+          "text": "Adani Enterprises Limited Earnings Presentation Q2 FY26 Images (hexagonal arrangement): - Hexagon 1 (top left): Image of workers in a manufacturing facility with solar panels. - Hexagon 2 (middle left, first row): Image of a wind turbine with \"ASTT\" visible on its base. - Hexagon 3 (bottom left, first row): Image of a large container with \"adani\" written on its side. - Hexagon 4 (bottom left, second row): Image of a building with solar panels on its roof. - Hexagon 5 (center): Large stylized letter \"a\"."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p14:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 14,
+          "chunk_index": 115,
+          "score": 0.8228568434715271,
+          "citation": "[p14:c115]",
+          "text": "adani AEL : Energy & Utility – Adani New Industries Limited (ANIL) Integrated Manufacturing Solar | Plant | Capacity | Status | |---|---|---| | Cell & Module (MonoPerc) | 2.0 GW | Operational | | Cell & Module (TopCon) | 2.0 GW | Operational | | Cell & Module (TopCon) | 6.0 GW | Financial Closure achieved<br>Under Construction | | Ingot & Wafer | 2.0 GW | Operational | Module sales in MW H1-25 2,380 MW H1-26 2,443 MW 1,379 808 571 Q1-25 1,001 490 511 Q2-25 1,350 704 646 Q1-26 1,093 188 905 Q2-26 Domestic Export Integrated Manufacturing Wind | Plant | Capacity | 4 Models listed in RLMM | |---|---|---| | Wind Turbine Generator | 2.25 GW | 5.2 MW 160m RD 120m HH – TT<br>5.2 MW 160m RD 140m HH – HT<br>3.0 MW 147m RD<br>3.3 MW 164m RD | WTG sales in sets 63 56 15 41 H1-25 Q1 28 35 H1-26 Q2 Q2-26 WTG sets supply increased 87% Y-o-Y to 28 sets ANIL Wind division honored with “Gold Award” at Apex India Safety Award 2025 RLMM: Revised List of Models & Manufacturers I RD: Rotor Diameter I HH: Hub Height I TT: Tabular Tower I HT: Hybrid Tower 14"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p10:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 10,
+          "chunk_index": 107,
+          "score": 0.8160819411277771,
+          "citation": "[p10:c107]",
+          "text": "AEL : Incubation Model adani Development Attractive Incubation Record Proven incubation success record Year 2015 > APSEZ, APL & AESL Year 2018 > AGEL & ATGL Green Hydrogen Ecosystem Intend to set up integrated manufacturing for generating low-cost green hydrogen Ingots, wafers, cells, modules, wind turbines & electrolysers Business Model B2B Model ANIL Ecosystem, Data Center B2C Model Airports, Roads Operations Global Recognition Testing & Certification backed operations to meet global standards e.g."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p28:vlm:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 28,
+          "chunk_index": 136,
+          "score": 0.8153559565544128,
+          "citation": "[p28:c136]",
+          "text": "and embed sustainability into our core operations. | Entity/Indicator Category | Specific Indicator / Rating Name | Value | Description | |---|---|---|---| | CRISIL <br> An S&P Global Company | CRISIL | 51 | Denotes \"Adequate\", Increase from previous score of 50 (a SEBI registered ESG rating agency) | | Transition Pathway Initiative | TPI | Level 3 | Denotes \"Integrating climate change into operational decision making\" | | ESG Risk Assessment & Insight <br> ESG Assessments & Insight | ESG Risk Assessment & Insight | 67.5 | Categorized as 'Strong' for its ESG performance by ESG Risk.ai (a SEBI registered agency) | **Performance Highlights** - **ANIL Ecosystem** - Icon: Sun <br> 19% renewable energy in electricity mix - Icon: Water drop <br> 100% water withdrawal from non-competing sources - **Data Center** - Icon: Sun <br> 26% renewable energy in electricity mix - Icon: Water drop <br> 3 Operational sites achieved Zero Liquid Discharge (ZLD) status - **Airports** - Icon: Sun <br> 51% renewable energy in electricity mix - Icon: Factories <br> 26% reduction1 in scope 1 emission intensity - **Mining Services** - Icon: Factories <br> 27% reduction in scope 23 emission intensity - Icon: Water drop <br> 12% reduction in water consumption3 intensity - Icon: Recycling symbol <br> 99% of waste managed through reuse, recycle and other recovery operations - Icon: Plant <br> 2,81,678 trees planted in H1-26 Achieved in H1-26 against H1-25 ; 1: Per million pax ; 2: Per ton of copper production ; 3: Per ton of ROM (coal + iron ore) [Home icon] [Document stack icon] 28"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p1:vlm:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 83,
+          "score": 0.8311119079589844,
+          "citation": "[p1:c83]",
+          "text": "of an industrial site with piles of coal or other material. - Hexagon 10 (bottom right, first row): Image of a bridge over water. - Hexagon 11 (bottom right, second row): Image of stacked reddish-brown rectangular materials. adani Growth With Goodness"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p1:vlm:c1",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 82,
+          "score": 0.8225691318511963,
+          "citation": "[p1:c82]",
+          "text": "on its roof. - Hexagon 5 (center): Large stylized letter \"a\". - Hexagon 6 (top right): Image of a spacious interior, possibly a lobby or airport. - Hexagon 7 (middle right, first row): Image of a train or road snaking through a green landscape. - Hexagon 8 (middle center, bottom row): Image of a modern building with \"Adani Capital\" faintly visible on its facade. - Hexagon 9 (middle right, second row): Image of an industrial site with piles of coal or other material."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p14:text:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 14,
+          "chunk_index": 37,
+          "score": 0.8230044841766357,
+          "citation": "[p14:c37]",
+          "text": "AEL : Energy & Utility – Adani New Industries Limited (ANIL) Integrated Manufacturing Module sales in MW Plant Capacity Status Solar H1-25 H1-26 2,380 MW 2,443 MW Cell & Module 2.0 GW ▪ Operational (MonoPerc) 1,379 1,350 1,093 Cell & Module 1,001 2.0 GW ▪ Operational (TopCon) 808 704 188 490 Cell & Module ▪ Financial Closure achieved 6.0 GW (TopCon) ▪ Under Construction 905 571 511 646 Ingot & Wafer 2.0 GW ▪ Operational Q1-25 Q2-25 Q1-26 Q2-26 Domestic Export WTG sales in sets Integrated Manufacturing Plant"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c4",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 12,
+          "score": 0.8154774904251099,
+          "citation": "[p6:c12]",
+          "text": "Includes the manufacturing of Defense and Aerospace Equipment | AEL: Adani Enterprises Limited | APSEZ: Adani Ports and Special Economic Zone Limited | AESL: Adani Energy Solutions Limited | T&D: Transmission & Distribution | APL: Adani Power Limited | AGEL: Adani Green Energy Limited | Home outline Hsoalmid bfiullrger Menu Icon with 6 AAHL: Adani Airport Holdings Limited | ARTL: Adani Roads Transport Limited | ANIL: Adani New Industries Limited | IPP: Independent Power Producer | NDTV: New Delhi Television"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p23:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 23,
+          "chunk_index": 129,
+          "score": 0.8162497878074646,
+          "citation": "[p23:c129]",
+          "text": "AEL: Consolidated Financial Highlights Q2-26 Y-o-Y ₹ crore adani **Chart Title:** Consolidated Financial Highlights Q2-26 Y-o-Y (Overall) **Section 1: TOTAL INCOME** Y-axis label: TOTAL INCOME **Sub-section 1.1: Consolidated** Chart type: Bar chart (waterfall-like) Chart title: Consolidated Data points: Q2-25: 23,196 Decrease: (1,560) (label above bar) Increase: 208 (label above bar) Q2-26: 21,844 X-axis labels: Q2-25, Established, Incubating, Q2-26 **Sub-section 1.2: ANIL Ecosystem** Chart type: Bar chart Chart title: ANIL Ecosystem Data points: Q2-25: 3,115 Q2-26: 3,199 X-axis labels: Q2-25, Q2-26 Note: ▲ 3% Increased on account of higher WTG sets supply **Sub-section 1.3: Airports** Chart type: Bar chart Chart title: Airports Data points: Q2-25: 2,276 Q2-26: 3,167 X-axis labels: Q2-25, Q2-26 Note: ▲ 39% Increased in line with tariff revision and non-aero growth **Sub-section 1.4: IRM** Chart type: Bar chart Chart title: IRM Data points: Q2-25: 9,697 Q2-26: 6,843 X-axis labels: Q2-25, Q2-26 Note: ▼ (29%) Impacted due to low volume and prices **Sub-section 1.5: Mining Service** Chart type: Bar chart Chart title: Mining Service Data points: Q2-25: 803 Q2-26: 1,088 X-axis labels: Q2-25, Q2-26 Note: ▲ 35% Increased in line with higher volume --- **Section 2: EBITDA** Y-axis label: EBITDA **Sub-section 2.1: Consolidated** Chart type: Bar chart (waterfall-like) Data points: Q2-25: 4,354 Decrease: (556) (label above bar) Increase: 104 (label above bar) Q2-26: 3,902 X-axis labels: Q2-25, Established, Incubating, Q2-26 **Sub-section 2.2: ANIL Ecosystem** Chart type: Bar chart Data points: Q2-25: 1,121 Q2-26: 1,172 X-axis labels: Q2-25, Q2-26 Note: ▲ 5% Increase in line with revenue **Sub-section 2.3: Airports** Chart type: Bar chart Data points: Q2-25: 744 Q2-26: 1,062 X-axis labels: Q2-25, Q2-26 Note: ▲ 43% Increased in line with revenue **Sub-section 2.4: IRM** Chart type: Bar chart Data points: Q2-25: 927 Q2-26: 726 X-axis labels: Q2-25, Q2-26 Note: ▼ (22%) Impacted due to low volume and prices **Sub-section 2.5: Mining Service** Chart type: Bar chart Data points: Q2-25: 400 Q2-26: 535 X-axis labels: Q2-25, Q2-26 Note: ▲ 34% Increased in line with higher volume --- **Legend (bottom-left):** Increase (blue bar) Decrease (grey bar) Total (dark blue bar) **Footer (bottom-right):** 23"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:raptor:l1:n15",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 1,
+          "embedding_channel": "raptor_summary",
+          "page_number": "?",
+          "chunk_index": "?",
+          "score": 0.818873405456543,
+          "citation": "[l1:n15]",
+          "text": "- AEL : Transport & Logistics – Adani Airport Holdings Ltd (AAHL) adani Operational Efficiency Security Check Queue Y-axis labels: 100%, 98%, 96%, 94%, 92% X-axis labels: AMD, LKO, IXE, BOM, JAI, GAU, TRV Benchmark line: Visible as a horizontal red line at the 95% level.\n- Immigrations Y-axis labels: 100%, 98%, 96%, 94%, 92% X-axis labels: AMD, LKO, IXE, BOM, JAI, GAU, TRV Benchmark line: Visible as a horizontal red line at the 95% level.\n- Car Parking Y-axis labels: 100%, 98%, 96%, 94%, 92% X-axis labels: AMD, LKO, IXE, BOM, JAI, GAU, TRV Benchmark line: Visible as a horizontal red line at the 95% level.\n- Check In Y-axis labels: 100%, 98%, 96%, 94%, 92% X-axis labels: AMD, LKO, IXE, BOM, JAI, GAU, TRV Benchmark line: Visible as a horizontal red line at the 95% level.\n- Legend for bar charts: Jul (dark blue square) Aug (medium blue square) Sep (light blue square) Benchmark (red line symbol) Non-Aero Performance | Non Aero Revenue | Q2-25 | Q2-26 | H1-25 | H1-26 | | :-------------------------- | :---- | :---- | :---- | :---- | | Duty Free | 386 | 498 | 733 | 956 | | Food & Beverages (F&B) | 80 | 233 | 162 | 486 | | Lease & Retails | 188 | 286 | 369 | 549 | | Car Park | 67 | 75 | 125 | 150 | | Passenger Services & Others | 354 | 333 | 680 | 682 | | Total | 1,075 | 1,424 | 2,069 | 2,823 | Non-aero revenue Mix H1-26 Pie Chart: Visible data labels/values: 34%, 17%, 19%, 5%, 24% Legend: Duty Free (dark blue square), F&B (light blue square), Lease & Retail (grey square), Car Park (light grey square), Passenger Services & Others (medium grey square) | Particular | KPI Benchmark as per Guidelines | Particular | KPI Benchmark as per Guidelines | | :------------------- | :-------------------------------------------------------------- | :--------- | :------------------------------------------------ | | Security Check Queue | 95% of peak pax < 5 mins | Car Park | 95% of drivers take less than 5 minutes | | Immigrations | 95% of peak pax wait less than 10 minutes- Arrivals/Dep | Check In | 95% of peak pax < 5 mins | [Home icon] 18\n- | Activity | Q2-25 | Q2-26 | % change | H1-25 | H1-26 | % change | |---------------|-------|-------|----------|-------|-------|----------| | Volume in MMT | 13.7 | 11.3 | (17%) | 29.1 | 24.1 | (17%) | Carmichael Mine, Australia Image of a large mining truck.\n- No numerical data labels are visible on the bars."
+        }
+      ],
+      "chunks_found": 21,
+      "crag_report": {
+        "status": "checked",
+        "needs_page_fallback": true,
+        "spans": [
+          {
+            "start": 66,
+            "end": 72,
+            "confidence": 0.8325544595718384,
+            "text": "p1:c81"
+          }
+        ],
+        "raw_span_count": 1,
+        "page_fallback": {
+          "answer": "Not found in the Documents",
+          "found": false,
+          "checked_pages": [
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 1,
+              "score": 0.8364342451095581,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 14,
+              "score": 0.8228568434715271,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 10,
+              "score": 0.8160819411277771,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 28,
+              "score": 0.8153559565544128,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 6,
+              "score": 0.8154774904251099,
+              "status": "source_pdf_not_found"
+            }
+          ]
+        }
+      },
+      "elapsed_seconds": 11.2846701999988
     },
     {
       "index": 2,
       "question": "What is the Adani Family's equity stake in AEL as shown in the portfolio structure diagram?",
-      "answer": "",
+      "answer": "Not found in the Documents",
       "is_fallback": true,
-      "sources": [],
-      "chunks_found": 0,
-      "crag_report": {},
-      "elapsed_seconds": 7.427238499978557,
-      "error": "Run: pip install google-genai"
+      "sources": [
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 89,
+          "score": 0.8616653680801392,
+          "citation": "[p6:c89]",
+          "text": "Adani Portfolio: A World Class Infrastructure & Utility Portfolio adani Flagship Incubator (73.97%) AEL (100%) ANIL New Industries (50.00%) AdaniConneX⁵ Data Centre Infrastructure & Utility Core Portfolio Energy & Utility (62.43%) AGEL Renewables (74.96%) APL IPP (71.19%) AESL T&D (37.40%) ATGL¹ Gas Discom Transport & Logistics (65.89%) APSEZ Ports & Logistics (100%) NQXT² (100%) AAHL Airports (100%) ARTL Roads Primary Industry Materials, Metal & Mining (67.64%)³ Ambuja Cements⁴ (50.05%) ACC⁴ (58.08%) Sanghi⁴ (72.66%) Orient⁴ (100%) Copper, Aluminum (100%) PVC (100%) Mining Services & Com."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c1",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 90,
+          "score": 0.8954747915267944,
+          "citation": "[p6:c90]",
+          "text": "Copper, Aluminum (100%) PVC (100%) Mining Services & Com. Mining Other Specialty (64.71%) NDTV⁶ (20.00%) AWL⁷ Food FMCG (100%) GCC (100%) Specialist Manufacturing⁸ (%) Adani Family equity stake in Adani Portfolio companies (%): AEL equity stake in its subsidiaries (%): Ambuja equity stake Listed cos [blue square] Direct Consumer [grey square] A multi-decade story of high growth centered around infrastructure & utility core 1. ATGL: Adani Total Gas Ltd, JV with Total Energies | 2."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 91,
+          "score": 0.8355363607406616,
+          "citation": "[p6:c91]",
+          "text": "core 1. ATGL: Adani Total Gas Ltd, JV with Total Energies | 2. NQXT: North Queensland Export Terminal. On 17th Apr’25, Board of Directors have approved the acquisition of NQXT by APSEZ, transaction will be concluded post pending regulatory approval. | 3. Ambuja Cement’s shareholding does not include Global Depository Receipt of 0.04% but includes AEL shareholding of 0.35% received as part of the consideration against transfer of Adani Cementation Limited as per NCLT order dated 18th July’25 | 4."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c3",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 92,
+          "score": 0.86929851770401,
+          "citation": "[p6:c92]",
+          "text": "Cementation Limited as per NCLT order dated 18th July’25 | 4. Cement includes stake in ACC Limited. AEL shareholding of 67.64% (67.68% on Voting Rights basis) stake in Ambuja Cements Ltd. as on 30th Sep’25 which in turn owns 50.05% in ACC Limited. Adani directly owns 6.64% stake in ACC Limited. | 5. Data center, JV with EdgeConnex | 6. Promoter holding in NDTV has increased to 69.02% post completion of right issue in the month of Oct’25 | 7. AWL: Agri Business Ltd."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c4",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 93,
+          "score": 0.8389336466789246,
+          "citation": "[p6:c93]",
+          "text": "right issue in the month of Oct’25 | 7. AWL: Agri Business Ltd. : AEL to exit Wilmar JV, agreement signed for residual 20% stake dilution. | 8."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c5",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 94,
+          "score": 0.861538290977478,
+          "citation": "[p6:c94]",
+          "text": "JV, agreement signed for residual 20% stake dilution. | 8. Includes the manufacturing of Defense and Aerospace Equipment | AEL: Adani Enterprises Limited | APSEZ: Adani Ports and Special Economic Zone Limited | IPP: Independent Power Producer | T&D: Transmission & Distribution | APL: Adani Power Limited | AGEL: Adani Green Energy Limited | AAHL: Adani Airport Holdings Limited | ARTL: Adani Roads Transport Limited | ANIL: Adani New Industries Limited | NDTV: New Delhi Television Ltd | PVC: Polyvinyl Chloride | GCC: Global Capability Centre | Promoter’s holdings are as on 30th September, 2025."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:vlm:c6",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 6,
+          "chunk_index": 95,
+          "score": 0.7587039470672607,
+          "citation": "[p6:c95]",
+          "text": "Centre | Promoter’s holdings are as on 30th September, 2025. [Home icon] [Menu icon] 6"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 8,
+          "score": 0.8491990566253662,
+          "citation": "[p6:c8]",
+          "text": "Adani Portfolio: A World Class Infrastructure & Utility Portfolio Flagship Infrastructure & Utility Core Portfolio Primary Industry Other Materials, Metal Incubator Energy & Utility Transport & Logistics Specialty & Mining (73.97%) (62.43%) (74.96%) (65.89%) (67.64%)3 AGEL APL APSEZ AEL Ambuja Cements4 Renewables IPP Ports & Logistics (71.19%) (37.40%) (100%) (50.05%) (58.08%) (72.66%) AESL ATGL1 NQXT2 ACC4 Sanghi4 Orient4 T&D Gas Discom (100%) (50.00%) (100%) (100%) (100%) (64.71%) (20.00%) ANIL"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c1",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 9,
+          "score": 0.8927953839302063,
+          "citation": "[p6:c9]",
+          "text": "AdaniConneX5 AAHL ARTL AWL7 Copper, Aluminum NDTV6 New Industries Data Centre Airports Roads Food FMCG (100%) (100%) (100%) (100%) Mining Services Specialist PVC & GCC Manufacturing8 Com. Mining (%): Adani Family equity stake in Adani Portfolio companies (%): AEL equity stake in its subsidiaries (%): Ambuja equity stake in its subsidiaries Listed cos Direct Consumer A multi-decade story of high growth centered around infrastructure & utility core 1. ATGL: Adani Total Gas Ltd, JV with Total Energies | 2."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 10,
+          "score": 0.8355363607406616,
+          "citation": "[p6:c10]",
+          "text": "core 1. ATGL: Adani Total Gas Ltd, JV with Total Energies | 2. NQXT: North Queensland Export Terminal. On 17th Apr’25, Board of Directors have approved the acquisition of NQXT by APSEZ, transaction will be concluded post pending regulatory approval. | 3. Ambuja Cement’s shareholding does not include Global Depository Receipt of 0.04% but includes AEL shareholding of 0.35% received as part of the consideration against transfer of Adani Cementation Limited as per NCLT order dated 18th July’25 | 4."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c3",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 11,
+          "score": 0.8606631755828857,
+          "citation": "[p6:c11]",
+          "text": "Cementation Limited as per NCLT order dated 18th July’25 | 4. Cement includes 67.64% (67.68% on Voting Rights basis) stake in Ambuja Cements Ltd. as on 30th Sep’25 which in turn owns 50.05% in ACC Limited. Adani directly owns 6.64% stake in ACC Limited.| 5. Data center, JV with EdgeConnex | 6. Promoter holding in NDTV has increased to 69.02% post completion of right issue in the month of Oct’25 | 7. AWL Agri Business Ltd. : AEL to exit Wilmar JV, agreement signed for residual 20% stake dilution. | 8."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c4",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 12,
+          "score": 0.8427889347076416,
+          "citation": "[p6:c12]",
+          "text": "Includes the manufacturing of Defense and Aerospace Equipment | AEL: Adani Enterprises Limited | APSEZ: Adani Ports and Special Economic Zone Limited | AESL: Adani Energy Solutions Limited | T&D: Transmission & Distribution | APL: Adani Power Limited | AGEL: Adani Green Energy Limited | Home outline Hsoalmid bfiullrger Menu Icon with 6 AAHL: Adani Airport Holdings Limited | ARTL: Adani Roads Transport Limited | ANIL: Adani New Industries Limited | IPP: Independent Power Producer | NDTV: New Delhi Television"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p6:text:c5",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 6,
+          "chunk_index": 13,
+          "score": 0.7921090722084045,
+          "citation": "[p6:c13]",
+          "text": "Ltd | PVC: Polyvinyl Chloride | GCC: Global Capability Centre l Promoter’s holdings are as on 30th September, 2025."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 4,
+          "chunk_index": 38,
+          "score": 0.8813920021057129,
+          "citation": "[p4:c38]",
+          "text": "adani About Adani Enterprises Ltd Adani Enterprises Limited (AEL) is the flagship company of Adani Group, one of India's largest business organisations. Over the years, Adani Enterprises has focused on building emerging infrastructure businesses, contributing to nation-building and divesting them into separate listed entities."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 4,
+          "chunk_index": 39,
+          "score": 0.812789261341095,
+          "citation": "[p4:c39]",
+          "text": "and divesting them into separate listed entities. Having successfully built sizeable and scalable businesses like Adani Ports & SEZ, Adani Energy Solutions, Adani Power, Adani Green Energy, Adani Total Gas and Adani Wilmar, the company has contributed to make India self-reliant with our robust businesses. This has also led to significant returns to our shareholders for three decades."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c2",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 4,
+          "chunk_index": 40,
+          "score": 0.7921557426452637,
+          "citation": "[p4:c40]",
+          "text": "to significant returns to our shareholders for three decades. The next generation of its strategic business investments are centered around green hydrogen ecosystem, airport management, data center, roads and primary industries like copper and petrochem - all of which have significant scope for value unlocking."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c3",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 4,
+          "chunk_index": 41,
+          "score": 0.828543484210968,
+          "citation": "[p4:c41]",
+          "text": "- all of which have significant scope for value unlocking. For more information, please visit www.adanienterprises.com For more information please contact: | Mitul Thakkar | | :---------------------- | | Adani Group | | Corporate Communications | | Tel: +91-79-25550539 | | mitul.thakkar@adani.com | | Manan Vakharia | | :---------------------- | | Adani Enterprises Ltd | | Investor Relations | | Tel: +91-79-25556140 | | mananj.vakharia@adani.com | Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c4",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 4,
+          "chunk_index": 42,
+          "score": 0.8137332201004028,
+          "citation": "[p4:c42]",
+          "text": "Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421. Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 4,
+          "chunk_index": 20,
+          "score": 0.8796390891075134,
+          "citation": "[p4:c20]",
+          "text": "About Adani Enterprises Ltd Adani Enterprises Limited (AEL) is the flagship company of Adani Group, one of India’s largest business organisations. Over the years, Adani Enterprises has focused on building emerging infrastructure businesses, contributing to nation-building and divesting them into separate listed entities."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 4,
+          "chunk_index": 21,
+          "score": 0.812789261341095,
+          "citation": "[p4:c21]",
+          "text": "and divesting them into separate listed entities. Having successfully built sizeable and scalable businesses like Adani Ports & SEZ, Adani Energy Solutions, Adani Power, Adani Green Energy, Adani Total Gas and Adani Wilmar, the company has contributed to make India self-reliant with our robust businesses. This has also led to significant returns to our shareholders for three decades."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c2",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 4,
+          "chunk_index": 22,
+          "score": 0.7921557426452637,
+          "citation": "[p4:c22]",
+          "text": "to significant returns to our shareholders for three decades. The next generation of its strategic business investments are centered around green hydrogen ecosystem, airport management, data center, roads and primary industries like copper and petrochem - all of which have significant scope for value unlocking."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c3",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 4,
+          "chunk_index": 23,
+          "score": 0.8333679437637329,
+          "citation": "[p4:c23]",
+          "text": "- all of which have significant scope for value unlocking. For more information, please visit www.adanienterprises.com For more information please contact: Mitul Thakkar Manan Vakharia Adani Group Adani Enterprises Ltd Corporate Communications Investor Relations Tel: +91-79-25550539 Tel: +91-79-25556140 mitul.thakkar@adani.com mananj.vakharia@adani.com Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : “Adani Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c4",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 4,
+          "chunk_index": 24,
+          "score": 0.8142492771148682,
+          "citation": "[p4:c24]",
+          "text": "Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421, Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_95903140997f7c19:p11:vlm:c0",
+          "document_id": "doc_95903140997f7c19",
+          "filename": "AELBoardoutcome041120251_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 11,
+          "chunk_index": 275,
+          "score": 0.8240693807601929,
+          "citation": "[p11:c275]",
+          "text": "Adani Enterprises Limited (CIN No : L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S. G."
+        },
+        {
+          "chunk_id": "doc_95903140997f7c19:p11:vlm:c1",
+          "document_id": "doc_95903140997f7c19",
+          "filename": "AELBoardoutcome041120251_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 11,
+          "chunk_index": 276,
+          "score": 0.8451279401779175,
+          "citation": "[p11:c276]",
+          "text": "Corporate House\", Shantigram, Near Vaishno Devi Circle, S. G. Highway, Khodiyar, Ahmedabad - 382 421 Phone : 079-26565555 ; Fax : 079-26565500 ; Email : investor.ael@adani.com ; Website : www.adani enterprises.com [adani logo] Notes : 1 The above consolidated financial results have been reviewed by the Audit Committee and subsequently approved by the Board of Directors of Adani Enterprises Limited (\"Parent Company\") at their respective meetings held on 4th November, 2025."
+        },
+        {
+          "chunk_id": "doc_95903140997f7c19:p11:vlm:c3",
+          "document_id": "doc_95903140997f7c19",
+          "filename": "AELBoardoutcome041120251_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 11,
+          "chunk_index": 278,
+          "score": 0.8709927797317505,
+          "citation": "[p11:c278]",
+          "text": "Act, 2013 read with the relevant rules issued thereunder. 3 During the previous year and quarter ended 31st March, 2025, Adani Commodities LLP (\"ACLLP\") launched Offer For Sale (OFS) and sold 13.51% of paid-up equity share capital of AWL Agri Business Limited (formerly known as Adani Wilmar Limited) (\"AWL\"). Consequent to OFS, the Group recognized ₹ 3,945.73 crores as exceptional gain (post-tax gain of ₹ 3,286.22 crores) and investment in AWL was classified from jointly controlled entity to associate."
+        },
+        {
+          "chunk_id": "doc_95903140997f7c19:p11:vlm:c4",
+          "document_id": "doc_95903140997f7c19",
+          "filename": "AELBoardoutcome041120251_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 11,
+          "chunk_index": 279,
+          "score": 0.8353620767593384,
+          "citation": "[p11:c279]",
+          "text": "AWL was classified from jointly controlled entity to associate. During the quarter ended 30th September, 2025: (a) The Parent Company, ACLLP and Lence Pte Limited (\"Lence\") have entered into a share purchase agreement, wherein Lence has agreed to purchase minimum 11.00% (up to maximum of 20.00%) of paid-up equity share capital of AWL, as would be determined by Lence at its absolute discretion. This transaction is subject to customary and regulatory approvals."
+        },
+        {
+          "chunk_id": "doc_95903140997f7c19:p11:vlm:c5",
+          "document_id": "doc_95903140997f7c19",
+          "filename": "AELBoardoutcome041120251_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 11,
+          "chunk_index": 280,
+          "score": 0.8461307883262634,
+          "citation": "[p11:c280]",
+          "text": "transaction is subject to customary and regulatory approvals. (b) ACLLP has sold 13,54,82,400 equity shares, representing 10.42% of the paid-up equity share capital of AWL. Consequently, the Group has recognized ₹ 2,968.72 crores as exceptional gain (post-tax gain of ₹ 2,455.57 crores) and ACLLP's stake in AWL has reduced from 30.42% to 20.00%."
+        }
+      ],
+      "chunks_found": 28,
+      "crag_report": {
+        "status": "checked",
+        "needs_page_fallback": true,
+        "spans": [],
+        "raw_span_count": 0,
+        "page_fallback": {
+          "answer": "Not found in the Documents",
+          "found": false,
+          "checked_pages": [
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 6,
+              "score": 0.8616653680801392,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_9d5307eef66c3ceb",
+              "filename": "AEL Press Release Q2 FY26_copy.pdf",
+              "page_number": 4,
+              "score": 0.8813920021057129,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_95903140997f7c19",
+              "filename": "AELBoardoutcome041120251_copy.pdf",
+              "page_number": 11,
+              "score": 0.8240693807601929,
+              "status": "checked",
+              "answer": "Not found in the Documents"
+            }
+          ]
+        }
+      },
+      "elapsed_seconds": 27.516456099998322
     },
     {
       "index": 3,
@@ -306,23 +848,398 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 1.96450050000567
+      "elapsed_seconds": 28.49253619999945
     },
     {
       "index": 4,
       "question": "Navi Mumbai Airport was just inaugurated — how soon can I expect it to contribute to the company's revenues?",
-      "answer": "",
+      "answer": "Not found in the Documents",
       "is_fallback": true,
-      "sources": [],
-      "chunks_found": 0,
-      "crag_report": {},
-      "elapsed_seconds": 3.383835699991323,
-      "error": "Run: pip install google-genai"
+      "sources": [
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 24,
+          "score": 0.8420615196228027,
+          "citation": "[p1:c24]",
+          "text": "Adani Media Release Adani Enterprises Ltd announces H1 FY26 results Consolidated EBITDA at Rs. 7,688 cr Consolidated PBT at Rs. 2,281 cr AEL Board approves Rights Issue of Rs.25,000 cr Editor's Synopsis Consolidated financial highlights H1 FY26 (YoY) * Revenue at Rs. 44,281 cr * EBITDA at Rs. 7,688 cr * PBT at Rs. 2,281 cr excluding exceptional gain of Rs. 3,583 cr * AAHL Airports EBITDA increased by 51% YoY to Rs. 2,157 cr; with Airports business now tracking at quarterly run-rate of Rs."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 25,
+          "score": 0.8994063138961792,
+          "citation": "[p1:c25]",
+          "text": "Airports business now tracking at quarterly run-rate of Rs. 1,000+ crore Investment highlights Asset Completed * Greenfield Navi Mumbai International Airport inaugurated on 08ᵗʰ October 2025, set to commence operations from Q3 FY26 * Received PCOD for Nanasa-Pidgaon project; AEL now has 7 operational road assets New Investments * Received LoA for three projects in Roads and two projects in Water business with cumulative order book of Rs."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c2",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 26,
+          "score": 0.7990517616271973,
+          "citation": "[p1:c26]",
+          "text": "projects in Water business with cumulative order book of Rs. 19,982 cr * AdaniConnex partners with Google to develop India's largest AI Data Center campus in Visakhapatnam Capital management * AEL Board approves partly paid-up Rights Issue of Rs.25,000 cr for strengthening its balance sheet further to support next phase of incubation Ahmedabad, November 04, 2025: Adani Enterprises Ltd (AEL), the flagship company of the Adani Group, announced its results today for the quarter and half year ended September 30, 2025."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c3",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 27,
+          "score": 0.8694822788238525,
+          "citation": "[p1:c27]",
+          "text": "today for the quarter and half year ended September 30, 2025. AEL has validated its core strength of timely execution of large-scale projects during the quarter. The inauguration of greenfield Navi Mumbai airport and completion of its 7ᵗʰ road project reflects AEL's fundamental focus on incubation at scale and execution. Each of these new milestones strengthens our diversified model and reaffirms our commitment to deliver infrastructure of national importance."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c4",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 28,
+          "score": 0.8172203302383423,
+          "citation": "[p1:c28]",
+          "text": "commitment to deliver infrastructure of national importance. The emerging core infra businesses have recorded half-yearly EBITDA of Rs. 5,470 crore with an an increase of 5% on year-on-year basis and now contributes 71% to total EBITDA. Adani Enterprises Ltd (CIN No.: L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c5",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 1,
+          "chunk_index": 29,
+          "score": 0.7620683908462524,
+          "citation": "[p1:c29]",
+          "text": "Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421. Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 1,
+          "score": 0.9002254605293274,
+          "citation": "[p1:c1]",
+          "text": "Airports business now tracking at quarterly run-rate of Rs. 1,000+ crore Investment highlights Asset Completed • Greenfield Navi Mumbai International Airport inaugurated on 08th October 2025, set to commence operations from Q3 FY26 • Received PCOD for Nanasa-Pidgaon project; AEL now has 7 operational road assets New Investments • Received LoA for three projects in Roads and two projects in Water business with cumulative order book of Rs. 19,982 cr •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c2",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 2,
+          "score": 0.7997013330459595,
+          "citation": "[p1:c2]",
+          "text": "in Water business with cumulative order book of Rs. 19,982 cr • AdaniConnex partners with Google to develop India’s largest AI Data Center campus in Visakhapatnam Capital management • AEL Board approves partly paid-up Rights Issue of Rs.25,000 cr for strengthening its balance sheet further to support next phase of incubation Ahmedabad, November 04, 2025: Adani Enterprises Ltd (AEL), the flagship company of the Adani Group, announced its results today for the quarter and half year ended September 30, 2025."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c3",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 3,
+          "score": 0.8684013485908508,
+          "citation": "[p1:c3]",
+          "text": "today for the quarter and half year ended September 30, 2025. AEL has validated its core strength of timely execution of large-scale projects during the quarter. The inauguration of greenfield Navi Mumbai airport and completion of its 7th road project reflects AEL’s fundamental focus on incubation at scale and execution. Each of these new milestones strengthens our diversified model and reaffirms our commitment to deliver infrastructure of national importance."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c4",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 4,
+          "score": 0.8176870942115784,
+          "citation": "[p1:c4]",
+          "text": "commitment to deliver infrastructure of national importance. The emerging core infra businesses have recorded half-yearly EBITDA of Rs. 5,470 crore with an increase of 5% on year-on-year basis and now contributes 71% to total EBITDA. Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : “Adani Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c5",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 5,
+          "score": 0.7809731364250183,
+          "citation": "[p1:c5]",
+          "text": "Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421, Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 1,
+          "chunk_index": 0,
+          "score": 0.8448086380958557,
+          "citation": "[p1:c0]",
+          "text": "Media Release Adani Enterprises Ltd announces H1 FY26 results Consolidated EBITDA at Rs. 7,688 cr Consolidated PBT at Rs. 2,281 cr AEL Board approves Rights Issue of Rs.25,000 cr Editor’s Synopsis Consolidated financial highlights H1 FY26 (YoY) • Revenue at Rs. 44,281 cr • EBITDA at Rs. 7,688 cr • PBT at Rs. 2,281 cr excluding exceptional gain of Rs. Rs. 3,583 cr • AAHL Airports EBITDA increased by 51% YoY to Rs. 2,157 cr; with Airports business now tracking at quarterly run-rate of Rs."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:vlm:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 3,
+          "chunk_index": 36,
+          "score": 0.828884482383728,
+          "citation": "[p3:c36]",
+          "text": "adani Business Updates Adani New Industries (ANIL - Green Hydrogen Ecosystem) * Module sales continue to track to 1 GW per quarter, domestic sale increased by 43% during H1 FY26 on YoY basis * Construction for additional 6 GW cell and module lines progressing as per schedule * ANIL Wind division honored with \"Gold Award\" at Apex India Safety Award 2025 AdaniConnex Pvt Ltd (ACX - Data Center) * Partners with Google to develop India's largest AI Data Center campus in Visakhapatnam, Andhra Pradesh * Hyderabad data center phase II MEP works ~96% completed * Pune data center phase I & II works crosses ~90% MEP: Mechanical, Electrical & Plumbing Adani Water Ltd (AWL - Water) * Letter of Award received for two new projects; * Build and manage Brahmani Barrage across Brahmani River * Build and manage Mor Sagar Artificial Reservoir Adani Airports Holdings Ltd (AAHL - Airports) * Greenfield Navi Mumbai International Airport inaugurated on 08ᵗʰ October 2025, a major landmark in India's aviation journey; set to commence operations from Q3 FY26 * During the quarter 7 new routes, 8 new flights and 1 new airline added * Mumbai Airport received the \"Best Airport for Digitization\" award at the India Cargo Award 2025 Adani Road Transport Ltd (ARTL - Roads) * Provisional COD received for HAM project \"Nanasa-Pidgaon\" in the state of Madhya Pradesh; making it 7ᵗʰ operational project * Letter of Award received for three new projects; * Ropeway project between Sonprayag and Kedarnath of 12.9 KM length * Two HAM Road projects connecting Munger-Sultanganj and Sultanganj-Sabour Road ESG Highlights * AEL has been recognized as the 'Great Indian ESG Organization of the Year 2025' at the Transformance ESG Awards for its unwavering commitment to sustainability * ANIL honored with the 'Outstanding Contribution to Circular Economy' Award by Indian Chamber of Commerce for spearheading India's first off-grid Green Hydrogen pilot project * Adani Natural Resources won the prestigious 'Leadership in Climate Action' Award by Indian Chamber of Commerce for its pioneering hydrogen truck initiative, advancing sustainable mining logistics Adani Enterprises Ltd (CIN No: L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:vlm:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 3,
+          "chunk_index": 37,
+          "score": 0.7795088291168213,
+          "citation": "[p3:c37]",
+          "text": "Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421. Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c0",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 13,
+          "score": 0.7796522974967957,
+          "citation": "[p3:c13]",
+          "text": "Business Updates Adani New Industries (ANIL - Green Hydrogen Ecosystem) • Module sales continue to track to 1 GW per quarter, domestic sale increased by 43% during H1 FY26 on YoY basis • Construction for additional 6 GW cell and module lines progressing as per schedule • ANIL Wind division honored with “Gold Award” at Apex India Safety Award 2025 AdaniConnex Pvt Ltd (ACX - Data Center) • Partners with Google to develop India’s largest AI Data Center campus in Visakhapatnam, Andhra Pradesh •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c1",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 14,
+          "score": 0.7806345820426941,
+          "citation": "[p3:c14]",
+          "text": "AI Data Center campus in Visakhapatnam, Andhra Pradesh • Hyderabad data center phase II MEP works ~96% completed • Pune data center phase I & II works crosses ~90% MEP: Mechanical, Electrical & Plumbing Adani Water Ltd (AWL - Water) • Letter of Award received for two new projects; o Build and manage Brahmani Barrage across Brahmani River o Build and manage Mor Sagar Artificial Reservoir Adani Airports Holdings Ltd (AAHL - Airports) •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c2",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 15,
+          "score": 0.8859833478927612,
+          "citation": "[p3:c15]",
+          "text": "Reservoir Adani Airports Holdings Ltd (AAHL - Airports) • Greenfield Navi Mumbai International Airport inaugurated on 08th October 2025, a major landmark in India’s aviation journey; set to commence operations from Q3 FY26 • During the quarter 7 new routes, 8 new flights and 1 new airline added • Mumbai Airport received the “Best Airport for Digitization” award at the India Cargo Award 2025 Adani Road Transport Ltd (ARTL - Roads) •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c3",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 16,
+          "score": 0.7909470796585083,
+          "citation": "[p3:c16]",
+          "text": "Cargo Award 2025 Adani Road Transport Ltd (ARTL - Roads) • Provisional COD received for HAM project “Nanasa-Pidgaon” in the state of Madhya Pradesh; making it 7th operational project • Letter of Award received for three new projects; o Ropeway project between Sonprayag and Kedarnath of 12.9 KM length o Two HAM Road projects connecting Munger-Sultanganj and Sultanganj-Sabour Road ESG Highlights •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c4",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 17,
+          "score": 0.7720895409584045,
+          "citation": "[p3:c17]",
+          "text": "Munger-Sultanganj and Sultanganj-Sabour Road ESG Highlights • AEL has been recognized as the ‘Great Indian ESG Organization of the Year 2025’ at the Transformance ESG Awards for its unwavering commitment to sustainability • ANIL honored with the ‘Outstanding Contribution to Circular Economy’ Award by Indian Chamber of Commerce for spearheading India’s first off-grid Green Hydrogen pilot project •"
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c5",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 18,
+          "score": 0.7741814851760864,
+          "citation": "[p3:c18]",
+          "text": "India’s first off-grid Green Hydrogen pilot project • Adani Natural Resources won the prestigious ‘Leadership in Climate Action’ Award by Indian Chamber of Commerce for its pioneering hydrogen truck initiative, advancing sustainable mining logistics Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : “Adani Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G."
+        },
+        {
+          "chunk_id": "doc_9d5307eef66c3ceb:p3:text:c6",
+          "document_id": "doc_9d5307eef66c3ceb",
+          "filename": "AEL Press Release Q2 FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 3,
+          "chunk_index": 19,
+          "score": 0.7809731364250183,
+          "citation": "[p3:c19]",
+          "text": "Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421, Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:vlm:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 13,
+          "chunk_index": 112,
+          "score": 0.8661450147628784,
+          "citation": "[p13:c112]",
+          "text": "adani logo AEL : Performance Highlights Airports - Greenfield Navi Mumbai International Airport inaugurated on 08ᵗʰ October 2025, a major landmark in India's aviation journey; set to commence operations from Q3 FY26 - Mumbai Airport received the “Best Airport for Digitization” award at the India Cargo Award 2025 Roads - AEL bags three new projects, received LoA for - the prestigious 12.9 KM ropeway project between Sonprayag and Kedarnath and - Two projects connecting Munger-Sultanganj and Sultanganj-Sabour Road under HAM from BSRDCL - AEL operationalizes its 7ᵗʰ Road project; received PCOD for Nanasa-Pidgaon HAM project Data Center - Partnership with Google to develop India's largest AI Data Center campus in Visakhapatnam, Andhra Pradesh Water - Received LoA for two projects in Rajasthan (RWGCL) under HAM for construction of - Brahmani Barrage across Brahmani river with its O&M for a period of 20 years - Mor Sagar Artificial Reservoir with its O&M for a period of 20 years Debt Issue - AEL raised Rs."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:vlm:c1",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 13,
+          "chunk_index": 113,
+          "score": 0.7979545593261719,
+          "citation": "[p13:c113]",
+          "text": "its O&M for a period of 20 years Debt Issue - AEL raised Rs. 1,000 crore through private placement of “AA-” NCDs in October,2025 - BPRPL raised Rs."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:vlm:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "vlm",
+          "page_number": 13,
+          "chunk_index": 114,
+          "score": 0.7954020500183105,
+          "citation": "[p13:c114]",
+          "text": "placement of “AA-” NCDs in October,2025 - BPRPL raised Rs. 371 crore through private placement of “AAA” rated NCDs in October,2025 LoA: Letter of Award I PCOD: Provisional Commercial Operation Date I HAM: Hybrid Annuity Model I RWGCL: Rajasthan Water Grid Corporation Ltd I O&M: Operation & Maintenance I NCDs: Non-Convertible Debentures I BPRPL: Bilaspur Pathrapali Road Private Limited I BSRDCL: Bihar State Road Development Corporation Ltd 13"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:text:c0",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 13,
+          "chunk_index": 33,
+          "score": 0.8801901340484619,
+          "citation": "[p13:c33]",
+          "text": "AEL : Performance Highlights ❑ Greenfield Navi Mumbai International Airport inaugurated on 08th October 2025, a major landmark in India’s Airports aviation journey; set to commence operations from Q3 FY26 ❑ Mumbai Airport received the “Best Airport for Digitization” award at the India Cargo Award 2025 ❑ AEL bags three new projects, received LoA for ▪ the prestigious 12.9 KM ropeway project between Sonprayag and Kedarnath and Roads ▪ Two projects connecting Munger-Sultanganj and Sultanganj-Sabour Road under"
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:text:c1",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 13,
+          "chunk_index": 34,
+          "score": 0.7712982892990112,
+          "citation": "[p13:c34]",
+          "text": "HAM from BSRDCL ❑ AEL operationalizes its 7th Road project; received PCOD for Nanasa-Pidgaon HAM project Data Center ❑ Partnership with Google to develop India’s largest AI Data Center campus in Visakhapatnam, Andhra Pradesh ❑ Received LoA for two projects in Rajasthan (RWGCL) under HAM for construction of Water ▪ Brahmani Barrage across Brahmani river with its O&M for a period of 20 years ▪ Mor Sagar Artificial Reservoir with its O&M for a period of 20 years ❑ AEL raised Rs."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:text:c2",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 13,
+          "chunk_index": 35,
+          "score": 0.8035637140274048,
+          "citation": "[p13:c35]",
+          "text": "with its O&M for a period of 20 years ❑ AEL raised Rs. 1,000 crore through private placement of “AA-” NCDs in October,2025 Debt Issue ❑ BPRPL raised Rs."
+        },
+        {
+          "chunk_id": "doc_52829a34df8b6a71:p13:text:c3",
+          "document_id": "doc_52829a34df8b6a71",
+          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+          "index_level": 0,
+          "embedding_channel": "text",
+          "page_number": 13,
+          "chunk_index": 36,
+          "score": 0.7917215824127197,
+          "citation": "[p13:c36]",
+          "text": "of “AA-” NCDs in October,2025 Debt Issue ❑ BPRPL raised Rs. 371 crore through private placement of “AAA” rated NCDs in October,2025 LoA: Letter of Award I PCOD: Provisional Commercial Operation Date I HAM: Hybrid Annuity Model I RWGCL: Rajasthan Water Grid Corporation Ltd I O&M: Operation & Maintenance I NCDs: Non-Convertible Debentures I Home outline Hsoalmid bfiullrger Menu Icon with 13 BPRPL: Bilaspur Pathrapali Road Private Limited I BSRDCL: Bihar State Road Development Corporation Ltd"
+        }
+      ],
+      "chunks_found": 28,
+      "crag_report": {
+        "status": "checked",
+        "needs_page_fallback": true,
+        "spans": [
+          {
+            "start": 62,
+            "end": 94,
+            "confidence": 0.993675172328949,
+            "text": " [p1:c25], [p3:c15], [p13:c112]."
+          }
+        ],
+        "raw_span_count": 1,
+        "page_fallback": {
+          "answer": "Not found in the Documents",
+          "found": false,
+          "checked_pages": [
+            {
+              "document_id": "doc_9d5307eef66c3ceb",
+              "filename": "AEL Press Release Q2 FY26_copy.pdf",
+              "page_number": 1,
+              "score": 0.8420615196228027,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_9d5307eef66c3ceb",
+              "filename": "AEL Press Release Q2 FY26_copy.pdf",
+              "page_number": 3,
+              "score": 0.828884482383728,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 13,
+              "score": 0.8661450147628784,
+              "status": "source_pdf_not_found"
+            }
+          ]
+        }
+      },
+      "elapsed_seconds": 6.953465099999448
     },
     {
       "index": 5,
       "question": "What is the total income of incubating business of H1-25?",
-      "answer": "The total income of incubating business of H1-25 is 27,109 crore [p2:c1].",
+      "answer": "Total income of incubating business of H1-25 is 27,109 crore [p2:c1].",
       "is_fallback": false,
       "sources": [
         {
@@ -669,7 +1586,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 6.056588699982967
+      "elapsed_seconds": 16.866929400002846
     },
     {
       "index": 6,
@@ -1021,7 +1938,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 2.143098499975167
+      "elapsed_seconds": 21.1143387000011
     },
     {
       "index": 7,
@@ -1373,7 +2290,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 16.572227200027555
+      "elapsed_seconds": 13.361207600002672
     },
     {
       "index": 8,
@@ -1725,12 +2642,12 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 14.590396000014152
+      "elapsed_seconds": 8.25821829999768
     },
     {
       "index": 9,
       "question": "What drivers are mentioned for EBITDA changes in H1-26?",
-      "answer": "EBITDA changes in H1-26 are driven by decrease in trade volume and price volatility in IRM and Commercial Mining, and growth momentum led by Airports [p2:c85].",
+      "answer": "EBITDA changes in H1-26 are driven by low export volume, low volume and prices, tariff revision, and non-aero growth [p22:c128], [p2:c84].",
       "is_fallback": false,
       "sources": [
         {
@@ -2017,7 +2934,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 7.323369499994442
+      "elapsed_seconds": 23.42125130000204
     },
     {
       "index": 10,
@@ -2369,12 +3286,12 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 1.6034871999872848
+      "elapsed_seconds": 21.52641720000247
     },
     {
       "index": 11,
       "question": "Summarize airport performance in H1-26.",
-      "answer": "Airport performance in H1-26 increased by 32% to Rs. 5,882 cr, with EBITDA increasing by 51% to Rs. 2,157 cr [p22:c128], [p3:c5].",
+      "answer": "Airport performance in H1-26 showed a 32% increase in total income to Rs. 5,882 crore [p22:c128], with a 51% increase in EBITDA to Rs. 2,157 crore [p3:c5], driven by tariff revision and non-aero growth [p22:c128].",
       "is_fallback": false,
       "sources": [
         {
@@ -2697,12 +3614,12 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 23.183608899998944
+      "elapsed_seconds": 8.836102100001881
     },
     {
       "index": 12,
       "question": "Break that down into passenger and cargo changes.",
-      "answer": "Passengers increased by 0.3 million and Cargo increased by 0.1 Lacs MT [p32:c76].",
+      "answer": "Passengers increased by 0.3 million and Cargo by 0.1 lacs MT in Q2-26 compared to Q2-25 for Ahmedabad airport [p32:c140].",
       "is_fallback": false,
       "sources": [
         {
@@ -3049,7 +3966,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 4.4243791999761015
+      "elapsed_seconds": 24.777970600000117
     }
   ]
 }
