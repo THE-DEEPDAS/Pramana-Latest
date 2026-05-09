@@ -98,29 +98,45 @@ Qwen 2.5 7B Instruct is suitable for final grounded text generation. It is text-
 
 ## Usage
 
-### One-Time Ingestion
+### One-Time Strict Qwen-VL Ingestion
 
-Run this once for all PDFs in `data`. It creates stored records under `storage/`.
+Run this from the repo root for all PDFs in `service/data`. The repo-root `.env`
+points the pipeline at the local E5 and Qwen-VL model folders, keeps strict
+ColPali/byaldi visual indexing enabled, runs Mistral OCR, and refreshes visual
+page summaries so old remote analysis caches are not reused.
 
-```cmd
+If ColPali fails with a `peft.utils.save_and_load` import error, run this once:
+
+```powershell
 conda activate powermind_rtx5050
-set POWERMIND_LOCAL_ONLY=1
-set PYTHONDONTWRITEBYTECODE=1
-python -m powermind_rag.cli ingest-dir .\data --doc-type "AEL disclosure pack" --section "Q2 FY26 and H1-26 results" --context "business segments, consolidated income, EBITDA drivers, and airport performance"
+python -m pip install --upgrade peft==0.19.1
 ```
+
+```powershell
+cd D:\PowerMind
+conda activate powermind_rtx5050
+.\scripts\run_qwen_vl_ingest.ps1
+```
+
+This writes `visual_records.json`, `visual_page_analysis.json`, and
+`text_records.json` under `service/storage/<document_id>/`. Text records include
+normal PDF text, Mistral OCR table markdown, and local Qwen-VL summaries for
+charts, tables, infographics, and flowcharts.
 
 ### Ask Queries After Ingestion
 
 This reuses the stored embeddings and records. Do not ingest again unless the PDFs change.
 
-```cmd
+```powershell
+cd D:\PowerMind
 conda activate powermind_rtx5050
-set POWERMIND_LOCAL_ONLY=1
-set PYTHONDONTWRITEBYTECODE=1
-python -m powermind_rag.cli ask "What is the consolidated total income in H1-26?"
+.\scripts\run_qwen_vl_ask.ps1 "What is the consolidated total income in H1-26?"
 ```
 
-Add `--show-timings` to print the component-wise response-time breakdown for the same query.
+The script uses the repo-root `.env`, sets `PYTHONPATH` to `service/src`, and prints the component-wise timing breakdown.
+For interactive answers it runs the local E5 query embedding on CPU, avoids
+query-time ColPali/Qwen-VL model loading, uses lexical relevance filtering, and
+sends the final grounded response to NVIDIA's API model.
 
 ### Run The Provided Question Set
 
@@ -152,20 +168,6 @@ To run the testcases and generate results, use the batch runner script. By defau
 conda activate powermind_rtx5050
 set POWERMIND_LOCAL_ONLY=1
 set PYTHONDONTWRITEBYTECODE=1
-<<<<<<< HEAD
-set POWERMIND_STORAGE_DIR=.\storage
-python ..\scripts\run_batch_from_test_cases.py
-```
-
-The script will:
-1. Load all questions from `test_cases.json` organized by category
-2. Execute 3 questions from each category (customizable in the script)
-3. Generate two output files in `outputs/`:
-   - `qa_results.md`: Human-readable markdown format with answers and citations
-   - `qa_results.json`: Machine-readable JSON format with detailed metadata, timings, and verifier reports
-
-**To customize the number of questions per category**, edit `run_batch_from_test_cases.py` and change the `max_per_category` variable:
-=======
 set POWERMIND_STORAGE_DIR=.\service\storage
 python .\scripts\run_batch_from_test_cases.py
 ```
@@ -178,17 +180,12 @@ The script will:
    - `qa_results.json`: Machine-readable JSON format with detailed metadata, timings, and verifier reports
 
 **To customize the number of questions per category**, edit `scripts/run_batch_from_test_cases.py` and change the `max_per_category` variable:
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 
 ```python
 max_per_category = 3  # Change this number
 ```
 
-<<<<<<< HEAD
-**To add more test questions**, simply add them to the appropriate section in `test_cases.json` following the same structure:
-=======
 **To add more test questions**, simply add them to the appropriate section in `service/test_cases.json` following the same structure:
->>>>>>> 67292228a7704d55a65553d6e8f1d814dd93d553
 
 ```json
 {

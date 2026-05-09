@@ -103,7 +103,11 @@ class LocalQwenVL:
 
         content = []
         for image_path in image_paths:
-            content.append({"type": "image", "image": str(image_path)})
+            content.append({
+                "type": "image",
+                "image": str(image_path),
+                "max_pixels": 896 * 896,
+            })
         content.append({"type": "text", "text": user})
         messages = [
             {"role": "system", "content": system},
@@ -135,6 +139,13 @@ class LocalQwenVL:
             clean_up_tokenization_spaces=False,
         )
         return output_text[0].strip()
+
+    def unload_model(self) -> None:
+        model = getattr(self, "model", None)
+        if model is not None:
+            del self.model
+        if torch.cuda.is_available():
+            torch.cuda.empty_cache()
 
     def _validate_model_files(self) -> None:
         if not self.model_path.exists():
@@ -394,7 +405,7 @@ def _extract_json_array(text: str) -> str:
     return clean
 
 
-def _image_data_url(image_path: Path, target_bytes: int = 20_000) -> str:
+def _image_data_url(image_path: Path, target_bytes: int = 8_000) -> str:
     with Image.open(image_path) as image:
         image = image.convert("RGB")
         max_side = 1200

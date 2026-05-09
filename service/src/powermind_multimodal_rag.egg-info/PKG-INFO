@@ -14,6 +14,7 @@ Requires-Dist: pillow>=10.0.0
 Requires-Dist: pydantic>=2.7.0
 Requires-Dist: pymupdf>=1.24.0
 Requires-Dist: python-dotenv>=1.0.1
+Requires-Dist: qwen-vl-utils>=0.0.8
 Requires-Dist: rank-bm25>=0.2.2
 Requires-Dist: sentence-transformers<6.0.0,>=5.4.1
 Requires-Dist: transformers<6.0.0,>=5.7.0

@@ -33,6 +33,8 @@ class RAGConfig:
     rrf_k: int = 60
     mistral_api_key: str | None = None
     mistral_ocr_model: str = "mistral-ocr-latest"
+    mistral_server_url: str = "https://api.mistral.ai"
+    mistral_timeout_ms: int = 120_000
     groq_api_key: str | None = None
     gemini_api_key: str | None = None
     gemini_api_key_2: str | None = None
@@ -48,6 +50,7 @@ class RAGConfig:
     openrouter_http_referer: str = "http://localhost/powermind"
     openrouter_app_title: str = "PowerMind RAG"
     enable_visual_understanding: bool = False
+    refresh_visual_understanding: bool = False
     visual_understanding_provider: str = "nvidia"
     nvidia_api_key: str | None = None
     nvidia_vlm_base_url: str = "https://integrate.api.nvidia.com/v1"
@@ -57,6 +60,12 @@ class RAGConfig:
     nvidia_vlm_image_max_bytes: int = 100_000
     nvidia_vlm_image_max_side: int = 1400
     nvidia_vlm_timeout_seconds: int = 600
+    qwen_vl_device: str | None = None
+    qwen_vl_visual_max_tokens: int = 384
+    enable_query_visual_retrieval: bool = False
+    enable_query_vlm_fallback: bool = True
+    include_page_images_in_answers: bool = False
+    load_imported_records: bool = False
     enable_verification: bool = False
     chunking_provider: str = "rules"
     groq_chunking_model: str = "llama-3.3-70b-versatile"
@@ -89,6 +98,8 @@ class RAGConfig:
             cuda_arch=os.getenv("POWERMIND_CUDA_ARCH", "sm_120"),
             mistral_api_key=os.getenv("MISTRAL_API_KEY"),
             mistral_ocr_model=os.getenv("MISTRAL_OCR_MODEL", "mistral-ocr-latest"),
+            mistral_server_url=os.getenv("MISTRAL_SERVER_URL", "https://api.mistral.ai").rstrip("/"),
+            mistral_timeout_ms=int(os.getenv("MISTRAL_TIMEOUT_MS", "120000")),
             groq_api_key=os.getenv("GROQ_API_KEY"),
             gemini_api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
             gemini_api_key_2=os.getenv("GEMINI_API_KEY_2"),
@@ -122,6 +133,10 @@ class RAGConfig:
                 "POWERMIND_ENABLE_VISUAL_UNDERSTANDING", ""
             ).strip().lower()
             in {"1", "true", "yes", "on"},
+            refresh_visual_understanding=os.getenv(
+                "POWERMIND_REFRESH_VISUAL_UNDERSTANDING", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
             visual_understanding_provider=os.getenv(
                 "POWERMIND_VISUAL_UNDERSTANDING_PROVIDER", "nvidia"
             ).strip().lower(),
@@ -146,6 +161,24 @@ class RAGConfig:
             nvidia_vlm_image_max_bytes=int(os.getenv("NVIDIA_VLM_IMAGE_MAX_BYTES", "100000")),
             nvidia_vlm_image_max_side=int(os.getenv("NVIDIA_VLM_IMAGE_MAX_SIDE", "1400")),
             nvidia_vlm_timeout_seconds=int(os.getenv("NVIDIA_VLM_TIMEOUT_SECONDS", "600")),
+            qwen_vl_device=(os.getenv("QWEN_VL_DEVICE") or "").strip().lower() or None,
+            qwen_vl_visual_max_tokens=int(os.getenv("QWEN_VL_VISUAL_MAX_TOKENS", "384")),
+            enable_query_visual_retrieval=os.getenv(
+                "POWERMIND_ENABLE_QUERY_VISUAL_RETRIEVAL", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
+            enable_query_vlm_fallback=os.getenv(
+                "POWERMIND_ENABLE_QUERY_VLM_FALLBACK", "1"
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
+            include_page_images_in_answers=os.getenv(
+                "POWERMIND_INCLUDE_PAGE_IMAGES_IN_ANSWERS", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
+            load_imported_records=os.getenv(
+                "POWERMIND_LOAD_IMPORTED_RECORDS", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
             chunking_provider=os.getenv("POWERMIND_CHUNKING_PROVIDER", "rules").strip().lower(),
             groq_chunking_model=os.getenv("GROQ_CHUNKING_MODEL", "llama-3.3-70b-versatile"),
             chunking_fallback_provider=os.getenv(

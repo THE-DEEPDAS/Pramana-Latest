@@ -9,6 +9,8 @@ from urllib.error import HTTPError, URLError
 
 from PIL import Image
 
+from powermind_rag.llm import LocalQwenVL
+
 
 class NvidiaVisualPageAnalyzer:
     def __init__(
@@ -102,6 +104,50 @@ class NvidiaVisualPageAnalyzer:
         if not content:
             raise RuntimeError(f"NVIDIA VLM {self.model_name} returned an empty page analysis.")
         return content
+
+
+class LocalQwenVLVisualPageAnalyzer:
+    def __init__(
+        self,
+        model_path: Path,
+        device: str,
+        max_tokens: int = 4096,
+    ):
+        self.max_tokens = max_tokens
+        self.llm = LocalQwenVL(model_path, device=device)
+
+    def analyze_page(
+        self,
+        image_path: Path,
+        page_number: int,
+        doc_type: str,
+        section: str,
+        context: str,
+    ) -> str:
+        prompt = _analysis_prompt(
+            page_number=page_number,
+            doc_type=doc_type,
+            section=section,
+            context=context,
+        )
+        content = self.llm.generate_with_images(
+            system=(
+                "You are a precise document intelligence extractor. "
+                "Read the page image only. Preserve visible text, numbers, labels, units, "
+                "periods, and table relationships. "
+                "Extract all numeric and text data from charts and infographics exactly as shown. "
+                "Do not infer missing values."
+            ),
+            user=prompt,
+            image_paths=[image_path.resolve()],
+            max_new_tokens=self.max_tokens,
+        ).strip()
+        if not content:
+            raise RuntimeError("Local Qwen-VL returned an empty page analysis.")
+        return content
+
+    def unload_model(self) -> None:
+        self.llm.unload_model()
 
 
 def _analysis_prompt(page_number: int, doc_type: str, section: str, context: str) -> str:

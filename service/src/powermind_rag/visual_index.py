@@ -246,6 +246,19 @@ class ColPaliVisualIndex:
         payload = [asdict(record) for record in self.records if record.document_id == document_id]
         path.write_text(json.dumps(payload, default=str, indent=2), encoding="utf-8")
 
+    def unload_model(self) -> None:
+        import gc
+
+        self.model = None
+        gc.collect()
+        try:
+            import torch
+
+            if torch.cuda.is_available():
+                torch.cuda.empty_cache()
+        except Exception:
+            pass
+
     def load_records(self, records: list[VisualPageRecord]) -> None:
         self.records = records
         if not records:

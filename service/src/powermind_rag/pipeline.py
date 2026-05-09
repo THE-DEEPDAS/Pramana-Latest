@@ -27,14 +27,15 @@ from powermind_rag.schema import Answer, RetrievedChunk, TextChunkRecord
 from powermind_rag.text_index import HybridTextIndex, load_text_records, save_text_records
 from powermind_rag.verifier import LettuceClaimVerifier
 from powermind_rag.visual_index import ColPaliVisualIndex, load_visual_records
-from powermind_rag.visual_understanding import NvidiaVisualPageAnalyzer
+from powermind_rag.visual_understanding import LocalQwenVLVisualPageAnalyzer, NvidiaVisualPageAnalyzer
 
 
 NOT_FOUND = "Not found in the document."
 FALLBACK_NOT_FOUND = "Fallback: Not found in the document."
 MAX_VISUAL_EVIDENCE_PAGES = 1
-MAX_IMAGE_GENERATION_CHARS_PER_CHUNK = 1400
-MAX_TEXT_GENERATION_CHARS_PER_CHUNK = 4000
+MAX_IMAGE_FALLBACK_PAGES = 3
+MAX_IMAGE_GENERATION_CHARS_PER_CHUNK = 700
+MAX_TEXT_GENERATION_CHARS_PER_CHUNK = 2500
 TIMING_KEYS = (
     "storage_load",
     "query_expansion",
@@ -63,7 +64,7 @@ class MultimodalRAGPipeline:
         self.image_generator: ChatLLM | None = None
         self.relevance_grader: RelevanceGrader | None = None
         self.verifier: LettuceClaimVerifier | None = None
-        self.visual_page_analyzer: NvidiaVisualPageAnalyzer | None = None
+        self.visual_page_analyzer: LocalQwenVLVisualPageAnalyzer | NvidiaVisualPageAnalyzer | None = None
 
     def ingest_pdf(
         self,
@@ -80,21 +81,36 @@ class MultimodalRAGPipeline:
         base_dir = self.config.storage_dir / document_id
         tables_by_page = defaultdict(str)
         visual_markdown_by_page: dict[int, str] = {}
-        if not self.config.local_only:
+        should_render_pages = (
+            not self.config.local_only
+            or self.config.enable_visual_understanding
+        )
+        image_paths = []
+        if should_render_pages:
             image_paths = render_pdf_pages(pdf_path, base_dir / "pages")
+        if self.config.enable_visual_understanding:
+            visual_markdown_by_page = self._load_or_analyze_visual_pages(
+                image_paths=image_paths,
+                document_id=document_id,
+                doc_type=doc_type,
+                section=section,
+                context=context,
+                cache_path=base_dir / "visual_page_analysis.json",
+            )
+            self._unload_visual_page_analyzer()
+        if not self.config.local_only:
             self._visual_index().build(image_paths, document_id=document_id, metadata=metadata or {})
-            if self.config.enable_visual_understanding:
-                visual_markdown_by_page = self._load_or_analyze_visual_pages(
-                    image_paths=image_paths,
-                    document_id=document_id,
-                    doc_type=doc_type,
-                    section=section,
-                    context=context,
-                    cache_path=base_dir / "visual_page_analysis.json",
-                )
-            ocr = MistralTableOCR(self.config.mistral_api_key, self.config.mistral_ocr_model)
+            ocr = MistralTableOCR(
+                self.config.mistral_api_key,
+                self.config.mistral_ocr_model,
+                server_url=self.config.mistral_server_url,
+                timeout_ms=self.config.mistral_timeout_ms,
+            )
             for table in ocr.extract_markdown_tables(image_paths):
                 tables_by_page[table.page_number] += table.markdown + "\n\n"
+            if self.visual_index is not None:
+                self.visual_index.save_document_records(document_id, base_dir / "visual_records.json")
+                self.visual_index.unload_model()
 
         use_rule_chunking = self.config.chunking_provider in {"rules", "local-rules"}
         chunker = None if self.config.local_only or use_rule_chunking else PropositionChunker(self._chunking_llm())
@@ -131,7 +147,7 @@ class MultimodalRAGPipeline:
                 chunk_id = f"{document_id}:{chunk_label}"
                 prefix = (
                     f"This chunk is from {doc_type}, {section}, describing {context}. "
-                    "It may include PDF text, OCR table text, or NVIDIA visual page analysis."
+                    "It may include PDF text, OCR table text, or visual page analysis."
                 )
                 embedding = self.embedder.encode([proposition])[0].tolist()
                 records.append(
@@ -150,22 +166,32 @@ class MultimodalRAGPipeline:
         self.text_records.extend(records)
         self.text_index.build(self.text_records)
         save_text_records(records, base_dir / "text_records.json")
-        if self.visual_index is not None:
+        if self.visual_index is not None and self.visual_index.model is not None:
             self.visual_index.save_document_records(document_id, base_dir / "visual_records.json")
 
     def load_from_storage(self) -> None:
         text_records: list[TextChunkRecord] = []
         visual_records = []
         for text_path in self.config.storage_dir.glob("*/text_records.json"):
+            if (
+                not self.config.load_imported_records
+                and text_path.parent.name.endswith("_embeddings_import")
+            ):
+                continue
             text_records.extend(load_text_records(text_path))
         for visual_path in self.config.storage_dir.glob("*/visual_records.json"):
+            if (
+                not self.config.load_imported_records
+                and visual_path.parent.name.endswith("_embeddings_import")
+            ):
+                continue
             visual_records.extend(load_visual_records(visual_path))
         if not text_records and not visual_records:
             raise RuntimeError(f"No ingested records found under {self.config.storage_dir}.")
         self.text_records = text_records
         if text_records:
             self.text_index.build(text_records)
-        if visual_records:
+        if visual_records and self.config.enable_query_visual_retrieval:
             self._visual_index().load_records(visual_records)
 
     def answer(self, query: str) -> Answer:
@@ -197,9 +223,13 @@ class MultimodalRAGPipeline:
         text_fusion_start = perf_counter()
         text_hits = reciprocal_rank_fusion([keyword_hits, bm25_hits, dense_hits], k=self.config.rrf_k)
         timings["text_rrf"] = perf_counter() - text_fusion_start
-        text_page_hints = _ranked_text_pages(text_hits, MAX_VISUAL_EVIDENCE_PAGES)
+        text_page_hints = _ranked_text_pages(text_hits, MAX_IMAGE_FALLBACK_PAGES)
         visual_start = perf_counter()
-        if self.config.local_only or self.visual_index is None:
+        if (
+            self.config.local_only
+            or self.visual_index is None
+            or not self.config.enable_query_visual_retrieval
+        ):
             visual_hits = []
         else:
             visual_hits = self.visual_index.search(query, self.config.visual_top_k)
@@ -212,6 +242,8 @@ class MultimodalRAGPipeline:
 
         if self.config.local_only:
             graded = [(chunk, 1.0) for chunk in candidates]
+        elif self.config.relevance_provider in {"none", "lexical", "local"}:
+            graded = _lexical_crag_grade(query, candidates)
         else:
             grade_start = perf_counter()
             try:
@@ -225,16 +257,8 @@ class MultimodalRAGPipeline:
                 graded = _lexical_crag_grade(query, candidates)
             timings["relevance_grading"] = perf_counter() - grade_start
         supported = [chunk for chunk, score in graded if score >= self.config.relevance_threshold]
-        image_fallback = []
-        if self._can_generate_from_images():
-            image_fallback = _related_visual_evidence(
-                candidates,
-                [],
-                text_page_hints,
-                self.config.storage_dir,
-            )
-
         if not supported:
+            image_fallback = self._lazy_image_fallback_pages(candidates, [], text_page_hints)
             if image_fallback:
                 image_answer = self._generate_image_fallback(query, image_fallback)
                 if image_answer.strip() != NOT_FOUND:
@@ -242,11 +266,15 @@ class MultimodalRAGPipeline:
             return finalize(text=NOT_FOUND, retrieved=candidates, is_fallback=False)
 
         text_evidence = [chunk for chunk in supported if chunk.modality == "text"]
-        visual_evidence = _related_visual_evidence(
-            candidates,
-            text_evidence,
-            text_page_hints,
-            self.config.storage_dir,
+        visual_evidence = (
+            _related_visual_evidence(
+                candidates,
+                text_evidence,
+                text_page_hints,
+                self.config.storage_dir,
+            )
+            if self._can_generate_from_images()
+            else []
         )
         if not text_evidence and not self._can_generate_from_images():
             return finalize(text=FALLBACK_NOT_FOUND, retrieved=supported, is_fallback=True)
@@ -272,6 +300,7 @@ class MultimodalRAGPipeline:
             timings["generation"] = perf_counter() - generation_start
             answer = self._extractive_local_answer(query, text_evidence, exc)
         if answer.strip() == NOT_FOUND:
+            image_fallback = self._lazy_image_fallback_pages(candidates, text_evidence, text_page_hints)
             if image_fallback:
                 image_answer = self._generate_image_fallback(query, image_fallback)
                 if image_answer.strip() != NOT_FOUND:
@@ -366,7 +395,7 @@ RETRIEVED CONTEXT:
             for chunk in image_chunks
             for path in [chunk.metadata.get("raw_image_path")]
             if path
-        ][:MAX_VISUAL_EVIDENCE_PAGES]
+        ][:MAX_IMAGE_FALLBACK_PAGES]
         if not image_paths:
             return NOT_FOUND
         page_list = ", ".join(f"p{chunk.page_number}" for chunk in image_chunks[:len(image_paths)])
@@ -393,7 +422,16 @@ QUERY:
         )
 
     def _can_generate_from_images(self) -> bool:
-        return self.config.image_generation_provider in {"nvidia", "qwen_vl", "qwen-vl"}
+        return (
+            self.config.include_page_images_in_answers
+            and self.config.image_generation_provider in {"nvidia", "qwen_vl", "qwen-vl"}
+        )
+
+    def _can_use_image_fallback(self) -> bool:
+        return (
+            self.config.enable_query_vlm_fallback
+            and self.config.image_generation_provider in {"nvidia", "qwen_vl", "qwen-vl"}
+        )
 
     def _extractive_local_answer(self, query: str, chunks: list[RetrievedChunk], exc: Exception) -> str:
         excerpts = []
@@ -410,8 +448,10 @@ QUERY:
         )
 
     def _visual_index(self) -> ColPaliVisualIndex:
-        if self.visual_index is None:
+        if self.visual_index is None or self.visual_index.model is None:
+            previous_records = self.visual_index.records if self.visual_index is not None else []
             self.visual_index = ColPaliVisualIndex(self.config.colpali_model_name, device=self.device)
+            self.visual_index.records.extend(previous_records)
         return self.visual_index
 
     def _load_or_analyze_visual_pages(
@@ -423,7 +463,7 @@ QUERY:
         context: str,
         cache_path: Path,
     ) -> dict[int, str]:
-        cached = _load_visual_page_analysis(cache_path)
+        cached = {} if self.config.refresh_visual_understanding else _load_visual_page_analysis(cache_path)
         if cached and set(cached) == set(range(1, len(image_paths) + 1)):
             return cached
 
@@ -433,7 +473,7 @@ QUERY:
             if analyses.get(page_number):
                 continue
             print(
-                f"Analyzing {document_id} page {page_number} with {self.config.nvidia_vlm_model}...",
+                f"Analyzing {document_id} page {page_number} with {self._visual_understanding_model_label()}...",
                 flush=True,
             )
             analyses[page_number] = analyzer.analyze_page(
@@ -446,22 +486,42 @@ QUERY:
             _save_visual_page_analysis(cache_path, analyses)
         return analyses
 
-    def _visual_page_analyzer(self) -> NvidiaVisualPageAnalyzer:
-        if self.config.visual_understanding_provider != "nvidia":
-            raise RuntimeError(
-                "Unsupported POWERMIND_VISUAL_UNDERSTANDING_PROVIDER. Use 'nvidia'."
-            )
+    def _visual_page_analyzer(self) -> LocalQwenVLVisualPageAnalyzer | NvidiaVisualPageAnalyzer:
         if self.visual_page_analyzer is None:
-            self.visual_page_analyzer = NvidiaVisualPageAnalyzer(
-                api_key=self.config.nvidia_api_key,
-                model_name=self.config.nvidia_vlm_model,
-                base_url=self.config.nvidia_vlm_base_url,
-                max_tokens=self.config.nvidia_vlm_max_tokens,
-                image_max_bytes=self.config.nvidia_vlm_image_max_bytes,
-                image_max_side=self.config.nvidia_vlm_image_max_side,
-                timeout_seconds=self.config.nvidia_vlm_timeout_seconds,
-            )
+            if self.config.visual_understanding_provider == "nvidia":
+                self.visual_page_analyzer = NvidiaVisualPageAnalyzer(
+                    api_key=self.config.nvidia_api_key,
+                    model_name=self.config.nvidia_vlm_model,
+                    base_url=self.config.nvidia_vlm_base_url,
+                    max_tokens=self.config.nvidia_vlm_max_tokens,
+                    image_max_bytes=self.config.nvidia_vlm_image_max_bytes,
+                    image_max_side=self.config.nvidia_vlm_image_max_side,
+                    timeout_seconds=self.config.nvidia_vlm_timeout_seconds,
+                )
+            elif self.config.visual_understanding_provider in {"qwen_vl", "qwen-vl"}:
+                qwen_device = self.config.qwen_vl_device or self.device
+                self.visual_page_analyzer = LocalQwenVLVisualPageAnalyzer(
+                    model_path=self.config.qwen_vl_model_path,
+                    device=qwen_device,
+                    max_tokens=self.config.qwen_vl_visual_max_tokens,
+                )
+            else:
+                raise RuntimeError(
+                    "Unsupported POWERMIND_VISUAL_UNDERSTANDING_PROVIDER. Use 'nvidia' or 'qwen_vl'."
+                )
         return self.visual_page_analyzer
+
+    def _visual_understanding_model_label(self) -> str:
+        if self.config.visual_understanding_provider in {"qwen_vl", "qwen-vl"}:
+            qwen_device = self.config.qwen_vl_device or self.device
+            return f"local Qwen-VL at {self.config.qwen_vl_model_path} on {qwen_device}"
+        return self.config.nvidia_vlm_model
+
+    def _unload_visual_page_analyzer(self) -> None:
+        analyzer = self.visual_page_analyzer
+        if analyzer is not None and hasattr(analyzer, "unload_model"):
+            analyzer.unload_model()
+            self.visual_page_analyzer = None
 
     def _generation_llm(self) -> ChatLLM:
         if self.generator is None:
@@ -485,7 +545,10 @@ QUERY:
                     base_url=self.config.nvidia_vlm_base_url,
                 )
             elif self.config.generation_provider in {"qwen_vl", "qwen-vl"}:
-                self.generator = LocalQwenVL(self.config.qwen_vl_model_path, device=self.device)
+                self.generator = LocalQwenVL(
+                    self.config.qwen_vl_model_path,
+                    device=self.config.qwen_vl_device or self.device,
+                )
             elif self.config.generation_provider in {"local", "qwen"}:
                 self.generator = LocalQwen(self.config.qwen_model_path, device=self.device)
             else:
@@ -503,7 +566,10 @@ QUERY:
                     base_url=self.config.nvidia_vlm_base_url,
                 )
             elif self.config.image_generation_provider in {"qwen_vl", "qwen-vl"}:
-                self.image_generator = LocalQwenVL(self.config.qwen_vl_model_path, device=self.device)
+                self.image_generator = LocalQwenVL(
+                    self.config.qwen_vl_model_path,
+                    device=self.config.qwen_vl_device or self.device,
+                )
             else:
                 raise RuntimeError(
                     "Unsupported POWERMIND_IMAGE_PROVIDER. Use 'nvidia' or 'qwen_vl'."
@@ -559,6 +625,22 @@ QUERY:
             )
         return self.verifier
 
+    def _lazy_image_fallback_pages(
+        self,
+        candidates: list[RetrievedChunk],
+        text_evidence: list[RetrievedChunk],
+        text_page_hints: list[tuple[str, int]],
+    ) -> list[RetrievedChunk]:
+        if not self._can_use_image_fallback():
+            return []
+        return _related_visual_evidence(
+            candidates,
+            text_evidence,
+            text_page_hints,
+            self.config.storage_dir,
+            limit=MAX_IMAGE_FALLBACK_PAGES,
+        )
+
 
 def _local_propositions(text: str) -> list[str]:
     if not text.strip():
@@ -567,6 +649,10 @@ def _local_propositions(text: str) -> list[str]:
     for block in _markdown_blocks(text):
         if _looks_like_markdown_table(block):
             propositions.extend(_table_propositions(block))
+            continue
+        structured = _structured_bullet_propositions(block)
+        if structured:
+            propositions.extend(structured)
             continue
         clean = re.sub(r"\s+", " ", block).strip()
         parts = re.split(r"(?<=[.!?])\s+(?=[A-Z0-9])", clean)
@@ -583,6 +669,23 @@ def _local_propositions(text: str) -> list[str]:
                 if len(chunk) >= 20:
                     propositions.append(chunk)
     return propositions
+
+
+def _structured_bullet_propositions(block: str) -> list[str]:
+    lines = [line.strip() for line in block.splitlines() if line.strip()]
+    if len(lines) < 2:
+        return []
+    heading = ""
+    facts: list[str] = []
+    for line in lines:
+        if line.startswith("#"):
+            heading = re.sub(r"^#+\s*", "", line).strip()
+            continue
+        if line.startswith(("-", "*")):
+            fact = line[1:].strip()
+            if len(fact) >= 20:
+                facts.append(f"{heading}: {fact}" if heading else fact)
+    return facts
 
 
 def _markdown_blocks(text: str) -> list[str]:
@@ -616,6 +719,9 @@ def _looks_like_markdown_table(block: str) -> bool:
 
 def _table_propositions(table: str, max_chars: int = 1200) -> list[str]:
     lines = [line.strip() for line in table.splitlines() if line.strip()]
+    row_facts = _markdown_table_row_facts(lines)
+    if row_facts:
+        return row_facts
     if len("\n".join(lines)) <= max_chars:
         return ["\n".join(lines)]
     header = lines[:2] if len(lines) >= 2 else lines[:1]
@@ -631,6 +737,44 @@ def _table_propositions(table: str, max_chars: int = 1200) -> list[str]:
     if current:
         chunks.append("\n".join(current))
     return chunks
+
+
+def _markdown_table_row_facts(lines: list[str]) -> list[str]:
+    table_lines = [line for line in lines if "|" in line and line.count("|") >= 2]
+    if len(table_lines) < 2:
+        return []
+    title = ""
+    for line in lines:
+        if line.startswith("#"):
+            title = re.sub(r"^#+\s*", "", line).strip()
+            break
+    parsed = [_split_markdown_row(line) for line in table_lines]
+    parsed = [row for row in parsed if row and not _is_markdown_separator(row)]
+    if len(parsed) < 2:
+        return []
+    header = parsed[0]
+    facts = []
+    for row in parsed[1:]:
+        width = min(len(header), len(row))
+        pairs = [
+            f"{header[index]}={row[index]}"
+            for index in range(width)
+            if header[index] and row[index]
+        ]
+        if len(pairs) >= 2:
+            prefix = f"{title}: " if title else "Table row: "
+            facts.append(prefix + "; ".join(pairs))
+    return facts
+
+
+def _split_markdown_row(line: str) -> list[str]:
+    stripped = line.strip().strip("|")
+    cells = re.split(r"(?<!\\)\|", stripped)
+    return [cell.replace("\\|", "|").strip() for cell in cells]
+
+
+def _is_markdown_separator(row: list[str]) -> bool:
+    return all(re.fullmatch(r":?-{3,}:?", cell.strip()) for cell in row if cell.strip())
 
 
 def _combined_text(*parts: str) -> str:
@@ -715,6 +859,7 @@ def _related_visual_evidence(
     text_evidence: list[RetrievedChunk],
     page_hints: list[tuple[str, int]] | None = None,
     storage_dir: Path | None = None,
+    limit: int = MAX_VISUAL_EVIDENCE_PAGES,
 ) -> list[RetrievedChunk]:
     storage_dir = storage_dir or Path("storage")
     evidence_pages = list(page_hints or [])
@@ -724,7 +869,7 @@ def _related_visual_evidence(
             evidence_pages.append(page_key)
     visuals = [chunk for chunk in candidates if chunk.modality == "image"]
     if not evidence_pages:
-        return visuals[:MAX_VISUAL_EVIDENCE_PAGES]
+        return visuals[:limit]
 
     visual_by_page: dict[tuple[str, int], RetrievedChunk] = {}
     for visual in visuals:
@@ -753,17 +898,17 @@ def _related_visual_evidence(
                 metadata={"chunk_label": "image", "raw_image_path": str(image_path)},
             )
         )
-        if len(selected) >= MAX_VISUAL_EVIDENCE_PAGES:
+        if len(selected) >= limit:
             break
     if selected:
-        return selected[:MAX_VISUAL_EVIDENCE_PAGES]
-    return visuals[:MAX_VISUAL_EVIDENCE_PAGES]
+        return selected[:limit]
+    return visuals[:limit]
 
 
 def _generation_context_chunks(chunks: list[RetrievedChunk]) -> list[RetrievedChunk]:
     text_chunks = [chunk for chunk in chunks if chunk.modality == "text"]
     image_chunks = [chunk for chunk in chunks if chunk.modality == "image"]
-    return text_chunks[:5] + image_chunks[:MAX_VISUAL_EVIDENCE_PAGES]
+    return text_chunks[:3] + image_chunks[:MAX_VISUAL_EVIDENCE_PAGES]
 
 
 def _trim_generation_text(text: str, limit: int) -> str:

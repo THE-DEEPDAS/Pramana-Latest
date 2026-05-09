@@ -198,7 +198,57 @@ http://localhost:3000
 - `backend/scripts/run_v2_data_ingest.py`: ingest documents into the RAG v2 vector store
 - `backend/scripts/export_pinecone_vectors.py`: export Pinecone vectors to local JSONL
 - `backend/scripts/run_tests_json.py`: run configured QA tests
+- `scripts/run_qwen_vl_ingest.ps1`: ingest every PDF in `service/data` using local Qwen-VL page summaries plus robust text/table/layout parsing
+- `scripts/run_qwen_vl_ask.ps1`: ask one question against the stored local service records
 - `scripts/smoke_full_pipeline.py`: smoke test the full pipeline
+
+## Strict Service Ingestion
+
+The service ingestion path is configured from the repo-root `.env`. The current strict defaults point at:
+
+```text
+POWERMIND_DENSE_MODEL=D:\PowerMind\E5_Small
+QWEN_VL_MODEL_PATH=D:\PowerMind\Qwen_VL
+QWEN_VL_DEVICE=cuda
+POWERMIND_STORAGE_DIR=D:\PowerMind\service\storage
+POWERMIND_LOCAL_ONLY=0
+POWERMIND_ENABLE_VISUAL_UNDERSTANDING=true
+POWERMIND_VISUAL_UNDERSTANDING_PROVIDER=qwen_vl
+POWERMIND_REFRESH_VISUAL_UNDERSTANDING=1
+MISTRAL_SERVER_URL=https://api.mistral.ai
+QWEN_VL_VISUAL_MAX_TOKENS=384
+POWERMIND_GENERATION_PROVIDER=nvidia
+POWERMIND_IMAGE_PROVIDER=qwen_vl
+POWERMIND_RELEVANCE_PROVIDER=lexical
+POWERMIND_ENABLE_QUERY_VISUAL_RETRIEVAL=0
+POWERMIND_ENABLE_QUERY_VLM_FALLBACK=1
+```
+
+If ColPali fails with a `peft.utils.save_and_load` import error, run this once inside `powermind_rtx5050`:
+
+```powershell
+python -m pip install --upgrade peft==0.19.1
+```
+
+Run ingestion from the repo root in the GPU conda environment:
+
+```powershell
+cd D:\PowerMind
+conda activate powermind_rtx5050
+.\scripts\run_qwen_vl_ingest.ps1
+```
+
+This renders pages for each PDF in `service/data`, builds the ColPali/byaldi visual index, runs Mistral OCR, extracts selectable PDF text, preserves native PDF tables as row-level facts, adds layout-derived numeric facts for chart-like financial slides, summarizes visual/table/chart content with the local Qwen-VL model, embeds everything with the local E5 model, and writes records under `service/storage`.
+
+Ask one question after ingestion:
+
+```powershell
+cd D:\PowerMind
+conda activate powermind_rtx5050
+.\scripts\run_qwen_vl_ask.ps1 "What is the consolidated total income in H1-26?"
+```
+
+The ask script is optimized for interactive answers: it runs retrieval first from stored embeddings, uses lexical relevance filtering, and calls NVIDIA's API model for final text generation. It does not load Qwen-VL during normal answers. If retrieval/generation returns `Not found in the document.`, it lazily loads local Qwen-VL on CUDA and checks the most relevant page image as a fallback for missed visual/text content.
 
 ## Notes
 
