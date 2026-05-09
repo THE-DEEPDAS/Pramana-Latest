@@ -286,7 +286,7 @@ Answer format:
         if crag_report.get("needs_page_fallback"):
             page_report = page_level_fallback(config=config, query=query, chunks=chunks)
             crag_report = {**crag_report, "page_fallback": page_report}
-            answer = page_report["answer"]
+            answer = _apply_page_fallback_answer(answer, page_report)
 
         return {
             **state,
@@ -350,6 +350,15 @@ def _fallback(state: RagState) -> RagState:
 
 def _route(state: RagState) -> str:
     return "generate" if state.get("chunks") else "fallback"
+
+
+def _apply_page_fallback_answer(answer: str, page_report: dict[str, Any]) -> str:
+    if page_report.get("found") and page_report.get("answer"):
+        return str(page_report["answer"])
+    return answer
+
+
+
 
 
 # ---------------------------------------------------------------------------

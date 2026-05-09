@@ -1,16 +1,16 @@
 {
-  "ran_at": "2026-05-09T17:48:58.775468+00:00",
+  "ran_at": "2026-05-09T18:14:44.679429+00:00",
   "tests_path": "D:\\PowerMind\\backend\\tests.json",
   "pinecone_index": "powermind-rag-final",
   "pinecone_namespace": "default",
   "total_questions": 12,
-  "total_elapsed_seconds": 212.41221009999936,
+  "total_elapsed_seconds": 159.33949220000068,
   "results": [
     {
       "index": 1,
       "question": "The ANIL slide shows a manufacturing facility image — what type of product appears to be manufactured there based on the visual?",
-      "answer": "Not found in the Documents",
-      "is_fallback": true,
+      "answer": "Solar panels appear to be manufactured there based on the visual [p1:c81].",
+      "is_fallback": false,
       "sources": [
         {
           "chunk_id": "doc_52829a34df8b6a71:p1:vlm:c0",
@@ -188,7 +188,7 @@
           ]
         }
       },
-      "elapsed_seconds": 11.2846701999988
+      "elapsed_seconds": 51.51646229999824
     },
     {
       "index": 2,
@@ -568,12 +568,12 @@
           ]
         }
       },
-      "elapsed_seconds": 27.516456099998322
+      "elapsed_seconds": 10.89526029999979
     },
     {
       "index": 3,
       "question": "According to the ARTL Roads construction activity table, what was the lane-km construction volume in Q2-26 and what was the year-on-year change?",
-      "answer": "The lane-km construction volume in Q2-26 was 456.1, with a year-on-year change of 153% [p19:c124].",
+      "answer": "The lane-km construction volume in Q2-26 was 456.1, with a 153% year-on-year change [p19:c124].",
       "is_fallback": false,
       "sources": [
         {
@@ -848,13 +848,13 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 28.49253619999945
+      "elapsed_seconds": 13.777854700001626
     },
     {
       "index": 4,
       "question": "Navi Mumbai Airport was just inaugurated — how soon can I expect it to contribute to the company's revenues?",
-      "answer": "Not found in the Documents",
-      "is_fallback": true,
+      "answer": "Navi Mumbai International Airport is set to commence operations from Q3 FY26 [p1:c24], [p3:c36], [p13:c112].",
+      "is_fallback": false,
       "sources": [
         {
           "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c0",
@@ -1199,10 +1199,10 @@
         "needs_page_fallback": true,
         "spans": [
           {
-            "start": 62,
-            "end": 94,
-            "confidence": 0.993675172328949,
-            "text": " [p1:c25], [p3:c15], [p13:c112]."
+            "start": 76,
+            "end": 108,
+            "confidence": 0.989461362361908,
+            "text": " [p1:c24], [p3:c36], [p13:c112]."
           }
         ],
         "raw_span_count": 1,
@@ -1234,12 +1234,12 @@
           ]
         }
       },
-      "elapsed_seconds": 6.953465099999448
+      "elapsed_seconds": 8.781619400000636
     },
     {
       "index": 5,
       "question": "What is the total income of incubating business of H1-25?",
-      "answer": "Total income of incubating business of H1-25 is 27,109 crore [p2:c1].",
+      "answer": "The total income of incubating business of H1-25 is 27,109 crore [p2:c1].",
       "is_fallback": false,
       "sources": [
         {
@@ -1586,7 +1586,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 16.866929400002846
+      "elapsed_seconds": 19.054021199997806
     },
     {
       "index": 6,
@@ -1938,7 +1938,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 21.1143387000011
+      "elapsed_seconds": 8.437429699999484
     },
     {
       "index": 7,
@@ -2290,7 +2290,7 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 13.361207600002672
+      "elapsed_seconds": 6.227010700000392
     },
     {
       "index": 8,
@@ -2642,305 +2642,24 @@
         "spans": [],
         "raw_span_count": 0
       },
-      "elapsed_seconds": 8.25821829999768
+      "elapsed_seconds": 23.82397149999815
     },
     {
       "index": 9,
       "question": "What drivers are mentioned for EBITDA changes in H1-26?",
-      "answer": "EBITDA changes in H1-26 are driven by low export volume, low volume and prices, tariff revision, and non-aero growth [p22:c128], [p2:c84].",
-      "is_fallback": false,
-      "sources": [
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 22,
-          "chunk_index": 128,
-          "score": 0.8596876859664917,
-          "citation": "[p22:c128]",
-          "text": "AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 22,
-          "chunk_index": 54,
-          "score": 0.8525155782699585,
-          "citation": "[p22:c54]",
-          "text": "AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore Consolidated ANIL Ecosystem Airports IRM Mining Service 49,263 7,634 5,882 2,247 7,233 44,281 20,898 4,453 (4,867) (115) 1,660 14,899 E M O C N I L A T O H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 T (5%) 32% (29%) 35% Impacted due to low export Increased in line with tariff Impacted due to low volume Increased in line with higher H1-25 Established Incubating H1-26 volume by 31% revision and non-aero growth and prices volume 8,654 2,763 2,157"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 22,
-          "chunk_index": 55,
-          "score": 0.8767745494842529,
-          "citation": "[p22:c55]",
-          "text": "1,019 237 7,688 2,384 1,916 (1,203) 1,426 746 1,331 A D T I B E H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 (14%) 51% (31%) 37% Impacted due to low export Increased in line with revenue Impacted due to low volume Increased in line with higher H1-25 Established Incubating H1-26 and levy of tariff and tariff order revision and prices volume Home outline Hsoalmid bfiullrger Menu Icon with 22 Increase Decrease Total"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 25,
-          "chunk_index": 130,
-          "score": 0.827857494354248,
-          "citation": "[p25:c130]",
-          "text": "AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore adani **Interest coverage ratio** - Data points: - FY21: 2.8 - FY22: 2.4 - FY23: 3.1 - FY24: 3.6 - FY25: 3.4 - H126: 2.5 - Trend: Decreased from FY21 to FY22, then increased to FY24, then decreased to H126. **Debt Service coverage ratio** - Data points: - FY21: 1.7 - FY22: 1.8 - FY23: 2.5 - FY24: 2.5 - FY25: 2.6 - H126: 1.8 - Trend: Generally increased from FY21 to FY25, then decreased for H126."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:vlm:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 25,
-          "chunk_index": 131,
-          "score": 0.8548709750175476,
-          "citation": "[p25:c131]",
-          "text": "Generally increased from FY21 to FY25, then decreased for H126. **Net External Debt/ EBITDA** - Data points: - FY21: 3.0 - FY22: 5.2 - FY23: 2.2 - FY24: 2.3 - FY25: 2.9 - H126: 3.9 - Trend: Increased from FY21 to FY22, then sharply decreased to FY23, then generally increased to H126. | External debt from Mar-24 | External debt accounted for | | EBITDA | |---|---|---|---| | Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:vlm:c2",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 25,
-          "chunk_index": 132,
-          "score": 0.8325483798980713,
-          "citation": "[p25:c132]",
-          "text": "debt accounted for | | EBITDA | |---|---|---|---| | Rs. 31,064 cr | accounted for | | yet to unlock | | **35%** in AAHL Airports | > Construction of Navi Mumbai Airport<br>> PPRA Payment of Three Airports<br>> Construction of New Terminals<br>> Capex expenditure for Non-aero activities | -> | Navi Mumbai Airport in FY26 | | **23%** in ARTL Roads | > Construction of Ganga Expressway project<br>> Construction of other projects | -> | Ganga Expressway in FY26 | | **21%** in KCL Copper | > Construction of Copper plant 500 KTPA<br>> Working capital requirements | -> | Copper Plant fully by FY26 | | **18%** in MPL PVC | > Construction of PVC plant 1 MMTPA | -> | PVC Plant by FY28 | [Home icon] [List icon] 25"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 25,
-          "chunk_index": 59,
-          "score": 0.8284880518913269,
-          "citation": "[p25:c59]",
-          "text": "AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore Interest coverage ratio External debt External debt EBITDA from Mar-24 3.6 3.4 3.1 2.8 2.4 2.5 Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 25,
-          "chunk_index": 60,
-          "score": 0.8272767066955566,
-          "citation": "[p25:c60]",
-          "text": "31,064 cr accounted for yet to unlock ➢ Construction of Navi Mumbai Airport 35% in ➢ PPRA Payment of Three Airports Navi Mumbai Airport FY21 FY22 FY23 FY24 FY25 H126 in FY26 AAHL Airports ➢ Construction of New Terminals ➢ Capex expenditure for Non-aero activities Debt Service coverage ratio 2.5 2.5 2.6 1.7 1.8 1.8 23% in ➢ Construction of Ganga Expressway project Ganga Expressway ARTL Roads ➢ Construction of other projects in FY26 FY21 FY22 FY23 FY24 FY25 H126 21% in ➢ Construction of Copper plant 500 KTPA"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p25:text:c2",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 25,
-          "chunk_index": 61,
-          "score": 0.8141658306121826,
-          "citation": "[p25:c61]",
-          "text": "Copper Plant fully Net External Debt/ EBITDA by FY26 KCL Copper ➢ Working capital requirements 5.2 3.9 3.0 2.9 2.2 2.3 18% in PVC Plant ➢ Construction of PVC plant 1 MMTPA by FY28 MPL PVC FY21 FY22 FY23 FY24 FY25 H126 Home outline Hsoalmid bfiullrger Menu Icon with 25"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p2:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 2,
-          "chunk_index": 84,
-          "score": 0.8307393789291382,
-          "citation": "[p2:c84]",
-          "text": "Adani Enterprises Limited (“AEL”): Consolidated Financial Highlights H1-26 ₹ crore adani Results at glance Total Income 49,263 17,287 31,976 H1-25 44,281 17,172 27,109 H1-26 EBITDA 8,654 5,233 3,421 H1-25 7,688 5,470 2,218 5% (with grey triangle symbol pointing right) H1-26 PBT 4,644 2,878 1,766 H1-25 2,281# 2,630 (349) H1-26 Established Businesses Incubating Businesses (core infra) # Excluding exceptional pre-tax gain of Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p2:vlm:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 2,
-          "chunk_index": 85,
-          "score": 0.8273112773895264,
-          "citation": "[p2:c85]",
-          "text": "(core infra) # Excluding exceptional pre-tax gain of Rs. 3,583 cr > *EBITDA impacted primarily on account of decrease in trade volume and price volatility in IRM and Commercial Mining* > *Incubating businesses EBITDA continues growth momentum led by Airports* > *Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26* Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd] Established Business – [Primary Industries – Mining services, IRM, Mining, Metals and Industrials] ☰ 2"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p2:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 2,
-          "chunk_index": 1,
-          "score": 0.8535176515579224,
-          "citation": "[p2:c1]",
-          "text": "Adani Enterprises Limited (“AEL”): Consolidated Financial Highlights H1-26 ₹ crore Results at glance Total Income EBITDA PBT 49,263 8,654 4,644 44,281 7,688 17,287 17,172 5,233 2,878 # 2,281 5,470 5% 31,976 2,630 27,109 3,421 1,766 2,218 (349) H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 Established Businesses Incubating Businesses (core infra) # Excluding exceptional pre-tax gain of Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p2:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 2,
-          "chunk_index": 2,
-          "score": 0.8425395488739014,
-          "citation": "[p2:c2]",
-          "text": "3,583 cr ➢ EBITDA impacted primarily on account of decrease in trade volume and price volatility in IRM and Commercial Mining ➢ Incubating businesses EBITDA continues growth momentum led by Airports ➢ Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26 Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd] Hsoalmid bfiullrger Menu Icon"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p2:text:c2",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 2,
-          "chunk_index": 3,
-          "score": 0.7728626728057861,
-          "citation": "[p2:c3]",
-          "text": "with 2 Established Business – [Primary Industries – Mining services, IRM, Mining, Metals and Industrials] SSTTRRIICCTTLLYY CCOONNFFIIDDEENNTTIIAALL"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 3,
-          "chunk_index": 86,
-          "score": 0.833794891834259,
-          "citation": "[p3:c86]",
-          "text": "Adani Enterprises Limited (“AEL”): Incubating Businesses ₹ crore adani Incubating Businesses at glance | | ANIL Green H2 Ecosystem | | AAHL Airports | | ARTL Roads | | :---------------- | :------------------- | :-------------------- | :---------------- | :------------------ | :------------- | :------------------ | | | FY25 | H1-26 (YoY change) | FY25 | H1-26 (YoY change) | FY25 | H1-26 (YoY change) | | Total Income | 14,236 | 7,233 (5%) ▼ | 10,224 | 5,882 32% ▲ | 10,086 | 4,056 (22%) ▼ | | EBITDA | 4,776 | 2,384 (14%) ▼ | 3,480 | 2,157 51% ▲ | 1,769 | 930 (11%) ▼ | AAHL Airports H1-26 EBITDA increased by 51% to Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:vlm:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 3,
-          "chunk_index": 87,
-          "score": 0.8522141575813293,
-          "citation": "[p3:c87]",
-          "text": "(11%) ▼ | AAHL Airports H1-26 EBITDA increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs. 1,000+ crore from seven operational airports Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26 Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd.] 3"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 3,
-          "chunk_index": 4,
-          "score": 0.8527307510375977,
-          "citation": "[p3:c4]",
-          "text": "Adani Enterprises Limited (“AEL”): Incubating Businesses ₹ crore Incubating Businesses at glance ANIL AAHL ARTL Green H2 Ecosystem Airports Roads H1-26 H1-26 H1-26 FY25 FY25 FY25 (YoY change) (YoY change) (YoY change) Total 7,233 5,882 4,056 14,236 10,224 10,086 Income (5%) 32% (22%) 2,384 2,157 930 4,776 3,480 1,769 EBITDA (14%) 51% (11%) AAHL Airports H1-26 EBITDA increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 3,
-          "chunk_index": 5,
-          "score": 0.8195912837982178,
-          "citation": "[p3:c5]",
-          "text": "increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs. 1,000+ crore from seven operational airports Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26 Hsoalmid bfiullrger Menu Icon with 3 Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd.] SSTTRRIICCTTLLYY CCOONNFFIIDDEENNTTIIAALL"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p2:text:c3",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 2,
-          "chunk_index": 9,
-          "score": 0.8496174812316895,
-          "citation": "[p2:c9]",
-          "text": "a self-reliant India.” Consolidated Financial Highlights (Rs. in crore) Q2 Q2 % change H1 H1 % change Particulars FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y Total Income 23,196 21,844 (6%) 49,263 44,281 (10%) EBITDA 4,354 3,902 (10%) 8,654 7,688 (11%) Exceptional Gain - 3,583 - - 3,583 - Profit Before Tax 2,409 4,398 83% 4,644 5,864 26% Profit After Tax1 1,742 3,199 84% 3,196 3,933 23% Note: 1."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p2:text:c4",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 2,
-          "chunk_index": 10,
-          "score": 0.8500449657440186,
-          "citation": "[p2:c10]",
-          "text": "PAT attributable to owners Incubating Businesses Financial Highlights Q 2 Q2 % change H1 H1 % change Particulars FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y ANIL Ecosystem Total Income 3,115 3,199 3% 7,634 7,233 (5%) EBITDA 1,121 1,172 5% 2,763 2,384 (14%) PBT 916 876 (4%) 2,341 1,836 (22%) Airports Total Income 2,276 3,167 39% 4,453 5,882 32% EBITDA 744 1,062 43% 1,426 2,157 51% PBT (148) 99 - (237) 303 - Operational Highlights Q2 Q2 % change H1 H1 % change Volume FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y ANIL Ecosystem Module"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:raptor:l1:n1",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 1,
-          "embedding_channel": "raptor_summary",
-          "page_number": "?",
-          "chunk_index": "?",
-          "score": 0.8585046529769897,
-          "citation": "[l1:n1]",
-          "text": "- in crore) Q2 Q2 % change H1 H1 % change Particulars FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y Total Income 23,196 21,844 (6%) 49,263 44,281 (10%) EBITDA 4,354 3,902 (10%) 8,654 7,688 (11%) Exceptional Gain - 3,583 - - 3,583 - Profit Before Tax 2,409 4,398 83% 4,644 5,864 26% Profit After Tax1 1,742 3,199 84% 3,196 3,933 23% Note: 1.\n- PAT attributable to owners Incubating Businesses Financial Highlights Q 2 Q2 % change H1 H1 % change Particulars FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y ANIL Ecosystem Total Income 3,115 3,199 3% 7,634 7,233 (5%) EBITDA 1,121 1,172 5% 2,763 2,384 (14%) PBT 916 876 (4%) 2,341 1,836 (22%) Airports Total Income 2,276 3,167 39% 4,453 5,882 32% EBITDA 744 1,062 43% 1,426 2,157 51% PBT (148) 99 - (237) 303 - Operational Highlights Q2 Q2 % change H1 H1 % change Volume FY25 FY26 Y-o-Y FY25 FY26 Y-o-Y ANIL Ecosystem Module\n- Sales (MW) 1001 1093 9% 2380 2443 3% WTG (Sets) 15 28 87% 56 63 13% Airports Pax movement (Mn) 22.3 22.6 1% 45.1 46.0 2% ATMs (‘000) 153.3 148.2 (3%) 305.4 301.7 (1%) Cargo (Lacs MT) 2.8 2.9 3% 5.5 5.7 4% Roads Construction (L-KM) 180.4 456.1 153% 910.4 949.3 4% Mining Services Dispatch (MMT) 8.2 10.5 27% 17.5 22.6 29% IRM Volume (MMT) 13.7 11.3 (17%) 29.1 24.1 (17%) Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : “Adani Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G.\n- Highway, Khodiyar, Ahmedabad 382 421, Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com\n- Business Updates Adani New Industries (ANIL - Green Hydrogen Ecosystem) • Module sales continue to track to 1 GW per quarter, domestic sale increased by 43% during H1 FY26 on YoY basis • Construction for additional 6 GW cell and module lines progressing as per schedule • ANIL Wind division honored with “Gold Award” at Apex India Safety Award 2025 AdaniConnex Pvt Ltd (ACX - Data Center) • Partners with Google to develop India’s largest AI Data Center campus in Visakhapatnam, Andhra Pradesh •\n- We remain committed to building globally competitive businesses that create enduring value for our stakeholders and strengthen the foundation of a self-reliant India.” Consolidated Financial Highlights (Rs.\n- a self-reliant India.” Consolidated Financial Highlights (Rs.\n- transition toward a sustainable, technology-driven future.\n- Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:raptor:l1:n16",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 1,
-          "embedding_channel": "raptor_summary",
-          "page_number": "?",
-          "chunk_index": "?",
-          "score": 0.8571094274520874,
-          "citation": "[l1:n16]",
-          "text": "- AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22\n- AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore adani **Interest coverage ratio** - Data points: - FY21: 2.8 - FY22: 2.4 - FY23: 3.1 - FY24: 3.6 - FY25: 3.4 - H126: 2.5 - Trend: Decreased from FY21 to FY22, then increased to FY24, then decreased to H126.\n- **Debt Service coverage ratio** - Data points: - FY21: 1.7 - FY22: 1.8 - FY23: 2.5 - FY24: 2.5 - FY25: 2.6 - H126: 1.8 - Trend: Generally increased from FY21 to FY25, then decreased for H126.\n- **Net External Debt/ EBITDA** - Data points: - FY21: 3.0 - FY22: 5.2 - FY23: 2.2 - FY24: 2.3 - FY25: 2.9 - H126: 3.9 - Trend: Increased from FY21 to FY22, then sharply decreased to FY23, then generally increased to H126.\n- 31,064 cr | accounted for | | yet to unlock | | **35%** in AAHL Airports | > Construction of Navi Mumbai Airport<br>> PPRA Payment of Three Airports<br>> Construction of New Terminals<br>> Capex expenditure for Non-aero activities | -> | Navi Mumbai Airport in FY26 | | **23%** in ARTL Roads | > Construction of Ganga Expressway project<br>> Construction of other projects | -> | Ganga Expressway in FY26 | | **21%** in KCL Copper | > Construction of Copper plant 500 KTPA<br>> Working capital requirements | -> | Copper Plant fully by FY26 | | **18%** in MPL PVC | > Construction of PVC plant 1 MMTPA | -> | PVC Plant by FY28 | [Home icon] [List icon] 25\n- Generally increased from FY21 to FY25, then decreased for H126."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:raptor:l2:n2",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 2,
-          "embedding_channel": "raptor_summary",
-          "page_number": "?",
-          "chunk_index": "?",
-          "score": 0.8555543422698975,
-          "citation": "[l2:n2]",
-          "text": "- - AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22\n- - AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore adani **Interest coverage ratio** - Data points: - FY21: 2.8 - FY22: 2.4 - FY23: 3.1 - FY24: 3.6 - FY25: 3.4 - H126: 2.5 - Trend: Decreased from FY21 to FY22, then increased to FY24, then decreased to H126.\n- - **Debt Service coverage ratio** - Data points: - FY21: 1.7 - FY22: 1.8 - FY23: 2.5 - FY24: 2.5 - FY25: 2.6 - H126: 1.8 - Trend: Generally increased from FY21 to FY25, then decreased for H126.\n- - **Net External Debt/ EBITDA** - Data points: - FY21: 3.0 - FY22: 5.2 - FY23: 2.2 - FY24: 2.3 - FY25: 2.9 - H126: 3.9 - Trend: Increased from FY21 to FY22, then sharply decreased to FY23, then generally increased to H126.\n- - 31,064 cr | accounted for | | yet to unlock | | **35%** in AAHL Airports | > Construction of Navi Mumbai Airport<br>> PPRA Payment of Three Airports<br>> Construction of New Terminals<br>> Capex expenditure for Non-aero activities | -> | Navi Mumbai Airport in FY26 | | **23%** in ARTL Roads | > Construction of Ganga Expressway project<br>> Construction of other projects | -> | Ganga Expressway in FY26 | | **21%** in KCL Copper | > Construction of Copper plant 500 KTPA<br>> Working capital requirements | -> | Copper Plant fully by FY26 | | **18%** in MPL PVC | > Construction of PVC plant 1 MMTPA | -> | PVC Plant by FY28 | [Home icon] [List icon] 25\n- - Generally increased from FY21 to FY25, then decreased for H126."
-        }
-      ],
-      "chunks_found": 23,
-      "crag_report": {
-        "status": "checked",
-        "needs_page_fallback": false,
-        "spans": [],
-        "raw_span_count": 0
-      },
-      "elapsed_seconds": 23.42125130000204
+      "answer": "",
+      "is_fallback": true,
+      "sources": [],
+      "chunks_found": 0,
+      "crag_report": {},
+      "elapsed_seconds": 0.2164511000009952,
+      "error": "429 Client Error: Too Many Requests for url: https://integrate.api.nvidia.com/v1/chat/completions"
     },
     {
       "index": 10,
       "question": "What is the CEO's email address?",
-      "answer": "The CEO's email address is investor.ael@adani.com [p9:c65].",
-      "is_fallback": false,
+      "answer": "Not found in the Documents",
+      "is_fallback": true,
       "sources": [
         {
           "chunk_id": "doc_52829a34df8b6a71:p12:text:c0",
@@ -3282,691 +3001,76 @@
       "chunks_found": 28,
       "crag_report": {
         "status": "checked",
-        "needs_page_fallback": false,
+        "needs_page_fallback": true,
         "spans": [],
-        "raw_span_count": 0
+        "raw_span_count": 0,
+        "page_fallback": {
+          "answer": "Not found in the Documents",
+          "found": false,
+          "checked_pages": [
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 12,
+              "score": 0.8367236852645874,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 23,
+              "score": 0.8154629468917847,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_95903140997f7c19",
+              "filename": "AELBoardoutcome041120251_copy.pdf",
+              "page_number": 9,
+              "score": 0.8073406219482422,
+              "status": "checked",
+              "answer": "Not found in the Documents"
+            },
+            {
+              "document_id": "doc_52829a34df8b6a71",
+              "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
+              "page_number": 33,
+              "score": 0.7670236825942993,
+              "status": "source_pdf_not_found"
+            },
+            {
+              "document_id": "doc_95903140997f7c19",
+              "filename": "AELBoardoutcome041120251_copy.pdf",
+              "page_number": 5,
+              "score": 0.8262878656387329,
+              "status": "checked",
+              "answer": "Not found in the Documents"
+            }
+          ]
+        }
       },
-      "elapsed_seconds": 21.52641720000247
+      "elapsed_seconds": 15.815711299997929
     },
     {
       "index": 11,
       "question": "Summarize airport performance in H1-26.",
-      "answer": "Airport performance in H1-26 showed a 32% increase in total income to Rs. 5,882 crore [p22:c128], with a 51% increase in EBITDA to Rs. 2,157 crore [p3:c5], driven by tariff revision and non-aero growth [p22:c128].",
-      "is_fallback": false,
-      "sources": [
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 22,
-          "chunk_index": 128,
-          "score": 0.8663787245750427,
-          "citation": "[p22:c128]",
-          "text": "AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 22,
-          "chunk_index": 54,
-          "score": 0.871658205986023,
-          "citation": "[p22:c54]",
-          "text": "AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore Consolidated ANIL Ecosystem Airports IRM Mining Service 49,263 7,634 5,882 2,247 7,233 44,281 20,898 4,453 (4,867) (115) 1,660 14,899 E M O C N I L A T O H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 T (5%) 32% (29%) 35% Impacted due to low export Increased in line with tariff Impacted due to low volume Increased in line with higher H1-25 Established Incubating H1-26 volume by 31% revision and non-aero growth and prices volume 8,654 2,763 2,157"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p22:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 22,
-          "chunk_index": 55,
-          "score": 0.8639001846313477,
-          "citation": "[p22:c55]",
-          "text": "1,019 237 7,688 2,384 1,916 (1,203) 1,426 746 1,331 A D T I B E H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 H1-25 H1-26 (14%) 51% (31%) 37% Impacted due to low export Increased in line with revenue Impacted due to low volume Increased in line with higher H1-25 Established Incubating H1-26 and levy of tariff and tariff order revision and prices volume Home outline Hsoalmid bfiullrger Menu Icon with 22 Increase Decrease Total"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 32,
-          "chunk_index": 140,
-          "score": 0.8635625243186951,
-          "citation": "[p32:c140]",
-          "text": "AEL: Transport & Logistics – AAHL (Airports) adani Volume Details | Airport | Passengers (In Mn) | | | | ATM (In '000) | | | | Cargo (In Lacs MT) | | | | | :----------------- | :----------------- | :----- | :----- | :----- | :------------ | :----- | :----- | :----- | :----------------- | :----- | :----- | :----- | | | Q2-25 | Q2-26 | H1-25 | H1-26 | Q2-25 | Q2-26 | H1-25 | H1-26 | Q2-25 | Q2-26 | H1-25 | H1-26 | | Ahmedabad | 3.0 | 3.1 | 6.2 | 6.6 | 23.4 | 23.6 | 47.2 | 50.2 | 0.3 | 0.3 | 0.5 | 0.6 | | Lucknow | 1.5 | 1.4 | 3.0 | 2.9 | 12.5 | 9.6 | 25.3 | 19.9 | 0.1 | 0.1 | 0.1 | 0.1 | | Mangaluru | 0.6 | 0.6 | 1.1 | 1.2 | 4.0 | 4.4 | 7.9 | 9.2 | 0.0 | 0.0 | 0.0 | 0.0 | | Jaipur | 1.4 | 1.2 | 2.7 | 2.4 | 11.3 | 9.7 | 22.6 | 19.1 | 0.1 | 0.1 | 0.1 | 0.1 | | Guwahati | 1.4 | 1.8 | 2.9 | 3.5 | 11.1 | 11.7 | 22.2 | 24.2 | 0.1 | 0.1 | 0.1 | 0.1 | | Thiruvananthapuram | 1.2 | 1.2 | 2.5 | 2.4 | 8.2 | 7.4 | 16.2 | 15.2 | 0.1 | 0.1 | 0.1 | 0.1 | | Mumbai | 13.2 | 13.3 | 26.7 | 26.9 | 82.7 | 81.7 | 164.0 | 164.1 | 2.3 | 2.3 | 4.5 | 4.6 | | Total | 22.3 | 22.6 | 45.1 | 46.0 | 153.3 | 148.2 | 305.4 | 301.7 | 2.8 | 2.9 | 5.5 | 5.7 | ATM – Air Traffic Movement 32"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 32,
-          "chunk_index": 76,
-          "score": 0.8594704866409302,
-          "citation": "[p32:c76]",
-          "text": "AEL: Transport & Logistics – AAHL (Airports) Volume Details Cargo (In Lacs MT) Passengers (In Mn) ATM (In ‘000) Airport Q2-25 Q2-26 H1-25 H1-26 Q2-25 Q2-26 H1-25 H1-26 Q2-25 Q2-26 H1-25 H1-26 Ahmedabad 3.0 3.1 6.2 6.6 23.4 23.6 47.2 50.2 0.3 0.3 0.5 0.6 Lucknow 1.5 1.4 3.0 2.9 12.5 9.6 25.3 19.9 0.1 0.1 0.1 0.1 Mangaluru 0.6 0.6 1.1 1.2 4.0 4.4 7.9 9.2 0.0 0.0 0.0 0.0 Jaipur 1.4 1.2 2.7 2.4 11.3 9.7 22.6 19.1 0.1 0.1 0.1 0.1 Guwahati 1.4 1.8 2.9 3.5 11.1 11.7 22.2 24.2 0.1 0.1 0.1 0.1 Thiruvananthapuram 1.2"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 32,
-          "chunk_index": 77,
-          "score": 0.8267507553100586,
-          "citation": "[p32:c77]",
-          "text": "1.2 2.5 2.4 8.2 7.4 16.2 15.2 0.1 0.1 0.1 0.1 Mumbai 13.2 13.3 26.7 26.9 82.7 81.7 164.0 164.1 2.3 2.3 4.5 4.6 Total 22.3 22.6 45.1 46.0 153.3 148.2 305.4 301.7 2.8 2.9 5.5 5.7 Home outline Hsoalmid bfiullrger Menu Icon with 32 ATM – Air Traffic Movement"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 3,
-          "chunk_index": 86,
-          "score": 0.8306987285614014,
-          "citation": "[p3:c86]",
-          "text": "Adani Enterprises Limited (“AEL”): Incubating Businesses ₹ crore adani Incubating Businesses at glance | | ANIL Green H2 Ecosystem | | AAHL Airports | | ARTL Roads | | :---------------- | :------------------- | :-------------------- | :---------------- | :------------------ | :------------- | :------------------ | | | FY25 | H1-26 (YoY change) | FY25 | H1-26 (YoY change) | FY25 | H1-26 (YoY change) | | Total Income | 14,236 | 7,233 (5%) ▼ | 10,224 | 5,882 32% ▲ | 10,086 | 4,056 (22%) ▼ | | EBITDA | 4,776 | 2,384 (14%) ▼ | 3,480 | 2,157 51% ▲ | 1,769 | 930 (11%) ▼ | AAHL Airports H1-26 EBITDA increased by 51% to Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:vlm:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 3,
-          "chunk_index": 87,
-          "score": 0.8621070384979248,
-          "citation": "[p3:c87]",
-          "text": "(11%) ▼ | AAHL Airports H1-26 EBITDA increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs. 1,000+ crore from seven operational airports Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26 Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd.] 3"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 3,
-          "chunk_index": 4,
-          "score": 0.8549954891204834,
-          "citation": "[p3:c4]",
-          "text": "Adani Enterprises Limited (“AEL”): Incubating Businesses ₹ crore Incubating Businesses at glance ANIL AAHL ARTL Green H2 Ecosystem Airports Roads H1-26 H1-26 H1-26 FY25 FY25 FY25 (YoY change) (YoY change) (YoY change) Total 7,233 5,882 4,056 14,236 10,224 10,086 Income (5%) 32% (22%) 2,384 2,157 930 4,776 3,480 1,769 EBITDA (14%) 51% (11%) AAHL Airports H1-26 EBITDA increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p3:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 3,
-          "chunk_index": 5,
-          "score": 0.8268136978149414,
-          "citation": "[p3:c5]",
-          "text": "increased by 51% to Rs. 2,157 cr at quarterly run-rate of Rs. 1,000+ crore from seven operational airports Large Infra assets comprising Navi Mumbai Airport, Copper Plant and Ganga Expressway to unlock EBITDA from Q4 FY26 Hsoalmid bfiullrger Menu Icon with 3 Incubating Business – [Energy & Utility – ANIL Ecosystem, Adani Connex Data Center, Transport & Logistics – Adani Airports Holdings Ltd, Adani Road Transport Ltd.] SSTTRRIICCTTLLYY CCOONNFFIIDDEENNTTIIAALL"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c0",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 24,
-          "score": 0.8524078130722046,
-          "citation": "[p1:c24]",
-          "text": "Adani Media Release Adani Enterprises Ltd announces H1 FY26 results Consolidated EBITDA at Rs. 7,688 cr Consolidated PBT at Rs. 2,281 cr AEL Board approves Rights Issue of Rs.25,000 cr Editor's Synopsis Consolidated financial highlights H1 FY26 (YoY) * Revenue at Rs. 44,281 cr * EBITDA at Rs. 7,688 cr * PBT at Rs. 2,281 cr excluding exceptional gain of Rs. 3,583 cr * AAHL Airports EBITDA increased by 51% YoY to Rs. 2,157 cr; with Airports business now tracking at quarterly run-rate of Rs."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c1",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 25,
-          "score": 0.8162437677383423,
-          "citation": "[p1:c25]",
-          "text": "Airports business now tracking at quarterly run-rate of Rs. 1,000+ crore Investment highlights Asset Completed * Greenfield Navi Mumbai International Airport inaugurated on 08ᵗʰ October 2025, set to commence operations from Q3 FY26 * Received PCOD for Nanasa-Pidgaon project; AEL now has 7 operational road assets New Investments * Received LoA for three projects in Roads and two projects in Water business with cumulative order book of Rs."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c2",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 26,
-          "score": 0.7634207010269165,
-          "citation": "[p1:c26]",
-          "text": "projects in Water business with cumulative order book of Rs. 19,982 cr * AdaniConnex partners with Google to develop India's largest AI Data Center campus in Visakhapatnam Capital management * AEL Board approves partly paid-up Rights Issue of Rs.25,000 cr for strengthening its balance sheet further to support next phase of incubation Ahmedabad, November 04, 2025: Adani Enterprises Ltd (AEL), the flagship company of the Adani Group, announced its results today for the quarter and half year ended September 30, 2025."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c3",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 27,
-          "score": 0.827595591545105,
-          "citation": "[p1:c27]",
-          "text": "today for the quarter and half year ended September 30, 2025. AEL has validated its core strength of timely execution of large-scale projects during the quarter. The inauguration of greenfield Navi Mumbai airport and completion of its 7ᵗʰ road project reflects AEL's fundamental focus on incubation at scale and execution. Each of these new milestones strengthens our diversified model and reaffirms our commitment to deliver infrastructure of national importance."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c4",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 28,
-          "score": 0.7758512496948242,
-          "citation": "[p1:c28]",
-          "text": "commitment to deliver infrastructure of national importance. The emerging core infra businesses have recorded half-yearly EBITDA of Rs. 5,470 crore with an an increase of 5% on year-on-year basis and now contributes 71% to total EBITDA. Adani Enterprises Ltd (CIN No.: L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:vlm:c5",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 1,
-          "chunk_index": 29,
-          "score": 0.7369275093078613,
-          "citation": "[p1:c29]",
-          "text": "Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421. Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c1",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 1,
-          "score": 0.813913106918335,
-          "citation": "[p1:c1]",
-          "text": "Airports business now tracking at quarterly run-rate of Rs. 1,000+ crore Investment highlights Asset Completed • Greenfield Navi Mumbai International Airport inaugurated on 08th October 2025, set to commence operations from Q3 FY26 • Received PCOD for Nanasa-Pidgaon project; AEL now has 7 operational road assets New Investments • Received LoA for three projects in Roads and two projects in Water business with cumulative order book of Rs. 19,982 cr •"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c2",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 2,
-          "score": 0.7646259069442749,
-          "citation": "[p1:c2]",
-          "text": "in Water business with cumulative order book of Rs. 19,982 cr • AdaniConnex partners with Google to develop India’s largest AI Data Center campus in Visakhapatnam Capital management • AEL Board approves partly paid-up Rights Issue of Rs.25,000 cr for strengthening its balance sheet further to support next phase of incubation Ahmedabad, November 04, 2025: Adani Enterprises Ltd (AEL), the flagship company of the Adani Group, announced its results today for the quarter and half year ended September 30, 2025."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c3",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 3,
-          "score": 0.827235221862793,
-          "citation": "[p1:c3]",
-          "text": "today for the quarter and half year ended September 30, 2025. AEL has validated its core strength of timely execution of large-scale projects during the quarter. The inauguration of greenfield Navi Mumbai airport and completion of its 7th road project reflects AEL’s fundamental focus on incubation at scale and execution. Each of these new milestones strengthens our diversified model and reaffirms our commitment to deliver infrastructure of national importance."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c4",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 4,
-          "score": 0.7766133546829224,
-          "citation": "[p1:c4]",
-          "text": "commitment to deliver infrastructure of national importance. The emerging core infra businesses have recorded half-yearly EBITDA of Rs. 5,470 crore with an increase of 5% on year-on-year basis and now contributes 71% to total EBITDA. Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : “Adani Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c5",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 5,
-          "score": 0.7517019510269165,
-          "citation": "[p1:c5]",
-          "text": "Corporate House”, Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421, Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p1:text:c0",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 1,
-          "chunk_index": 0,
-          "score": 0.8594022989273071,
-          "citation": "[p1:c0]",
-          "text": "Media Release Adani Enterprises Ltd announces H1 FY26 results Consolidated EBITDA at Rs. 7,688 cr Consolidated PBT at Rs. 2,281 cr AEL Board approves Rights Issue of Rs.25,000 cr Editor’s Synopsis Consolidated financial highlights H1 FY26 (YoY) • Revenue at Rs. 44,281 cr • EBITDA at Rs. 7,688 cr • PBT at Rs. 2,281 cr excluding exceptional gain of Rs. Rs. 3,583 cr • AAHL Airports EBITDA increased by 51% YoY to Rs. 2,157 cr; with Airports business now tracking at quarterly run-rate of Rs."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 17,
-          "chunk_index": 118,
-          "score": 0.8561639785766602,
-          "citation": "[p17:c118]",
-          "text": "AEL : Transport & Logistics – Adani Airport Holdings Ltd (AAHL) adani Revenue Mix H1-26 Pie chart with four segments and associated text: - Segment with label: 38% Associated text: Aero - Up by 22% Y-o-Y - Tariff order revision for 4 airports - Aero YPP INR 485 Up by 20% Y-o-Y (YPP: Yield per pax = Aero Income / Number of Passengers) - Segment with label: 48% Associated text: Non-Aero - Up by 36% Y-o-Y - Penetration at all time high backed by Digital and Duty-Free Initiatives - Non-Aero IPP INR 614 Up by 34% Y-o-Y (IPP: Income per pax = Non-Aero Income / Number of Passengers) - Segment with label: 8% Associated text: Others - Up by 98% Y-o-Y - Segment with label: 6% Associated text: Cargo - Up by 14% Y-o-Y - Volume up by 11% in Ahmedabad airport Revenue Growth | Total Income | Q2-25 | Q2-26 | H1-25 | H1-26 | |---|---|---|---|---| | Aero | 935 | 1,145 | 1,823 | 2,229 | | Non-Aero | 1,075 | 1,424 | 2,069 | 2,823 | | Cargo | 174 | 200 | 336 | 382 | | Others | 92 | 398 | 226 | 448 | | Total | 2,276 | 3,167 | 4,453 | 5,882 | Revenue Build-up H1-26 Waterfall chart with the following visible elements: - X-axis labels: H1-25, Aero, Non-Aero, Cargo, Others, H1-26 - Bar labels/values: 4,453 (above H1-25 bar), 407 (above Aero bar), 754 (above Non-Aero bar), 46 (above Cargo bar), 222 (above Others bar), 5,882 (above H1-26 bar) - Legend: Increase (dark blue box), Decrease (grey box), Total (blue box) - Visual trend: The revenue increases from H1-25 (4,453) to H1-26 (5,882), with intermediate positive contributions from Aero (407), Non-Aero (754), Cargo (46), and Others (222)."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 17,
-          "chunk_index": 44,
-          "score": 0.8556815385818481,
-          "citation": "[p17:c44]",
-          "text": "Passengers) (IPP: Income per pax = Others 92 398 226 448 Non-Aero Income / Number of Passengers) Total 2,276 3,167 4,453 5,882 Revenue Build-up H1-26 222 5,882 754 46 407 4,453 Others 8% Cargo - Up by 98% Y-o-Y 6% - Up by 14% Y-o-Y - Volume up by 11% in Ahmedabad airport H1-25 Aero Non-Aero Cargo Others H1-26 Increase Decrease Total Home outline Hsoalmid bfiullrger Menu Icon with 17"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:raptor:l1:n16",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 1,
-          "embedding_channel": "raptor_summary",
-          "page_number": "?",
-          "chunk_index": "?",
-          "score": 0.8614267110824585,
-          "citation": "[l1:n16]",
-          "text": "- AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22\n- AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore adani **Interest coverage ratio** - Data points: - FY21: 2.8 - FY22: 2.4 - FY23: 3.1 - FY24: 3.6 - FY25: 3.4 - H126: 2.5 - Trend: Decreased from FY21 to FY22, then increased to FY24, then decreased to H126.\n- **Debt Service coverage ratio** - Data points: - FY21: 1.7 - FY22: 1.8 - FY23: 2.5 - FY24: 2.5 - FY25: 2.6 - H126: 1.8 - Trend: Generally increased from FY21 to FY25, then decreased for H126.\n- **Net External Debt/ EBITDA** - Data points: - FY21: 3.0 - FY22: 5.2 - FY23: 2.2 - FY24: 2.3 - FY25: 2.9 - H126: 3.9 - Trend: Increased from FY21 to FY22, then sharply decreased to FY23, then generally increased to H126.\n- 31,064 cr | accounted for | | yet to unlock | | **35%** in AAHL Airports | > Construction of Navi Mumbai Airport<br>> PPRA Payment of Three Airports<br>> Construction of New Terminals<br>> Capex expenditure for Non-aero activities | -> | Navi Mumbai Airport in FY26 | | **23%** in ARTL Roads | > Construction of Ganga Expressway project<br>> Construction of other projects | -> | Ganga Expressway in FY26 | | **21%** in KCL Copper | > Construction of Copper plant 500 KTPA<br>> Working capital requirements | -> | Copper Plant fully by FY26 | | **18%** in MPL PVC | > Construction of PVC plant 1 MMTPA | -> | PVC Plant by FY28 | [Home icon] [List icon] 25\n- Generally increased from FY21 to FY25, then decreased for H126."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:raptor:l2:n2",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 2,
-          "embedding_channel": "raptor_summary",
-          "page_number": "?",
-          "chunk_index": "?",
-          "score": 0.8605304956436157,
-          "citation": "[l2:n2]",
-          "text": "- - AEL: Consolidated Financial Highlights H1-26 Y-o-Y ₹ crore adani TOTAL INCOME Consolidated 49,263 (4,867) (115) 44,281 H1-25 Established Incubating H1-26 ANIL Ecosystem 7,634 7,233 H1-25 H1-26 ▼ (5%) Impacted due to low export volume by 31% Airports 4,453 5,882 H1-25 H1-26 ▲ 32% Increased in line with tariff revision and non-aero growth IRM 20,898 14,899 H1-25 H1-26 ▼ (29%) Impacted due to low volume and prices Mining Service 1,660 2,247 H1-25 H1-26 ▲ 35% Increased in line with higher volume EBITDA Consolidated 8,654 (1,203) 237 7,688 H1-25 Established Incubating H1-26 ANIL Ecosystem 2,763 2,384 H1-25 H1-26 ▼ (14%) Impacted due to low export and levy of tariff Airports 1,426 2,157 H1-25 H1-26 ▲ 51% Increased in line with revenue and tariff order revision IRM 1,916 1,331 H1-25 H1-26 ▼ (31%) Impacted due to low volume and prices Mining Service 746 1,019 H1-25 H1-26 ▲ 37% Increased in line with higher volume Increase Decrease Total 22\n- - AEL: Consolidated Debt Movement H1-26 vis-à-vis March-2024 ₹ crore adani **Interest coverage ratio** - Data points: - FY21: 2.8 - FY22: 2.4 - FY23: 3.1 - FY24: 3.6 - FY25: 3.4 - H126: 2.5 - Trend: Decreased from FY21 to FY22, then increased to FY24, then decreased to H126.\n- - **Debt Service coverage ratio** - Data points: - FY21: 1.7 - FY22: 1.8 - FY23: 2.5 - FY24: 2.5 - FY25: 2.6 - H126: 1.8 - Trend: Generally increased from FY21 to FY25, then decreased for H126.\n- - **Net External Debt/ EBITDA** - Data points: - FY21: 3.0 - FY22: 5.2 - FY23: 2.2 - FY24: 2.3 - FY25: 2.9 - H126: 3.9 - Trend: Increased from FY21 to FY22, then sharply decreased to FY23, then generally increased to H126.\n- - 31,064 cr | accounted for | | yet to unlock | | **35%** in AAHL Airports | > Construction of Navi Mumbai Airport<br>> PPRA Payment of Three Airports<br>> Construction of New Terminals<br>> Capex expenditure for Non-aero activities | -> | Navi Mumbai Airport in FY26 | | **23%** in ARTL Roads | > Construction of Ganga Expressway project<br>> Construction of other projects | -> | Ganga Expressway in FY26 | | **21%** in KCL Copper | > Construction of Copper plant 500 KTPA<br>> Working capital requirements | -> | Copper Plant fully by FY26 | | **18%** in MPL PVC | > Construction of PVC plant 1 MMTPA | -> | PVC Plant by FY28 | [Home icon] [List icon] 25\n- - Generally increased from FY21 to FY25, then decreased for H126."
-        }
-      ],
-      "chunks_found": 26,
-      "crag_report": {
-        "status": "checked",
-        "needs_page_fallback": false,
-        "spans": [],
-        "raw_span_count": 0
-      },
-      "elapsed_seconds": 8.836102100001881
+      "answer": "",
+      "is_fallback": true,
+      "sources": [],
+      "chunks_found": 0,
+      "crag_report": {},
+      "elapsed_seconds": 0.5041979000015999,
+      "error": "429 Client Error: Too Many Requests for url: https://integrate.api.nvidia.com/v1/chat/completions"
     },
     {
       "index": 12,
       "question": "Break that down into passenger and cargo changes.",
-      "answer": "Passengers increased by 0.3 million and Cargo by 0.1 lacs MT in Q2-26 compared to Q2-25 for Ahmedabad airport [p32:c140].",
-      "is_fallback": false,
-      "sources": [
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 17,
-          "chunk_index": 118,
-          "score": 0.7987977266311646,
-          "citation": "[p17:c118]",
-          "text": "AEL : Transport & Logistics – Adani Airport Holdings Ltd (AAHL) adani Revenue Mix H1-26 Pie chart with four segments and associated text: - Segment with label: 38% Associated text: Aero - Up by 22% Y-o-Y - Tariff order revision for 4 airports - Aero YPP INR 485 Up by 20% Y-o-Y (YPP: Yield per pax = Aero Income / Number of Passengers) - Segment with label: 48% Associated text: Non-Aero - Up by 36% Y-o-Y - Penetration at all time high backed by Digital and Duty-Free Initiatives - Non-Aero IPP INR 614 Up by 34% Y-o-Y (IPP: Income per pax = Non-Aero Income / Number of Passengers) - Segment with label: 8% Associated text: Others - Up by 98% Y-o-Y - Segment with label: 6% Associated text: Cargo - Up by 14% Y-o-Y - Volume up by 11% in Ahmedabad airport Revenue Growth | Total Income | Q2-25 | Q2-26 | H1-25 | H1-26 | |---|---|---|---|---| | Aero | 935 | 1,145 | 1,823 | 2,229 | | Non-Aero | 1,075 | 1,424 | 2,069 | 2,823 | | Cargo | 174 | 200 | 336 | 382 | | Others | 92 | 398 | 226 | 448 | | Total | 2,276 | 3,167 | 4,453 | 5,882 | Revenue Build-up H1-26 Waterfall chart with the following visible elements: - X-axis labels: H1-25, Aero, Non-Aero, Cargo, Others, H1-26 - Bar labels/values: 4,453 (above H1-25 bar), 407 (above Aero bar), 754 (above Non-Aero bar), 46 (above Cargo bar), 222 (above Others bar), 5,882 (above H1-26 bar) - Legend: Increase (dark blue box), Decrease (grey box), Total (blue box) - Visual trend: The revenue increases from H1-25 (4,453) to H1-26 (5,882), with intermediate positive contributions from Aero (407), Non-Aero (754), Cargo (46), and Others (222)."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:vlm:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 17,
-          "chunk_index": 119,
-          "score": 0.8505394458770752,
-          "citation": "[p17:c119]",
-          "text": "from Aero (407), Non-Aero (754), Cargo (46), and Others (222). Home icon 17"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 17,
-          "chunk_index": 43,
-          "score": 0.7770761847496033,
-          "citation": "[p17:c43]",
-          "text": "AEL : Transport & Logistics – Adani Airport Holdings Ltd (AAHL) Revenue Mix H1-26 Revenue Growth Total Income Q2-25 Q2-26 H1-25 H1-26 Non-Aero Aero Aero 935 1,145 1,823 2,229 - Up by 36% Y-o-Y - Up by 22% Y-o-Y 38% 48% - Penetration at all time high backed Non-Aero 1,075 1,424 2,069 2,823 - Tariff order revision for 4 airports by Digital and Duty-Free Initiatives - Aero YPP INR 485 Up by 20% Y-o-Y Cargo 174 200 336 382 - Non-Aero IPP INR 614 Up by 34% Y-o-Y (YPP: Yield per pax = Aero Income / Number of"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p17:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 17,
-          "chunk_index": 44,
-          "score": 0.8071653246879578,
-          "citation": "[p17:c44]",
-          "text": "Passengers) (IPP: Income per pax = Others 92 398 226 448 Non-Aero Income / Number of Passengers) Total 2,276 3,167 4,453 5,882 Revenue Build-up H1-26 222 5,882 754 46 407 4,453 Others 8% Cargo - Up by 98% Y-o-Y 6% - Up by 14% Y-o-Y - Volume up by 11% in Ahmedabad airport H1-25 Aero Non-Aero Cargo Others H1-26 Increase Decrease Total Home outline Hsoalmid bfiullrger Menu Icon with 17"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:vlm:c0",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 9,
-          "chunk_index": 269,
-          "score": 0.7008453607559204,
-          "citation": "[p9:c269]",
-          "text": "Adani Enterprises Limited (CIN No : L51100GJ1993PLC019067) Registered Office: \"Adani Corporate House\", Shantigram, Nr. Vaishno Devi Circle, S. G. Highway, Khodiyar, Ahmedabad - 382 421 Phone : 079-26565555 ; Fax : 079-26565500 ; Email : investor.ael@adani.com ; Website : www.adanienterprises.com STATEMENT OF UNAUDITED CONSOLIDATED FINANCIAL RESULTS FOR THE QUARTER AND HALF YEAR ENDED 30TH SEPTEMBER, 2025 (₹ in Crores) | Sr. No."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:vlm:c1",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 9,
-          "chunk_index": 270,
-          "score": 0.7749742865562439,
-          "citation": "[p9:c270]",
-          "text": "HALF YEAR ENDED 30TH SEPTEMBER, 2025 (₹ in Crores) | Sr. No. | Particulars | Quarter Ended | Quarter Ended | Quarter Ended | Half Year Ended | Half Year Ended | Year Ended | | :------ | :---------------------------------------------------------------------------- | :--------------------- | :--------------------- | :--------------------- | :--------------------- | :--------------------- | :------------------- | | | | 30-09-2025 | 30-06-2025 | 30-09-2024 | 30-09-2025 | 30-09-2024 | 31-03-2025 | | | | (Unaudited) | (Unaudited) | (Unaudited) | (Unaudited) | (Unaudited) | (Audited) | | 1 | **Income** | | | | | | | | | Revenue from Operations | 21,248.51 | 21,961.20 | 22,608.07 | 43,209.71 | 48,080.47 | 97,894.75 | | | Other Income | 595.56 | 475.42 | 588.11 | 1,070.98 | 1,182.43 | 2,470.33 | | | **Total Income** | **21,844.07** | **22,436.62** | **23,196.18** | **44,280.69** | **49,262.90** | **100,365.08** | | 2 | **Expenses** | | | | | | | | | (a) Cost of materials consumed | 4,961.56 | 3,393.07 | 1,792.32 | 8,354.63 | 3,552.29 | 9,710.55 | | | (b) Purchases of stock-in-trade | 6,952.58 | 7,398.59 | 9,668.58 | 14,351.17 | 19,768.22 | 39,814.18 | | | (c) Changes in inventories of finished goods, | | | | | | | | | work-in-progress & stock-in-trade | (1,778.39) | (120.33) | (548.35) | (1,898.72) | 1,044.46 | 1,844.56 | | | (d) Employee benefits expense | 897.62 | 962.77 | 742.28 | 1,860.39 | 1,620.67 | 3,118.90 | | | (e) Finance cost | | | | | | | | | - Interest and Other finance cost | 1,761.64 | 1,511.11 | 1,250.02 | 3,272.75 | 2,427.50 | 5,260.36 | | | - Foreign exchange loss / (gain) (net) | (50.42) | (475.63) | (340.19) | (526.05) | (387.18) | 717.66 | | | (f) Depreciation, Amortisation & Impairment | 1,376.55 | 1,283.95 | 1,035.19 | 2,660.50 | 1,969.27 | 3,943.73 | | | (g) Operating and Other expenses | 6,908.58 | 7,016.81 | 7,187.44 | 13,925.39 | 14,623.22 | 29,154.55 | | | **Total Expenses** | **21,029.72** | **20,970.34** | **20,787.29** | **42,000.00** | **44,618.45** | **93,832.07** | | 3 | **Profit / (Loss) before exceptional items and tax (1-2)** | **814.35** | **1,466.28** | **2,408.89** | **2,280.69** | **4,644.45** | **6,533.01** | | 4 | Add / (Less) : Exceptional items (Refer Note 3 & 4) | 3,583.28 | - | - | 3,583.28 | - | 3,945.73 | | 5 | **Profit / (Loss) before tax from Continuing Operations (3+4)** | **4,397.63** | **1,466.28** | **2,408.89** | **5,863.91** | **4,644.45** | **10,478.74** | | 6 | **Tax expenses** | | | | | | | | | (a) Current Tax | 1,059.71 | 658.83 | 471.77 | 1,718.54 | 957.31 | 2,776.16 | | | (b) Deferred Tax | (58.64) | (87.58) | 40.60 | (146.22) | 158.66 | 192.36 | | | **Total Tax Expense** | **1,001.07** | **571.25** | **512.37** | **1,572.32** | **1,095.97** | **2,968.52** | | 7 | **Profit / (Loss) before share of profit / (loss) from jointly controlled** | | | | | | | | | **entities and associates (5-6)** | **3,396.56** | **895.03** | **1,896.52** | **4,291.59** | **3,548.48** | **7,510.22** | | 8 | Add / (Less): Share of profit / (loss) from jointly controlled | | | | | | | | | entities and associates | 17.87 | 81.45 | 98.21 | 99.32 | 222.27 | 507.73 | | 9 | **Profit / (Loss) after tax from Continuing Operations (7+8)** | **3,414.43** | **976.48** | **1,994.73** | **4,390.91** | **3,770.75** | **8,017.95** | | 10 | Profit / (Loss) before tax from Discontinued Operations (Refer Note 5) | - | - | (7.40) | - | (12.43) | (17.32) | | | Less : Tax expenses of Discontinued Operations | - | - | (1.86) | - | (3.13) | (4.36) | | | **Profit / (Loss) from Discontinued Operations** | - | - | (5.54) | - | (9.30) | (12.96) | | 11 | **Profit / (Loss) for the period (9+10)** | **3,414.43** | **976.48** | **1,989.19** | **4,390.91** | **3,761.45** | **8,004.99** | | 12 | **Other Comprehensive Income / (Loss)** | | | | | | | | | (a) Items that will not be reclassified to profit or loss | 10.99 | (1.05) | (3.17) | 9.94 | (3.77) | (6.14) | | | (b) Income tax relating to items that will not be | | | | | | | | | reclassified to profit or loss | (2.77) | 0.27 | 0.82 | (2.50) | 0.97 | 1.61 | | | (c) Items that will be reclassified to profit or loss | 592.10 | (273.38) | (33.16) | 318.72 | (186.47) | 672.90 | | | (d) Income tax relating to items that will be | | | | | | | | | reclassified to profit or loss | (1.03) | 15.06 | (17.53) | 14.03 | (23.45) | (35.09) | | | **Total Other Comprehensive Income / (Loss)** | **599.29** | **(259.10)** | **(53.04)** | **340.19** | **(212.72)** | **633.28** | | 13 | **Total Comprehensive Income / (Loss) (11+12)** | **4,013.72** | **717.38** | **1,936.15** | **4,731.10** | **3,548.73** | **8,638.27** | | 14 | **Net Profit / (Loss) attributable to :** | | | | | | | | | Owners of the Company | 3,198.75 | 734.41 | 1,741.75 | 3,933.16 | 3,196.25 | 7,099.00 | | | Non-controlling interests | 215.68 | 242.07 | 247.44 | 457.75 | 565.20 | 905.99 | | 15 | **Other Comprehensive Income / (Loss) attributable to :** | | | | | | | | | Owners of the Company | 595.99 | (246.26) | (63.45) | 349.73 | (228.43) | 609.15 | | | Non-controlling interests | - | (12.84) | 10.41 | (9.54) | 15.71 | 24.13 | | 16 | **Total Comprehensive Income / (Loss) attributable to :** | | | | | | | | | Owners of the Company | 3,794.74 | 488.15 | 1,678.30 | 4,282.89 | 2,967.82 | 7,708.15 | | | Non-controlling interests | 218.98 | 229.23 | 257.85 | 448.21 | 580.91 | 930.12 | | 17 | Paid-up Equity Share Capital | 115.42 | 115.42 | 114.00 | 115.42 | 114.00 | 115.42 | | | (Face Value of ₹ 1 each) | | | | | | | | 18 | Other Equity (excluding Instruments entirely Equity in nature) | | | | 53,940.91 | 41,781.71 | 50,198.55 | | 19 | **Net Worth** | | | | **61,577.66** | **47,608.05** | **56,470.45** | | 20 | **Earnings per share in Rupees (Face Value of ₹ 1 each) #** | | | | | | | | | (not annualised): | | | | | | | | | From Continuing Operations | | | | | | | | | Basic & Diluted | 27.38 | 6.02 | 14.87 | 33.40 | 27.20 | 60.67 | | | From Discontinued Operations | | | | | | | | | Basic & Diluted | - | - | (0.05) | - | (0.08) | (0.12) | | | From Continuing & Discontinued Operations | | | | | | | | | Basic & Diluted | 27.38 | 6.02 | 14.82 | 33.40 | 27.12 | 60.55 | | 21 | Additional Disclosure for Ratios (Refer Note 12) | | | | | | | #EPS has been calculated on net profit/loss less distribution on instruments entirely Equity in nature for the period / year whenever applicable, otherwise."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:vlm:c2",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 9,
-          "chunk_index": 271,
-          "score": 0.780848503112793,
-          "citation": "[p9:c271]",
-          "text": "in nature for the period / year whenever applicable, otherwise. SHAH DHARIA & CO. LLP FRN 1187R/W W100024 Chartered Accountants ADANI ENTERPRISES LIMITED [unclear symbol]"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c0",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 65,
-          "score": 0.6904304027557373,
-          "citation": "[p9:c65]",
-          "text": "Adani Enterprises Limited adani Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S. G. Highway, Khodiyar, Ahmedabad • 382 421 Phone: 079-26565555 ; Fax : 079-26565500 : Email : investor.ael@adani.com; Website: www.adanienterprises.com (CIN No: L51100GJ1993PLC019067) Crores) Sr."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c1",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 66,
-          "score": 0.7531403303146362,
-          "citation": "[p9:c66]",
-          "text": "(CIN No: L51100GJ1993PLC019067) Crores) Sr. 30-09-2025 30-09-2024 31-03-2025 STATEMENT OF UNAUDITED CONSOLIDATED FINANCIAL RESULTS FOR THE QUARTER AND HALF YEAR ENDED 30TH SEPTEMBER, 2025 (Unaudited) (Unaudited) (Unaudited) (Unaudited) (Unaudited) (Audited) Income (<' in from Quarter Ended Half Year Ended Year Ended No. Total Income Particulars 30 2 -0 1, 9 8 - 4 2 4 0 ."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c2",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 67,
-          "score": 0.8265011310577393,
-          "citation": "[p9:c67]",
-          "text": "Ended No. Total Income Particulars 30 2 -0 1, 9 8 - 4 2 4 0 . 2 0 5 7 30 2 - 2 0 , 6 4 - 3 2 6 0 .6 25 2 30-2039,1-9206.2148 44,280.69 49,262.90 100,365.08 2 Expenses Revenue Operations 21,248.51 21,961.20 22,608.07 43,209.71 48,080.47 97,894.75 Other Income 595.56 475.42 588.11 1,070.98 1,182.43 2.470.33 (a) Cost of materials consumed 4,961.56 3.393.07 1.792.32 8.354.63 3,552.29 9.710.55 (b) Purchases of stock-in-trade 6,952.58 7,398.59 9,668.58 14,351.17 19,768.22 39,814.18 (c) Changes in inventories of finished goods."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c3",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 68,
-          "score": 0.7773396968841553,
-          "citation": "[p9:c68]",
-          "text": "work-in-progress e, stock-in-trade (1,778.39) (12033) (548.35) (1.898 72) 1,044.46 1,844.54 (d) Employee benefits expense 897.62 962.77 742.28 1,860.39 1.620.67 3,118.90 (e) Finance cost Total Expenses 21,029.72 20,970.34 20,787.29 42,000.06 44,618.45 93,832.07 -Interest and Other finance cost 1,761.64 1,511.11 1,250.02 3,272.75 2,427.50 5,260.36 3 Profit/ (Loss) before exceptional items and tax (1-2) 814.35 1,466.28 2,408.89 2,280.63 4,644.45 6,533.01 -Foreign exchange loss/ (gain) (net) (50.42) (475.63)"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c4",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 69,
-          "score": 0.7883322834968567,
-          "citation": "[p9:c69]",
-          "text": "(340.19) (526.05) (387.18) 717.66 4 (f)Depreciation."
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c5",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 70,
-          "score": 0.7803592681884766,
-          "citation": "[p9:c70]",
-          "text": "Amortisation e, Impairment 1,376.55 1,283.95 1,035.19 2,660.50 1,969.27 4,211.33 5 P(gro) fOitp/e r(aLtoisnsg) abnedfo Oreth tearx e fxrpoemn sCeosn tinuing Operations (3+4) 64,,930987..6538 17,4,06166..2881 27,4,10887..8494 153,,896235..9391 144,6,64243..4252 1209,4,17584..7545 6 Tax expenses Add/ (Less): Exceptional items (Refer Note 3 e, 4) 3,583.28 3,583.28 3,945.73 Total Tax Expense 1,001.07 571.25 512.37 1,572.32 1,095.97 2,968.52 7 Profit/ (Loss) before share of profit/ (loss) from jointly controlled"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c6",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 71,
-          "score": 0.768993616104126,
-          "citation": "[p9:c71]",
-          "text": "3,396.56 895.03 1,896.52 4,291.59 3,548.48 7,510.22 entities and associates (5-6) (a) Current Tax 1,059.71 658.83 471.77 1.718.54 937.31 2,776.16 8 (b) Deferred Tax (58.64) (87.58) 40.60 (146.22) 158.66 192.36 9 Profit / (Loss) after tax from Continuing Operations (7+8) 3,414.43 976.48 1,994.73 4,390.91 3,770.75 8,017.95 10 (Refer Note 5) Add/ (Less): Share of profit/ (loss) from jointly controlled entities Profit / (Loss) after tax from Discontinued Operations 17.87 81.45 9(58.5.241) 99.32 2(292..3207)"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c7",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 72,
-          "score": 0.779495358467102,
-          "citation": "[p9:c72]",
-          "text": "5(1027.9.763) and associates 11 Profit/ (Loss) for the period (9+1 O) 3,414.43 976.48 1,989.19 4,390.91 3,761.45 8,004.99 12 Other Comprehensive Income / (Loss) Profit/ (Loss) before tax from Discontinued Operations (7.40) (12.43) (17.32) (Less) : Tax expenses of Discontinued Operations (1.86) (3.13) (4.36) (a) Items that will not be reclassified to profit or loss 10.99 (105) (3.17) 9.94 (3.77) (6.14) (b) Income tax relating to items that will not be Total Other Comprehensive Income/ (Loss) 599(2.2.797 )"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c8",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 73,
-          "score": 0.773763120174408,
-          "citation": "[p9:c73]",
-          "text": "(2590..1207) (530..0842) 34(02.,5190 ) (2102..7927) 6331..2681 reclassified to profit or loss 13 Total Comprehensive Income/ (Loss) (11+12) 4,013.72 717.38 1,936.15 4,731.10 3,548.73 8,638.27 (c) Items that will be reclassified to profit or loss 592,10 (273.38) (33.16) 318.72 (186.47) 672.90 14 Net Profit/ (Loss) attributable to (d) Income tax relating to items that will be Owners of the Company 3,19(81..0753 ) 73154..0461 1,7(4117..7553 ) 3,93143..0163 3,1(9263..4255 ) 7,09(395..0009 ) reclassified to"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c9",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 74,
-          "score": 0.7686787843704224,
-          "citation": "[p9:c74]",
-          "text": "profit or loss 15 Other Comprehensive Income/ (Loss) attributable to 16 Total Comprehensive Income/ (Loss) attributable to Non-controlling interests 215.68 242.07 247.44 457.75 565.20 905.99 Owners of the Company 595.99 (246.26) (63.45) 349.73 (228.43) 609.15 Non-controlling interests 3.30 (12.84) 10.41 (9.54) 15.71 24.13 Owners of the Company 3,794.74 488.15 1,678.30 4,282.89 2,967.82 7,708.15 19 NeNt oWno-crothn trolling interests 218.98 �29.23 257,85 61,547478.6.261 47,650880.0.951 56,497300.4.152 2107"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c10",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 75,
-          "score": 0.7895205020904541,
-          "citation": "[p9:c75]",
-          "text": "PEaaridn-iunpg sE pqeurit syh Sahrea rien CRauppietaels (Face Value of<' 1 each) # ((Fnaocte a nVnauluaeli soef<'d) :1 each) 115.42 115.42 114,00 115.42 114.00 115.42 18 OFrtohmer CEoqnutiitnyu (iInngc luOdpienrga tIniosntrsu ments entirely Equity in nature) 53,940.91 41,781.71 50,198.55 From Discontinued Operations From Continuing Discontinued Operations Basic e, Diluted --=- 27.38 6.02 14.87 -33.40 27.20 60.67 i� cf Basic e, Diluted �!"
-        },
-        {
-          "chunk_id": "doc_95903140997f7c19:p9:text:c11",
-          "document_id": "doc_95903140997f7c19",
-          "filename": "AELBoardoutcome041120251_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 9,
-          "chunk_index": 76,
-          "score": 0.7894423604011536,
-          "citation": "[p9:c76]",
-          "text": "27.38 6.02 14.87 -33.40 27.20 60.67 i� cf Basic e, Diluted �! (0.05) (0,08) (0.12) & I r Basic e, Diluted if: 0 j(,.:, 2 7.38 'b:= ' 6.02 14.82 Lu 33.40 27.12 60.55 21 Additional Disclosure for Ratios (Refer Note 12) I\\� \"1u71 :/r,J/ \\ � JI #EPS has been calculated on net profit less distribution on instrumentl\\(/) ' c:\\ W100 ':> zj , n . • a t I u / re for the period/ year w � h �Oo /y - * �m.Jar� () i(?�� 'y therw1se."
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:vlm:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 32,
-          "chunk_index": 140,
-          "score": 0.8117767572402954,
-          "citation": "[p32:c140]",
-          "text": "AEL: Transport & Logistics – AAHL (Airports) adani Volume Details | Airport | Passengers (In Mn) | | | | ATM (In '000) | | | | Cargo (In Lacs MT) | | | | | :----------------- | :----------------- | :----- | :----- | :----- | :------------ | :----- | :----- | :----- | :----------------- | :----- | :----- | :----- | | | Q2-25 | Q2-26 | H1-25 | H1-26 | Q2-25 | Q2-26 | H1-25 | H1-26 | Q2-25 | Q2-26 | H1-25 | H1-26 | | Ahmedabad | 3.0 | 3.1 | 6.2 | 6.6 | 23.4 | 23.6 | 47.2 | 50.2 | 0.3 | 0.3 | 0.5 | 0.6 | | Lucknow | 1.5 | 1.4 | 3.0 | 2.9 | 12.5 | 9.6 | 25.3 | 19.9 | 0.1 | 0.1 | 0.1 | 0.1 | | Mangaluru | 0.6 | 0.6 | 1.1 | 1.2 | 4.0 | 4.4 | 7.9 | 9.2 | 0.0 | 0.0 | 0.0 | 0.0 | | Jaipur | 1.4 | 1.2 | 2.7 | 2.4 | 11.3 | 9.7 | 22.6 | 19.1 | 0.1 | 0.1 | 0.1 | 0.1 | | Guwahati | 1.4 | 1.8 | 2.9 | 3.5 | 11.1 | 11.7 | 22.2 | 24.2 | 0.1 | 0.1 | 0.1 | 0.1 | | Thiruvananthapuram | 1.2 | 1.2 | 2.5 | 2.4 | 8.2 | 7.4 | 16.2 | 15.2 | 0.1 | 0.1 | 0.1 | 0.1 | | Mumbai | 13.2 | 13.3 | 26.7 | 26.9 | 82.7 | 81.7 | 164.0 | 164.1 | 2.3 | 2.3 | 4.5 | 4.6 | | Total | 22.3 | 22.6 | 45.1 | 46.0 | 153.3 | 148.2 | 305.4 | 301.7 | 2.8 | 2.9 | 5.5 | 5.7 | ATM – Air Traffic Movement 32"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:text:c0",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 32,
-          "chunk_index": 76,
-          "score": 0.8162683844566345,
-          "citation": "[p32:c76]",
-          "text": "AEL: Transport & Logistics – AAHL (Airports) Volume Details Cargo (In Lacs MT) Passengers (In Mn) ATM (In ‘000) Airport Q2-25 Q2-26 H1-25 H1-26 Q2-25 Q2-26 H1-25 H1-26 Q2-25 Q2-26 H1-25 H1-26 Ahmedabad 3.0 3.1 6.2 6.6 23.4 23.6 47.2 50.2 0.3 0.3 0.5 0.6 Lucknow 1.5 1.4 3.0 2.9 12.5 9.6 25.3 19.9 0.1 0.1 0.1 0.1 Mangaluru 0.6 0.6 1.1 1.2 4.0 4.4 7.9 9.2 0.0 0.0 0.0 0.0 Jaipur 1.4 1.2 2.7 2.4 11.3 9.7 22.6 19.1 0.1 0.1 0.1 0.1 Guwahati 1.4 1.8 2.9 3.5 11.1 11.7 22.2 24.2 0.1 0.1 0.1 0.1 Thiruvananthapuram 1.2"
-        },
-        {
-          "chunk_id": "doc_52829a34df8b6a71:p32:text:c1",
-          "document_id": "doc_52829a34df8b6a71",
-          "filename": "AEL_Earnings_Presentation_Q2-FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 32,
-          "chunk_index": 77,
-          "score": 0.7890380620956421,
-          "citation": "[p32:c77]",
-          "text": "1.2 2.5 2.4 8.2 7.4 16.2 15.2 0.1 0.1 0.1 0.1 Mumbai 13.2 13.3 26.7 26.9 82.7 81.7 164.0 164.1 2.3 2.3 4.5 4.6 Total 22.3 22.6 45.1 46.0 153.3 148.2 305.4 301.7 2.8 2.9 5.5 5.7 Home outline Hsoalmid bfiullrger Menu Icon with 32 ATM – Air Traffic Movement"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c0",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 4,
-          "chunk_index": 38,
-          "score": 0.7266111373901367,
-          "citation": "[p4:c38]",
-          "text": "adani About Adani Enterprises Ltd Adani Enterprises Limited (AEL) is the flagship company of Adani Group, one of India's largest business organisations. Over the years, Adani Enterprises has focused on building emerging infrastructure businesses, contributing to nation-building and divesting them into separate listed entities."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c1",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 4,
-          "chunk_index": 39,
-          "score": 0.7542632222175598,
-          "citation": "[p4:c39]",
-          "text": "and divesting them into separate listed entities. Having successfully built sizeable and scalable businesses like Adani Ports & SEZ, Adani Energy Solutions, Adani Power, Adani Green Energy, Adani Total Gas and Adani Wilmar, the company has contributed to make India self-reliant with our robust businesses. This has also led to significant returns to our shareholders for three decades."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c2",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 4,
-          "chunk_index": 40,
-          "score": 0.812194287776947,
-          "citation": "[p4:c40]",
-          "text": "to significant returns to our shareholders for three decades. The next generation of its strategic business investments are centered around green hydrogen ecosystem, airport management, data center, roads and primary industries like copper and petrochem - all of which have significant scope for value unlocking."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c3",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 4,
-          "chunk_index": 41,
-          "score": 0.7157517671585083,
-          "citation": "[p4:c41]",
-          "text": "- all of which have significant scope for value unlocking. For more information, please visit www.adanienterprises.com For more information please contact: | Mitul Thakkar | | :---------------------- | | Adani Group | | Corporate Communications | | Tel: +91-79-25550539 | | mitul.thakkar@adani.com | | Manan Vakharia | | :---------------------- | | Adani Enterprises Ltd | | Investor Relations | | Tel: +91-79-25556140 | | mananj.vakharia@adani.com | Adani Enterprises Ltd (CIN No : L51100GJ1993PLC019067) Registered Office : \"Adani Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G."
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:vlm:c4",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "vlm",
-          "page_number": 4,
-          "chunk_index": 42,
-          "score": 0.7257473468780518,
-          "citation": "[p4:c42]",
-          "text": "Corporate House\", Shantigram, Near Vaishno Devi Circle, S.G. Highway, Khodiyar, Ahmedabad 382 421. Phone : 079-26565555 ; Fax : 079-26565500 ; Email : info@adani.com ; Website : www.adanienterprises.com"
-        },
-        {
-          "chunk_id": "doc_9d5307eef66c3ceb:p4:text:c0",
-          "document_id": "doc_9d5307eef66c3ceb",
-          "filename": "AEL Press Release Q2 FY26_copy.pdf",
-          "index_level": 0,
-          "embedding_channel": "text",
-          "page_number": 4,
-          "chunk_index": 20,
-          "score": 0.7230256795883179,
-          "citation": "[p4:c20]",
-          "text": "About Adani Enterprises Ltd Adani Enterprises Limited (AEL) is the flagship company of Adani Group, one of India’s largest business organisations. Over the years, Adani Enterprises has focused on building emerging infrastructure businesses, contributing to nation-building and divesting them into separate listed entities."
-        }
-      ],
-      "chunks_found": 28,
-      "crag_report": {
-        "status": "checked",
-        "needs_page_fallback": false,
-        "spans": [],
-        "raw_span_count": 0
-      },
-      "elapsed_seconds": 24.777970600000117
+      "answer": "",
+      "is_fallback": true,
+      "sources": [],
+      "chunks_found": 0,
+      "crag_report": {},
+      "elapsed_seconds": 0.2846255000004021,
+      "error": "429 Client Error: Too Many Requests for url: https://integrate.api.nvidia.com/v1/chat/completions"
     }
   ]
 }
