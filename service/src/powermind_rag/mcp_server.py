@@ -1,10 +1,18 @@
 from __future__ import annotations
 
 import argparse
+import os
+import sys
 from pathlib import Path
 from typing import Any
 
 from fastmcp import FastMCP
+
+# FastMCP deploy/inspect may execute this file directly from the repo root
+# without installing the package. Make service/src importable in that case.
+SERVICE_SRC = Path(__file__).resolve().parents[1]
+if str(SERVICE_SRC) not in sys.path:
+    sys.path.insert(0, str(SERVICE_SRC))
 
 from powermind_rag.config import RAGConfig
 from powermind_rag.pipeline import MultimodalRAGPipeline
@@ -16,11 +24,48 @@ mcp = FastMCP(
     instructions=(
         "Pramana exposes document ingestion and retrieval tools. For final answers, "
         "call retrieve_evidence and synthesize only from returned evidence and citations. "
-        "The server does not need to be the final inference LLM."
+        "The server does not need to be the final inference LLM. If credentials are "
+        "missing, call environment_status and configure_environment before retrieval "
+        "or ingestion."
     ),
 )
 
 _pipeline: MultimodalRAGPipeline | None = None
+
+_ALLOWED_ENV_KEYS = {
+    "NVIDIA_KEY",
+    "NVIDIA_API_KEY",
+    "NVIDIA_NIM_API_KEY",
+    "NVIDIA_EMBEDDING_MODEL",
+    "NVIDIA_VLM_MODEL",
+    "NVIDIA_GENERATION_MODEL",
+    "NVIDIA_VLM_BASE_URL",
+    "MISTRAL_API_KEY",
+    "MISTRAL_SERVER_URL",
+    "GEMINI_API_KEY",
+    "GEMINI_API_KEY_1",
+    "GEMINI_API_KEY_2",
+    "GEMINI_API_KEY_3",
+    "GEMINI_API_KEY_4",
+    "GEMINI_API_KEY_5",
+    "GEMINI_API_KEY_6",
+    "GEMINI_1",
+    "GEMINI_2",
+    "GEMINI_3",
+    "GEMINI_4",
+    "GEMINI_5",
+    "GEMINI_6",
+    "GEMINI_RELEVANCE_MODEL",
+    "POWERMIND_STORAGE_DIR",
+    "POWERMIND_DEVICE",
+    "POWERMIND_ENABLE_VISUAL_UNDERSTANDING",
+    "POWERMIND_VISUAL_UNDERSTANDING_PROVIDER",
+    "POWERMIND_RELEVANCE_PROVIDER",
+    "POWERMIND_ALLOW_LEXICAL_CRAG_FALLBACK",
+    "POWERMIND_ENABLE_QUERY_VISUAL_RETRIEVAL",
+    "POWERMIND_ENABLE_COLPALI_VISUAL_INDEX",
+    "POWERMIND_CHUNKING_PROVIDER",
+}
 
 
 def _get_pipeline() -> MultimodalRAGPipeline:
@@ -28,6 +73,82 @@ def _get_pipeline() -> MultimodalRAGPipeline:
     if _pipeline is None:
         _pipeline = MultimodalRAGPipeline(RAGConfig.from_env())
     return _pipeline
+
+
+def _reset_pipeline() -> None:
+    global _pipeline
+    _pipeline = None
+
+
+def _has_any_env(*names: str) -> bool:
+    return any((os.getenv(name) or "").strip().strip('"') for name in names)
+
+
+def _gemini_configured() -> bool:
+    return _has_any_env(
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY",
+        "GEMINI_API_KEY_1",
+        "GEMINI_API_KEY_2",
+        "GEMINI_API_KEY_3",
+        "GEMINI_API_KEY_4",
+        "GEMINI_API_KEY_5",
+        "GEMINI_API_KEY_6",
+        "GEMINI_1",
+        "GEMINI_2",
+        "GEMINI_3",
+        "GEMINI_4",
+        "GEMINI_5",
+        "GEMINI_6",
+    )
+
+
+def _missing_for_retrieval(use_relevance: bool) -> list[str]:
+    missing = []
+    if not _has_any_env("NVIDIA_KEY", "NVIDIA_API_KEY", "NVIDIA_NIM_API_KEY"):
+        missing.append("NVIDIA_KEY")
+    relevance_provider = os.getenv("POWERMIND_RELEVANCE_PROVIDER", "gemini").strip().lower()
+    if use_relevance and relevance_provider == "gemini" and not _gemini_configured():
+        missing.append("GEMINI_API_KEY_1")
+    return missing
+
+
+def _missing_for_ingest() -> list[str]:
+    missing = _missing_for_retrieval(use_relevance=False)
+    visual_enabled = os.getenv("POWERMIND_ENABLE_VISUAL_UNDERSTANDING", "").strip().lower() in {
+        "1",
+        "true",
+        "yes",
+        "on",
+    }
+    visual_provider = os.getenv("POWERMIND_VISUAL_UNDERSTANDING_PROVIDER", "gemini_nvidia").strip().lower()
+    if visual_enabled and "gemini" in visual_provider and not _gemini_configured():
+        missing.append("GEMINI_API_KEY_1")
+    if (
+        visual_enabled
+        and "nvidia" in visual_provider
+        and not _has_any_env("NVIDIA_KEY", "NVIDIA_API_KEY", "NVIDIA_NIM_API_KEY")
+        and "NVIDIA_KEY" not in missing
+    ):
+        missing.append("NVIDIA_KEY")
+    if os.getenv("POWERMIND_CHUNKING_PROVIDER", "rules").strip().lower() == "gemini" and not _gemini_configured():
+        missing.append("GEMINI_API_KEY_1")
+    return list(dict.fromkeys(missing))
+
+
+def _configuration_response(operation: str, missing: list[str]) -> dict[str, Any]:
+    return {
+        "status": "needs_configuration",
+        "operation": operation,
+        "missing_env_vars": missing,
+        "message": (
+            "Ask the user for only these missing values, then call configure_environment "
+            "with an env mapping. The final inference LLM remains the MCP host."
+        ),
+        "example_tool_call": {
+            "env": {name: "<secret>" for name in missing},
+        },
+    }
 
 
 def _chunk_payload(chunk: RetrievedChunk) -> dict[str, Any]:
@@ -45,12 +166,63 @@ def _chunk_payload(chunk: RetrievedChunk) -> dict[str, Any]:
 
 
 @mcp.tool
-def retrieve_evidence(query: str, top_k: int = 8, use_relevance: bool = True) -> dict[str, Any]:
+def environment_status() -> dict[str, Any]:
+    """Show which credentials/settings are currently configured without revealing values."""
+    config = RAGConfig.from_env()
+    retrieval_missing = _missing_for_retrieval(use_relevance=True)
+    ingest_missing = _missing_for_ingest()
+    configured = [
+        key
+        for key in sorted(_ALLOWED_ENV_KEYS)
+        if key in os.environ and (os.getenv(key) or "").strip()
+    ]
+    return {
+        "storage_dir": str(config.storage_dir),
+        "configured_env_vars": configured,
+        "retrieval_ready": not retrieval_missing,
+        "ingest_ready": not ingest_missing,
+        "missing_for_retrieval": retrieval_missing,
+        "missing_for_ingest": ingest_missing,
+        "note": (
+            "Values are intentionally not returned. If anything is missing, ask the user "
+            "for only those variables and pass them to configure_environment."
+        ),
+    }
+
+
+@mcp.tool
+def configure_environment(env: dict[str, str]) -> dict[str, Any]:
+    """Set allowed Pramana environment variables for this running MCP server process."""
+    accepted = []
+    rejected = []
+    for key, value in env.items():
+        normalized_key = key.strip()
+        if normalized_key not in _ALLOWED_ENV_KEYS:
+            rejected.append(normalized_key)
+            continue
+        os.environ[normalized_key] = str(value).strip().strip('"')
+        accepted.append(normalized_key)
+    if accepted:
+        _reset_pipeline()
+    status = environment_status()
+    return {
+        "status": "configured" if accepted else "no_changes",
+        "accepted_env_vars": sorted(accepted),
+        "rejected_env_vars": sorted(rejected),
+        "environment_status": status,
+    }
+
+
+@mcp.tool
+def retrieve_evidence(query: str, top_k: int = 8, use_relevance: bool = False) -> dict[str, Any]:
     """Retrieve cited document evidence for the host LLM to answer from.
 
     Use this tool when the caller wants its own model to perform the final
     inference. The returned chunks are evidence, not a final answer.
     """
+    missing = _missing_for_retrieval(use_relevance=use_relevance)
+    if missing:
+        return _configuration_response("retrieve_evidence", missing)
     safe_top_k = max(1, min(top_k, 30))
     pipeline = _get_pipeline()
     chunks, timings = pipeline.retrieve_evidence(
@@ -78,6 +250,9 @@ def ingest_pdf(
     context: str | None = None,
 ) -> dict[str, Any]:
     """Ingest a PDF into Pramana storage so it can be retrieved later."""
+    missing = _missing_for_ingest()
+    if missing:
+        return _configuration_response("ingest_pdf", missing)
     path = Path(pdf_path).expanduser()
     if not path.exists():
         raise FileNotFoundError(f"PDF not found: {path}")
