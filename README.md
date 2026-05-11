@@ -168,6 +168,53 @@ cd D:\PowerMind
 python -m powermind_rag.cli ask "What is the Adani Family's equity stake in AEL as shown in the portfolio structure diagram?" --show-timings
 ```
 
+## MCP Server
+
+Pramana can run as an MCP server for local or remote MCP hosts. The preferred tool is
+`retrieve_evidence`: it returns cited evidence chunks and an answering contract, while the
+LLM in the calling host performs the final inference.
+
+Install and sync with uv:
+
+```powershell
+cd D:\PowerMind
+uv sync --project service
+```
+
+Run as a remote FastMCP HTTP server:
+
+```powershell
+cd D:\PowerMind
+uv run --project service fastmcp run service\src\powermind_rag\mcp_server.py --transport http --host 0.0.0.0 --port 8000
+```
+
+MCP clients should connect to:
+
+```text
+http://localhost:8000/mcp/
+```
+
+Run as a local stdio MCP server:
+
+```powershell
+cd D:\PowerMind
+uv run --project service fastmcp run service\src\powermind_rag\mcp_server.py --transport stdio
+```
+
+You can also run the module directly:
+
+```powershell
+cd D:\PowerMind
+uv run --project service python -m powermind_rag.mcp_server --transport http --host 0.0.0.0 --port 8000
+```
+
+Available MCP capabilities:
+
+- `retrieve_evidence(query, top_k, use_relevance)`: returns retrieved text/image evidence with citations for host-side answering.
+- `ingest_pdf(pdf_path, doc_type, section, context)`: ingests a PDF into Pramana storage.
+- `list_documents()`: lists stored documents.
+- `answer_from_pramana_evidence(question)`: prompt template that tells the host to retrieve evidence and answer only from it.
+
 ## Batch Questions
 
 ```powershell

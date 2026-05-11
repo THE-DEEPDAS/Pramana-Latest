@@ -15,11 +15,13 @@ dependencies = [
   "pymupdf>=1.24.0",
   "python-dotenv>=1.0.1",
   "rank-bm25>=0.2.2",
+  "fastmcp>=3.0.0,<4",
 ]
 
 [project.scripts]
 pramana-rag = "powermind_rag.cli:main"
 powermind-rag = "powermind_rag.cli:main"
+pramana-mcp = "powermind_rag.mcp_server:main"
 
 [build-system]
 requires = ["setuptools>=69", "wheel"]

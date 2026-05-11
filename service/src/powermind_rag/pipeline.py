@@ -373,6 +373,84 @@ class MultimodalRAGPipeline:
             verifier_report={"skipped": "POWERMIND_ENABLE_VERIFICATION is not enabled."},
         )
 
+    def retrieve_evidence(
+        self,
+        query: str,
+        top_k: int | None = None,
+        use_relevance: bool = True,
+    ) -> tuple[list[RetrievedChunk], dict[str, float]]:
+        """Retrieve grounded evidence without generating the final answer.
+
+        This is the path to expose over MCP when the MCP host's LLM should do
+        the final synthesis.
+        """
+        timings = {name: 0.0 for name in TIMING_KEYS}
+        total_start = perf_counter()
+
+        def finish(chunks: list[RetrievedChunk]) -> tuple[list[RetrievedChunk], dict[str, float]]:
+            timings["total"] = perf_counter() - total_start
+            limit = top_k or self.config.final_top_k
+            return chunks[:limit], dict(timings)
+
+        if not self.text_records:
+            load_start = perf_counter()
+            self.load_from_storage()
+            timings["storage_load"] = perf_counter() - load_start
+        expansion_start = perf_counter()
+        expanded_query, keyword_terms = _expand_query(query)
+        timings["query_expansion"] = perf_counter() - expansion_start
+
+        text_top_k = max(self.config.text_top_k, top_k or 0)
+        final_top_k = max(self.config.final_top_k, top_k or 0)
+
+        bm25_start = perf_counter()
+        bm25_hits = self.text_index.bm25_search(expanded_query, text_top_k)
+        timings["bm25_retrieval"] = perf_counter() - bm25_start
+        dense_start = perf_counter()
+        dense_hits = self.text_index.dense_search(expanded_query, text_top_k)
+        timings["dense_retrieval"] = perf_counter() - dense_start
+        keyword_start = perf_counter()
+        keyword_hits = self.text_index.keyword_search(keyword_terms, text_top_k)
+        timings["keyword_retrieval"] = perf_counter() - keyword_start
+
+        text_fusion_start = perf_counter()
+        text_hits = reciprocal_rank_fusion([keyword_hits, bm25_hits, dense_hits], k=self.config.rrf_k)
+        timings["text_rrf"] = perf_counter() - text_fusion_start
+
+        visual_start = perf_counter()
+        if (
+            self.config.local_only
+            or not self.config.enable_colpali_visual_index
+            or self.visual_index is None
+            or not self.config.enable_query_visual_retrieval
+        ):
+            visual_hits = []
+        else:
+            visual_hits = self.visual_index.search(query, self.config.visual_top_k)
+        timings["visual_retrieval"] = perf_counter() - visual_start
+
+        final_fusion_start = perf_counter()
+        candidates = reciprocal_rank_fusion([text_hits, visual_hits], k=self.config.rrf_k)[:final_top_k]
+        timings["final_rrf"] = perf_counter() - final_fusion_start
+
+        if not use_relevance or self.config.relevance_provider in {"none", "local"}:
+            return finish(candidates)
+
+        if self.config.relevance_provider in {"lexical"}:
+            graded = _lexical_crag_grade(query, candidates)
+        else:
+            grade_start = perf_counter()
+            try:
+                graded = self._relevance().grade(query, candidates)
+            except RuntimeError:
+                if not self.config.allow_lexical_crag_fallback:
+                    raise
+                graded = _lexical_crag_grade(query, candidates)
+            timings["relevance_grading"] = perf_counter() - grade_start
+
+        supported = [chunk for chunk, score in graded if score >= self.config.relevance_threshold]
+        return finish(supported or candidates)
+
     def _generate_grounded_answer(self, query: str, chunks: list[RetrievedChunk]) -> str:
         chunks = _generation_context_chunks(chunks)
         image_paths = [
