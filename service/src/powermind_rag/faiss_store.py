@@ -30,6 +30,12 @@ class FaissStore(Generic[T]):
         vector = np.asarray(query_vector, dtype="float32")
         if vector.ndim == 1:
             vector = vector.reshape(1, -1)
+        if vector.shape[1] != self.dimension:
+            raise ValueError(
+                f"Dense query vector dimension {vector.shape[1]} does not match "
+                f"FAISS index dimension {self.dimension}. Re-ingest or re-embed stored records "
+                "with the currently configured embedding model."
+            )
         scores, ids = self.index.search(vector, top_k)
         hits: list[tuple[T, float, int]] = []
         for rank, (idx, score) in enumerate(zip(ids[0], scores[0]), start=1):

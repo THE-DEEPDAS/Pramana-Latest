@@ -22,8 +22,12 @@ class RAGConfig:
     storage_dir: Path = Path("storage")
     qwen_model_path: Path = Path("Qwen")
     qwen_vl_model_path: Path = Path("Qwen_VL")
-    dense_embedding_model: str = "E5_Small"
+    dense_embedding_model: str = "nvidia/nv-embed-v1"
+    nvidia_embedding_model: str = "nvidia/nv-embed-v1"
+    nvidia_embedding_batch_size: int = 16
+    nvidia_embedding_timeout_seconds: int = 120
     colpali_model_name: str = "vidore/colpali-v1.2"
+    enable_colpali_visual_index: bool = False
     device: str = "cuda"
     cuda_arch: str = "sm_120"
     visual_top_k: int = 5
@@ -38,11 +42,13 @@ class RAGConfig:
     groq_api_key: str | None = None
     gemini_api_key: str | None = None
     gemini_api_key_2: str | None = None
+    gemini_api_keys: tuple[str, ...] = ()
     relevance_provider: str = "gemini"
+    allow_lexical_crag_fallback: bool = False
     groq_relevance_model: str = "llama-3.1-8b-instant"
     gemini_relevance_model: str = "gemini-2.5-flash"
-    generation_provider: str = "local"
-    image_generation_provider: str = "nvidia"
+    generation_provider: str = "nvidia"
+    image_generation_provider: str = "nvidia_gemini"
     groq_generation_model: str = "llama-3.3-70b-versatile"
     openrouter_api_key: str | None = None
     openrouter_generation_model: str = "liquid/lfm-2.5-1.2b-instruct:free"
@@ -54,8 +60,8 @@ class RAGConfig:
     visual_understanding_provider: str = "nvidia"
     nvidia_api_key: str | None = None
     nvidia_vlm_base_url: str = "https://integrate.api.nvidia.com/v1"
-    nvidia_vlm_model: str = "nvidia/nemotron-nano-12b-v2-vl"
-    nvidia_generation_model: str = "nvidia/nemotron-nano-12b-v2-vl"
+    nvidia_vlm_model: str = "microsoft/phi-4-multimodal-instruct"
+    nvidia_generation_model: str = "microsoft/phi-4-multimodal-instruct"
     nvidia_vlm_max_tokens: int = 4096
     nvidia_vlm_image_max_bytes: int = 100_000
     nvidia_vlm_image_max_side: int = 1400
@@ -83,17 +89,26 @@ class RAGConfig:
             "yes",
             "on",
         }
-        generation_provider = os.getenv("POWERMIND_GENERATION_PROVIDER", "local").strip().lower()
+        generation_provider = os.getenv("POWERMIND_GENERATION_PROVIDER", "nvidia").strip().lower()
         image_generation_provider = os.getenv(
             "POWERMIND_IMAGE_PROVIDER",
-            generation_provider,
+            "nvidia_gemini",
         ).strip().lower()
         return cls(
             storage_dir=_resolve_path(os.getenv("POWERMIND_STORAGE_DIR"), "storage"),
             qwen_model_path=_resolve_path(os.getenv("QWEN_MODEL_PATH"), "Qwen"),
             qwen_vl_model_path=_resolve_path(os.getenv("QWEN_VL_MODEL_PATH"), "Qwen_VL"),
-            dense_embedding_model=os.getenv("POWERMIND_DENSE_MODEL", "E5_Small"),
+            dense_embedding_model=os.getenv("NVIDIA_EMBEDDING_MODEL", "nvidia/nv-embed-v1"),
+            nvidia_embedding_model=os.getenv("NVIDIA_EMBEDDING_MODEL", "nvidia/nv-embed-v1"),
+            nvidia_embedding_batch_size=int(os.getenv("NVIDIA_EMBEDDING_BATCH_SIZE", "16")),
+            nvidia_embedding_timeout_seconds=int(
+                os.getenv("NVIDIA_EMBEDDING_TIMEOUT_SECONDS", "120")
+            ),
             colpali_model_name=os.getenv("POWERMIND_COLPALI_MODEL", "vidore/colpali-v1.2"),
+            enable_colpali_visual_index=os.getenv(
+                "POWERMIND_ENABLE_COLPALI_VISUAL_INDEX", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
             device=os.getenv("POWERMIND_DEVICE", "cuda"),
             cuda_arch=os.getenv("POWERMIND_CUDA_ARCH", "sm_120"),
             mistral_api_key=os.getenv("MISTRAL_API_KEY"),
@@ -103,7 +118,12 @@ class RAGConfig:
             groq_api_key=os.getenv("GROQ_API_KEY"),
             gemini_api_key=os.getenv("GEMINI_API_KEY") or os.getenv("GOOGLE_API_KEY"),
             gemini_api_key_2=os.getenv("GEMINI_API_KEY_2"),
+            gemini_api_keys=_gemini_keys_from_env(),
             relevance_provider=os.getenv("POWERMIND_RELEVANCE_PROVIDER", "gemini").strip().lower(),
+            allow_lexical_crag_fallback=os.getenv(
+                "POWERMIND_ALLOW_LEXICAL_CRAG_FALLBACK", ""
+            ).strip().lower()
+            in {"1", "true", "yes", "on"},
             groq_relevance_model=os.getenv("GROQ_RELEVANCE_MODEL", "llama-3.1-8b-instant"),
             gemini_relevance_model=os.getenv("GEMINI_RELEVANCE_MODEL", "gemini-2.5-flash"),
             generation_provider=generation_provider,
@@ -138,7 +158,7 @@ class RAGConfig:
             ).strip().lower()
             in {"1", "true", "yes", "on"},
             visual_understanding_provider=os.getenv(
-                "POWERMIND_VISUAL_UNDERSTANDING_PROVIDER", "nvidia"
+                "POWERMIND_VISUAL_UNDERSTANDING_PROVIDER", "gemini_nvidia"
             ).strip().lower(),
             nvidia_api_key=(
                 os.getenv("NVIDIA_KEY")
@@ -151,11 +171,11 @@ class RAGConfig:
             ).rstrip("/"),
             nvidia_vlm_model=os.getenv(
                 "NVIDIA_VLM_MODEL",
-                "nvidia/nemotron-nano-12b-v2-vl",
+                "microsoft/phi-4-multimodal-instruct",
             ),
             nvidia_generation_model=os.getenv(
                 "NVIDIA_GENERATION_MODEL",
-                os.getenv("NVIDIA_VLM_MODEL", "nvidia/nemotron-nano-12b-v2-vl"),
+                os.getenv("NVIDIA_VLM_MODEL", "microsoft/phi-4-multimodal-instruct"),
             ),
             nvidia_vlm_max_tokens=int(os.getenv("NVIDIA_VLM_MAX_TOKENS", "4096")),
             nvidia_vlm_image_max_bytes=int(os.getenv("NVIDIA_VLM_IMAGE_MAX_BYTES", "100000")),
@@ -189,7 +209,30 @@ class RAGConfig:
                 "LETTUCE_MODEL_PATH",
                 "KRLabsOrg/lettucedect-base-modernbert-en-v1",
             ),
-            enable_verification=os.getenv("POWERMIND_ENABLE_VERIFICATION", "").strip().lower()
-            in {"1", "true", "yes", "on"},
+            enable_verification=False,
             local_only=local_only,
         )
+
+
+def _gemini_keys_from_env() -> tuple[str, ...]:
+    keys: list[str] = []
+    for name in (
+        "GEMINI_1",
+        "GEMINI_2",
+        "GEMINI_3",
+        "GEMINI_4",
+        "GEMINI_5",
+        "GEMINI_6",
+        "GEMINI_API_KEY_1",
+        "GEMINI_API_KEY_2",
+        "GEMINI_API_KEY_3",
+        "GEMINI_API_KEY_4",
+        "GEMINI_API_KEY_5",
+        "GEMINI_API_KEY_6",
+        "GEMINI_API_KEY",
+        "GOOGLE_API_KEY",
+    ):
+        value = (os.getenv(name) or "").strip().strip('"')
+        if value and value not in keys:
+            keys.append(value)
+    return tuple(keys)

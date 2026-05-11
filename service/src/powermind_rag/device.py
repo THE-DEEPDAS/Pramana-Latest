@@ -3,22 +3,20 @@ from __future__ import annotations
 
 def resolve_device(requested: str) -> str:
     requested = requested.lower().strip()
+    if requested in {"api", "remote"}:
+        return "api"
     if requested == "cpu":
         return "cpu"
     if requested not in {"cuda", "gpu"}:
-        raise ValueError("POWERMIND_DEVICE must be 'cuda' or 'cpu'.")
+        raise ValueError("POWERMIND_DEVICE must be 'api', 'cuda', or 'cpu'.")
 
     try:
         import torch
-    except ImportError as exc:
-        raise RuntimeError("GPU execution requires torch. Install torch in the torch_env conda environment.") from exc
+    except ImportError:
+        return "api"
 
     if not torch.cuda.is_available():
-        raise RuntimeError(
-            "GPU execution is the default, but CUDA is not available. "
-            "Activate conda env 'torch_env' with an RTX 5050 / sm_120-compatible PyTorch build, "
-            "or set POWERMIND_DEVICE=cpu."
-        )
+        return "api"
     return "cuda"
 
 

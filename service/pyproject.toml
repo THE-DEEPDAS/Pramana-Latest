@@ -1,13 +1,12 @@
 [project]
 name = "powermind-multimodal-rag"
 version = "0.1.0"
-description = "Production-grade multimodal RAG with ColPali/byaldi, hybrid retrieval, RRF, CRAG, LettuceDetect, and local Qwen generation."
+description = "Production-grade API-first multimodal RAG with NVIDIA embeddings, Mistral OCR, Gemini/NVIDIA VLM, hybrid retrieval, RRF, and CRAG."
 requires-python = ">=3.10"
 dependencies = [
-  "byaldi>=0.0.7",
   "faiss-cpu>=1.8.0",
   "groq>=0.9.0",
-  "lettucedetect>=0.1.0",
+  "google-generativeai>=0.8.5",
   "mistralai>=1.0.0",
   "numpy>=1.26.0",
   "pdf2image>=1.17.0",
@@ -15,10 +14,7 @@ dependencies = [
   "pydantic>=2.7.0",
   "pymupdf>=1.24.0",
   "python-dotenv>=1.0.1",
-  "qwen-vl-utils>=0.0.8",
   "rank-bm25>=0.2.2",
-  "sentence-transformers>=5.4.1,<6.0.0",
-  "transformers>=5.7.0,<6.0.0",
 ]
 
 [project.scripts]

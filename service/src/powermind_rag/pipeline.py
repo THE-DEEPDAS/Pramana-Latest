@@ -3,8 +3,10 @@ from __future__ import annotations
 import re
 import json
 from collections import defaultdict
+from dataclasses import replace
 from time import perf_counter
 from pathlib import Path
+from typing import Any
 
 from powermind_rag.config import RAGConfig
 from powermind_rag.device import resolve_device
@@ -14,8 +16,6 @@ from powermind_rag.llm import (
     FallbackChatLLM,
     GeminiChatLLM,
     GroqChatLLM,
-    LocalQwen,
-    LocalQwenVL,
     NvidiaChatLLM,
     OpenRouterChatLLM,
     PropositionChunker,
@@ -26,8 +26,11 @@ from powermind_rag.rrf import reciprocal_rank_fusion
 from powermind_rag.schema import Answer, RetrievedChunk, TextChunkRecord
 from powermind_rag.text_index import HybridTextIndex, load_text_records, save_text_records
 from powermind_rag.verifier import LettuceClaimVerifier
-from powermind_rag.visual_index import ColPaliVisualIndex, load_visual_records
-from powermind_rag.visual_understanding import LocalQwenVLVisualPageAnalyzer, NvidiaVisualPageAnalyzer
+from powermind_rag.visual_understanding import (
+    GeminiVisualPageAnalyzer,
+    NvidiaFirstVisualPageAnalyzer,
+    NvidiaVisualPageAnalyzer,
+)
 
 
 NOT_FOUND = "Not found in the document."
@@ -56,15 +59,24 @@ class MultimodalRAGPipeline:
     def __init__(self, config: RAGConfig | None = None):
         self.config = config or RAGConfig.from_env()
         self.device = resolve_device(self.config.device)
-        self.embedder = DenseEmbedder(self.config.dense_embedding_model, device=self.device)
+        self.embedder = DenseEmbedder(
+            self.config.nvidia_embedding_model,
+            api_key=self.config.nvidia_api_key,
+            base_url=self.config.nvidia_vlm_base_url,
+            batch_size=self.config.nvidia_embedding_batch_size,
+            timeout_seconds=self.config.nvidia_embedding_timeout_seconds,
+        )
         self.text_index = HybridTextIndex(self.embedder)
-        self.visual_index: ColPaliVisualIndex | None = None
+        self.visual_index: Any | None = None
         self.text_records: list[TextChunkRecord] = []
         self.generator: ChatLLM | None = None
         self.image_generator: ChatLLM | None = None
         self.relevance_grader: RelevanceGrader | None = None
         self.verifier: LettuceClaimVerifier | None = None
-        self.visual_page_analyzer: LocalQwenVLVisualPageAnalyzer | NvidiaVisualPageAnalyzer | None = None
+        self.visual_page_analyzer: (
+            GeminiVisualPageAnalyzer | NvidiaFirstVisualPageAnalyzer | NvidiaVisualPageAnalyzer | None
+        ) = None
+        self.last_ingest_report: dict[str, object] = {}
 
     def ingest_pdf(
         self,
@@ -73,7 +85,7 @@ class MultimodalRAGPipeline:
         section: str = "document content",
         context: str | None = None,
         metadata: dict | None = None,
-    ) -> None:
+    ) -> dict[str, object]:
         from powermind_rag.document import document_id_for, extract_pdf_text, render_pdf_pages
 
         document_id = document_id_for(pdf_path)
@@ -81,15 +93,13 @@ class MultimodalRAGPipeline:
         base_dir = self.config.storage_dir / document_id
         tables_by_page = defaultdict(str)
         visual_markdown_by_page: dict[int, str] = {}
-        should_render_pages = (
-            not self.config.local_only
-            or self.config.enable_visual_understanding
-        )
+        visual_failures: list[dict[str, object]] = []
+        should_render_pages = bool(self.config.mistral_api_key) or self.config.enable_visual_understanding
         image_paths = []
         if should_render_pages:
             image_paths = render_pdf_pages(pdf_path, base_dir / "pages")
         if self.config.enable_visual_understanding:
-            visual_markdown_by_page = self._load_or_analyze_visual_pages(
+            visual_markdown_by_page, visual_failures = self._load_or_analyze_visual_pages(
                 image_paths=image_paths,
                 document_id=document_id,
                 doc_type=doc_type,
@@ -98,8 +108,7 @@ class MultimodalRAGPipeline:
                 cache_path=base_dir / "visual_page_analysis.json",
             )
             self._unload_visual_page_analyzer()
-        if not self.config.local_only:
-            self._visual_index().build(image_paths, document_id=document_id, metadata=metadata or {})
+        if bool(self.config.mistral_api_key):
             ocr = MistralTableOCR(
                 self.config.mistral_api_key,
                 self.config.mistral_ocr_model,
@@ -108,6 +117,8 @@ class MultimodalRAGPipeline:
             )
             for table in ocr.extract_markdown_tables(image_paths):
                 tables_by_page[table.page_number] += table.markdown + "\n\n"
+        if self.config.enable_colpali_visual_index:
+            self._visual_index().build(image_paths, document_id=document_id, metadata=metadata or {})
             if self.visual_index is not None:
                 self.visual_index.save_document_records(document_id, base_dir / "visual_records.json")
                 self.visual_index.unload_model()
@@ -166,8 +177,15 @@ class MultimodalRAGPipeline:
         self.text_records.extend(records)
         self.text_index.build(self.text_records)
         save_text_records(records, base_dir / "text_records.json")
-        if self.visual_index is not None and self.visual_index.model is not None:
-            self.visual_index.save_document_records(document_id, base_dir / "visual_records.json")
+        self.last_ingest_report = {
+            "document_id": document_id,
+            "pdf": str(pdf_path),
+            "text_records": len(records),
+            "visual_pages_succeeded": len(visual_markdown_by_page),
+            "visual_pages_failed": len(visual_failures),
+            "visual_failures": visual_failures,
+        }
+        return self.last_ingest_report
 
     def load_from_storage(self) -> None:
         text_records: list[TextChunkRecord] = []
@@ -178,21 +196,55 @@ class MultimodalRAGPipeline:
                 and text_path.parent.name.endswith("_embeddings_import")
             ):
                 continue
-            text_records.extend(load_text_records(text_path))
-        for visual_path in self.config.storage_dir.glob("*/visual_records.json"):
-            if (
-                not self.config.load_imported_records
-                and visual_path.parent.name.endswith("_embeddings_import")
-            ):
-                continue
-            visual_records.extend(load_visual_records(visual_path))
-        if not text_records and not visual_records:
+            records = load_text_records(text_path)
+            records = self._ensure_current_text_embeddings(records, text_path)
+            text_records.extend(records)
+        if self.config.enable_colpali_visual_index and self.config.enable_query_visual_retrieval:
+            from powermind_rag.visual_index import load_visual_records
+
+            for visual_path in self.config.storage_dir.glob("*/visual_records.json"):
+                if (
+                    not self.config.load_imported_records
+                    and visual_path.parent.name.endswith("_embeddings_import")
+                ):
+                    continue
+                visual_records.extend(load_visual_records(visual_path))
+        if not text_records:
             raise RuntimeError(f"No ingested records found under {self.config.storage_dir}.")
         self.text_records = text_records
         if text_records:
             self.text_index.build(text_records)
-        if visual_records and self.config.enable_query_visual_retrieval:
+        if visual_records:
             self._visual_index().load_records(visual_records)
+
+    def _ensure_current_text_embeddings(
+        self,
+        records: list[TextChunkRecord],
+        text_path: Path,
+    ) -> list[TextChunkRecord]:
+        if not records:
+            return records
+
+        expected_dim = self.embedder.dimension
+        current_dims = {len(record.embedding) for record in records if record.embedding}
+        if current_dims == {expected_dim}:
+            return records
+
+        print(
+            f"Embedding dimension mismatch in {text_path}: found {sorted(current_dims)} "
+            f"but current embedder {self.config.nvidia_embedding_model} uses {expected_dim}. "
+            "Re-embedding stored chunks with NVIDIA and saving them back...",
+            flush=True,
+        )
+        texts = [record.text for record in records]
+        embeddings = self.embedder.encode_passages(texts)
+        updated = [
+            replace(record, embedding=embedding.tolist())
+            for record, embedding in zip(records, embeddings)
+        ]
+        save_text_records(updated, text_path)
+        print(f"Re-embedded {len(updated)} chunks in {text_path}.", flush=True)
+        return updated
 
     def answer(self, query: str) -> Answer:
         timings = {name: 0.0 for name in TIMING_KEYS}
@@ -227,6 +279,7 @@ class MultimodalRAGPipeline:
         visual_start = perf_counter()
         if (
             self.config.local_only
+            or not self.config.enable_colpali_visual_index
             or self.visual_index is None
             or not self.config.enable_query_visual_retrieval
         ):
@@ -240,17 +293,21 @@ class MultimodalRAGPipeline:
         ]
         timings["final_rrf"] = perf_counter() - final_fusion_start
 
-        if self.config.local_only:
-            graded = [(chunk, 1.0) for chunk in candidates]
-        elif self.config.relevance_provider in {"none", "lexical", "local"}:
+        if self.config.relevance_provider in {"none", "lexical", "local"}:
             graded = _lexical_crag_grade(query, candidates)
         else:
             grade_start = perf_counter()
             try:
                 graded = self._relevance().grade(query, candidates)
             except RuntimeError as exc:
+                if not self.config.allow_lexical_crag_fallback:
+                    raise RuntimeError(
+                        "CRAG relevance grading failed and lexical fallback is disabled. "
+                        "Fix POWERMIND_RELEVANCE_PROVIDER/Gemini keys, or set "
+                        "POWERMIND_ALLOW_LEXICAL_CRAG_FALLBACK=1 only for emergency degraded runs."
+                    ) from exc
                 print(
-                    f"CRAG LLM relevance grading failed; using non-LLM lexical CRAG fallback. "
+                    f"CRAG LLM relevance grading failed; using emergency lexical CRAG fallback. "
                     f"Reason: {exc}",
                     flush=True,
                 )
@@ -281,26 +338,13 @@ class MultimodalRAGPipeline:
         if not text_evidence and not self._can_generate_from_images():
             return finalize(text=FALLBACK_NOT_FOUND, retrieved=supported, is_fallback=True)
 
-        if self.config.local_only:
-            return finalize(
-                text=self._extractive_local_answer(
-                    query,
-                    text_evidence,
-                    RuntimeError("POWERMIND_LOCAL_ONLY skips Qwen generation"),
-                ),
-                retrieved=text_evidence,
-                verifier_report={"skipped": "POWERMIND_LOCAL_ONLY disables external verification."},
-            )
-
         try:
             generation_start = perf_counter()
             answer = self._generate_grounded_answer(query, text_evidence + visual_evidence)
             timings["generation"] = perf_counter() - generation_start
         except Exception as exc:
-            if not self.config.local_only:
-                raise
             timings["generation"] = perf_counter() - generation_start
-            answer = self._extractive_local_answer(query, text_evidence, exc)
+            raise exc
         if answer.strip() == NOT_FOUND:
             image_answer = self._generate_image_fallback(query, candidates)
             if image_answer.strip() != NOT_FOUND:
@@ -310,13 +354,6 @@ class MultimodalRAGPipeline:
                     is_fallback=False,
                 )
             return finalize(text=NOT_FOUND, retrieved=text_evidence, is_fallback=False)
-
-        if self.config.local_only:
-            return finalize(
-                text=answer,
-                retrieved=text_evidence,
-                verifier_report={"skipped": "POWERMIND_LOCAL_ONLY disables external verification."},
-            )
 
         if self.config.enable_verification:
             verification_start = perf_counter()
@@ -353,12 +390,14 @@ class MultimodalRAGPipeline:
         ]
         user = f"""
 Answer the query using ONLY the retrieved context below.
-Search the context for the exact entities, labels, and numbers requested by the query.
+Search deeply across every retrieved chunk for the exact entities, labels, and numbers requested by the query.
+Preserve the document's visible structure: headings as headings, table data as markdown tables, bullets as bullets, and chart/infographic values as labeled bullet points.
+Include every relevant value, unit, currency symbol, percentage, sign, period, footnote marker, and comparison exactly as shown.
 Work through the chunks in order; if the answer is not found early, continue to later chunks before concluding.
 Every factual statement and every number must have a citation in the exact format [pN:cK].
 If retrieved page images are attached, read ALL visible text in the image (titles, legends, callouts, labels inside shapes, axis ticks, footnotes, table cells) and cite those findings with [pN:image].
 For charts, infographics, and flowcharts, map labels to exact values, units, directions, and relationships as shown in the image.
-Do not infer missing numbers or labels. Do not use outside knowledge.
+Do not summarize away requested detail. Do not infer missing numbers or labels. Do not use outside knowledge.
 If a value is unreadable or ambiguous, return {NOT_FOUND} rather than guessing.
 If the context does not explicitly support the answer, return exactly: {NOT_FOUND}
 
@@ -394,6 +433,8 @@ RETRIEVED CONTEXT:
         )
 
     def _generate_image_fallback(self, query: str, chunks: list[RetrievedChunk]) -> str:
+        if not self._can_use_image_fallback():
+            return NOT_FOUND
         fallback_chunks = chunks[:MAX_IMAGE_FALLBACK_PAGES]
         if not fallback_chunks:
             return NOT_FOUND
@@ -425,13 +466,15 @@ QUERY:
     def _can_generate_from_images(self) -> bool:
         return (
             self.config.include_page_images_in_answers
-            and self.config.image_generation_provider in {"nvidia", "qwen_vl", "qwen-vl"}
+            and self.config.image_generation_provider
+            in {"nvidia", "gemini", "gemini_nvidia", "nvidia_gemini"}
         )
 
     def _can_use_image_fallback(self) -> bool:
         return (
             self.config.enable_query_vlm_fallback
-            and self.config.image_generation_provider in {"nvidia", "qwen_vl", "qwen-vl"}
+            and self.config.image_generation_provider
+            in {"nvidia", "gemini", "gemini_nvidia", "nvidia_gemini"}
         )
 
     def _extractive_local_answer(self, query: str, chunks: list[RetrievedChunk], exc: Exception) -> str:
@@ -448,13 +491,6 @@ QUERY:
             f"({type(exc).__name__}). " + " ".join(excerpts)
         )
 
-    def _visual_index(self) -> ColPaliVisualIndex:
-        if self.visual_index is None or self.visual_index.model is None:
-            previous_records = self.visual_index.records if self.visual_index is not None else []
-            self.visual_index = ColPaliVisualIndex(self.config.colpali_model_name, device=self.device)
-            self.visual_index.records.extend(previous_records)
-        return self.visual_index
-
     def _load_or_analyze_visual_pages(
         self,
         image_paths: list[Path],
@@ -463,13 +499,14 @@ QUERY:
         section: str,
         context: str,
         cache_path: Path,
-    ) -> dict[int, str]:
+    ) -> tuple[dict[int, str], list[dict[str, object]]]:
         cached = {} if self.config.refresh_visual_understanding else _load_visual_page_analysis(cache_path)
         if cached and set(cached) == set(range(1, len(image_paths) + 1)):
-            return cached
+            return cached, []
 
         analyzer = self._visual_page_analyzer()
         analyses: dict[int, str] = dict(cached)
+        failures: list[dict[str, object]] = []
         for page_number, image_path in enumerate(sorted(image_paths), start=1):
             if analyses.get(page_number):
                 continue
@@ -477,45 +514,88 @@ QUERY:
                 f"Analyzing {document_id} page {page_number} with {self._visual_understanding_model_label()}...",
                 flush=True,
             )
-            analyses[page_number] = analyzer.analyze_page(
-                image_path=image_path,
-                page_number=page_number,
-                doc_type=doc_type,
-                section=section,
-                context=context,
-            )
-            _save_visual_page_analysis(cache_path, analyses)
-        return analyses
+            try:
+                analyses[page_number] = analyzer.analyze_page(
+                    image_path=image_path,
+                    page_number=page_number,
+                    doc_type=doc_type,
+                    section=section,
+                    context=context,
+                )
+                _save_visual_page_analysis(cache_path, analyses)
+            except Exception as exc:
+                failures.append(
+                    {
+                        "page_number": page_number,
+                        "image_path": str(image_path),
+                        "error": f"{type(exc).__name__}: {exc}",
+                    }
+                )
+                print(
+                    f"Visual analysis failed for {document_id} page {page_number}; "
+                    f"continuing ingest with PDF text and Mistral OCR only for this page. "
+                    f"Reason: {type(exc).__name__}: {exc}",
+                    flush=True,
+                )
+        _save_visual_failure_report(cache_path.with_name("visual_page_failures.json"), failures)
+        return analyses, failures
 
-    def _visual_page_analyzer(self) -> LocalQwenVLVisualPageAnalyzer | NvidiaVisualPageAnalyzer:
+    def _visual_index(self):
+        if self.visual_index is None or getattr(self.visual_index, "model", None) is None:
+            from powermind_rag.visual_index import ColPaliVisualIndex
+
+            previous_records = getattr(self.visual_index, "records", []) if self.visual_index else []
+            self.visual_index = ColPaliVisualIndex(
+                self.config.colpali_model_name,
+                device=self.device,
+            )
+            self.visual_index.records.extend(previous_records)
+        return self.visual_index
+
+    def _visual_page_analyzer(
+        self,
+    ) -> GeminiVisualPageAnalyzer | NvidiaFirstVisualPageAnalyzer | NvidiaVisualPageAnalyzer:
         if self.visual_page_analyzer is None:
-            if self.config.visual_understanding_provider == "nvidia":
-                self.visual_page_analyzer = NvidiaVisualPageAnalyzer(
-                    api_key=self.config.nvidia_api_key,
-                    model_name=self.config.nvidia_vlm_model,
-                    base_url=self.config.nvidia_vlm_base_url,
+            nvidia_fallback = NvidiaVisualPageAnalyzer(
+                api_key=self.config.nvidia_api_key,
+                model_name=self.config.nvidia_vlm_model,
+                base_url=self.config.nvidia_vlm_base_url,
+                max_tokens=self.config.nvidia_vlm_max_tokens,
+                image_max_bytes=self.config.nvidia_vlm_image_max_bytes,
+                image_max_side=self.config.nvidia_vlm_image_max_side,
+                timeout_seconds=self.config.nvidia_vlm_timeout_seconds,
+            )
+            if self.config.visual_understanding_provider in {"gemini", "gemini_nvidia"}:
+                self.visual_page_analyzer = GeminiVisualPageAnalyzer(
+                    api_keys=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
+                    fallback=nvidia_fallback,
                     max_tokens=self.config.nvidia_vlm_max_tokens,
-                    image_max_bytes=self.config.nvidia_vlm_image_max_bytes,
-                    image_max_side=self.config.nvidia_vlm_image_max_side,
-                    timeout_seconds=self.config.nvidia_vlm_timeout_seconds,
                 )
-            elif self.config.visual_understanding_provider in {"qwen_vl", "qwen-vl"}:
-                qwen_device = self.config.qwen_vl_device or self.device
-                self.visual_page_analyzer = LocalQwenVLVisualPageAnalyzer(
-                    model_path=self.config.qwen_vl_model_path,
-                    device=qwen_device,
-                    max_tokens=self.config.qwen_vl_visual_max_tokens,
+            elif self.config.visual_understanding_provider == "nvidia_gemini":
+                gemini_fallback = GeminiVisualPageAnalyzer(
+                    api_keys=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
+                    fallback=None,
+                    max_tokens=self.config.nvidia_vlm_max_tokens,
                 )
+                self.visual_page_analyzer = NvidiaFirstVisualPageAnalyzer(
+                    primary=nvidia_fallback,
+                    fallback=gemini_fallback,
+                )
+            elif self.config.visual_understanding_provider == "nvidia":
+                self.visual_page_analyzer = nvidia_fallback
             else:
                 raise RuntimeError(
-                    "Unsupported POWERMIND_VISUAL_UNDERSTANDING_PROVIDER. Use 'nvidia' or 'qwen_vl'."
+                    "Unsupported POWERMIND_VISUAL_UNDERSTANDING_PROVIDER. Use 'nvidia_gemini', 'gemini', 'gemini_nvidia', or 'nvidia'."
                 )
         return self.visual_page_analyzer
 
     def _visual_understanding_model_label(self) -> str:
-        if self.config.visual_understanding_provider in {"qwen_vl", "qwen-vl"}:
-            qwen_device = self.config.qwen_vl_device or self.device
-            return f"local Qwen-VL at {self.config.qwen_vl_model_path} on {qwen_device}"
+        if self.config.visual_understanding_provider == "nvidia_gemini":
+            return f"{self.config.nvidia_vlm_model} -> {self.config.gemini_relevance_model}"
+        if self.config.visual_understanding_provider in {"gemini", "gemini_nvidia"}:
+            return f"{self.config.gemini_relevance_model} -> {self.config.nvidia_vlm_model}"
         return self.config.nvidia_vlm_model
 
     def _unload_visual_page_analyzer(self) -> None:
@@ -545,35 +625,46 @@ QUERY:
                     model_name=self.config.nvidia_generation_model,
                     base_url=self.config.nvidia_vlm_base_url,
                 )
-            elif self.config.generation_provider in {"qwen_vl", "qwen-vl"}:
-                self.generator = LocalQwenVL(
-                    self.config.qwen_vl_model_path,
-                    device=self.config.qwen_vl_device or self.device,
+            elif self.config.generation_provider == "gemini":
+                self.generator = GeminiChatLLM(
+                    api_key=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
                 )
-            elif self.config.generation_provider in {"local", "qwen"}:
-                self.generator = LocalQwen(self.config.qwen_model_path, device=self.device)
             else:
                 raise RuntimeError(
-                    "Unsupported POWERMIND_GENERATION_PROVIDER. Use 'local', 'groq', 'openrouter', 'nvidia', or 'qwen_vl'."
+                    "Unsupported POWERMIND_GENERATION_PROVIDER. Use 'groq', 'openrouter', 'gemini', or 'nvidia'."
                 )
         return self.generator
 
     def _image_llm(self) -> ChatLLM:
         if self.image_generator is None:
+            nvidia = NvidiaChatLLM(
+                api_key=self.config.nvidia_api_key,
+                model_name=self.config.nvidia_generation_model,
+                base_url=self.config.nvidia_vlm_base_url,
+            )
             if self.config.image_generation_provider == "nvidia":
-                self.image_generator = NvidiaChatLLM(
-                    api_key=self.config.nvidia_api_key,
-                    model_name=self.config.nvidia_generation_model,
-                    base_url=self.config.nvidia_vlm_base_url,
+                self.image_generator = nvidia
+            elif self.config.image_generation_provider == "gemini":
+                self.image_generator = GeminiChatLLM(
+                    api_key=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
                 )
-            elif self.config.image_generation_provider in {"qwen_vl", "qwen-vl"}:
-                self.image_generator = LocalQwenVL(
-                    self.config.qwen_vl_model_path,
-                    device=self.config.qwen_vl_device or self.device,
+            elif self.config.image_generation_provider == "gemini_nvidia":
+                gemini = GeminiChatLLM(
+                    api_key=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
                 )
+                self.image_generator = FallbackChatLLM(gemini, nvidia)
+            elif self.config.image_generation_provider == "nvidia_gemini":
+                gemini = GeminiChatLLM(
+                    api_key=self.config.gemini_api_keys,
+                    model_name=self.config.gemini_relevance_model,
+                )
+                self.image_generator = FallbackChatLLM(nvidia, gemini)
             else:
                 raise RuntimeError(
-                    "Unsupported POWERMIND_IMAGE_PROVIDER. Use 'nvidia' or 'qwen_vl'."
+                    "Unsupported POWERMIND_IMAGE_PROVIDER. Use 'nvidia_gemini', 'gemini_nvidia', 'gemini', or 'nvidia'."
                 )
         return self.image_generator
 
@@ -585,26 +676,24 @@ QUERY:
             )
             if self.config.chunking_fallback_provider == "gemini":
                 fallback = GeminiChatLLM(
-                    api_key=self.config.gemini_api_key_2 or self.config.gemini_api_key,
+                    api_key=self.config.gemini_api_keys,
                     model_name=self.config.gemini_chunking_model,
                 )
                 return FallbackChatLLM(primary, fallback)
             return primary
         if self.config.chunking_provider == "gemini":
             return GeminiChatLLM(
-                api_key=self.config.gemini_api_key_2 or self.config.gemini_api_key,
+                api_key=self.config.gemini_api_keys,
                 model_name=self.config.gemini_chunking_model,
             )
-        if self.config.chunking_provider in {"local", "qwen"}:
-            return self._generation_llm()
-        raise RuntimeError("Unsupported POWERMIND_CHUNKING_PROVIDER. Use 'groq', 'gemini', 'local', or 'rules'.")
+        raise RuntimeError("Unsupported POWERMIND_CHUNKING_PROVIDER. Use 'groq', 'gemini', or 'rules'.")
 
     def _relevance(self) -> RelevanceGrader:
         if self.relevance_grader is None:
             if self.config.relevance_provider == "gemini":
                 api_key = [
                     key
-                    for key in (self.config.gemini_api_key, self.config.gemini_api_key_2)
+                    for key in self.config.gemini_api_keys
                     if key
                 ]
                 model_name = self.config.gemini_relevance_model
@@ -806,6 +895,11 @@ def _save_visual_page_analysis(path: Path, analyses: dict[int, str]) -> None:
     path.parent.mkdir(parents=True, exist_ok=True)
     payload = {str(page_number): text for page_number, text in sorted(analyses.items())}
     path.write_text(json.dumps(payload, indent=2, ensure_ascii=False), encoding="utf-8")
+
+
+def _save_visual_failure_report(path: Path, failures: list[dict[str, object]]) -> None:
+    path.parent.mkdir(parents=True, exist_ok=True)
+    path.write_text(json.dumps(failures, indent=2, ensure_ascii=False), encoding="utf-8")
 
 
 def _expand_query(query: str) -> tuple[str, list[str]]:

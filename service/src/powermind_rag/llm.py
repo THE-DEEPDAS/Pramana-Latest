@@ -9,17 +9,28 @@ from typing import Protocol
 from urllib import parse, request
 from urllib.error import HTTPError, URLError
 
-import torch
 from PIL import Image
-from transformers import AutoModelForCausalLM, AutoTokenizer
+
+from powermind_rag.rate_limit import NVIDIA_RATE_LIMITER
 
 
 class ChatLLM(Protocol):
     def generate(self, system: str, user: str, max_new_tokens: int = 512) -> str:
         ...
 
+    def generate_with_images(
+        self,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int = 512,
+    ) -> str:
+        ...
+
 class LocalQwen:
     def __init__(self, model_path: Path, device: str):
+        from transformers import AutoModelForCausalLM, AutoTokenizer
+
         self.model_path = model_path
         self.device = device
         self._validate_model_files()
@@ -141,6 +152,8 @@ class LocalQwenVL:
         return output_text[0].strip()
 
     def unload_model(self) -> None:
+        import torch
+
         model = getattr(self, "model", None)
         if model is not None:
             del self.model
@@ -283,6 +296,7 @@ class NvidiaChatLLM:
             },
             method="POST",
         )
+        NVIDIA_RATE_LIMITER.wait()
         try:
             with request.urlopen(req, timeout=120) as response:
                 data = json.loads(response.read().decode("utf-8"))
@@ -302,39 +316,97 @@ class NvidiaChatLLM:
 
 
 class GeminiChatLLM:
-    def __init__(self, api_key: str | None, model_name: str):
-        if not api_key:
-            raise RuntimeError("GEMINI_API_KEY_2, GEMINI_API_KEY, or GOOGLE_API_KEY is required for Gemini chunking.")
-        self.api_key = api_key
+    def __init__(self, api_key: str | list[str] | tuple[str, ...] | None, model_name: str):
+        api_keys = _normalize_keys(api_key)
+        if not api_keys:
+            raise RuntimeError("GEMINI_1..GEMINI_6, GEMINI_API_KEY, or GOOGLE_API_KEY is required for Gemini.")
+        self.api_keys = api_keys
+        self._next_key = 0
         self.model_name = model_name
 
     def generate(self, system: str, user: str, max_new_tokens: int = 512) -> str:
+        return self._generate(system, user, [], max_new_tokens, json_mode=True)
+
+    def generate_with_images(
+        self,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int = 512,
+    ) -> str:
+        return self._generate(system, user, image_paths, max_new_tokens, json_mode=False)
+
+    def _generate(
+        self,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int,
+        *,
+        json_mode: bool,
+    ) -> str:
+        errors: list[str] = []
+        for _ in range(len(self.api_keys)):
+            api_key = self._next_api_key()
+            try:
+                return self._generate_once(
+                    api_key=api_key,
+                    system=system,
+                    user=user,
+                    image_paths=image_paths,
+                    max_new_tokens=max_new_tokens,
+                    json_mode=json_mode,
+                )
+            except HTTPError as exc:
+                body = exc.read().decode("utf-8", errors="replace")
+                errors.append(f"HTTP {exc.code}: {body}")
+            except (URLError, TimeoutError, KeyError, IndexError, TypeError, json.JSONDecodeError) as exc:
+                errors.append(f"{type(exc).__name__}: {exc}")
+        raise RuntimeError(
+            f"All configured Gemini API keys failed for {self.model_name}. " + " | ".join(errors)
+        )
+
+    def _next_api_key(self) -> str:
+        api_key = self.api_keys[self._next_key]
+        self._next_key = (self._next_key + 1) % len(self.api_keys)
+        return api_key
+
+    def _generate_once(
+        self,
+        *,
+        api_key: str,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int,
+        json_mode: bool,
+    ) -> str:
         endpoint = (
             f"https://generativelanguage.googleapis.com/v1beta/models/"
             f"{parse.quote(self.model_name, safe='')}:generateContent"
-            f"?key={parse.quote(self.api_key, safe='')}"
+            f"?key={parse.quote(api_key, safe='')}"
         )
+        parts = [{"text": user}]
+        for image_path in image_paths:
+            parts.append(_gemini_image_part(image_path))
         payload = {
             "systemInstruction": {"parts": [{"text": system}]},
-            "contents": [{"role": "user", "parts": [{"text": user}]}],
+            "contents": [{"role": "user", "parts": parts}],
             "generationConfig": {
                 "temperature": 0,
                 "maxOutputTokens": max_new_tokens,
-                "responseMimeType": "application/json",
             },
         }
+        if json_mode:
+            payload["generationConfig"]["responseMimeType"] = "application/json"
         req = request.Request(
             endpoint,
             data=json.dumps(payload).encode("utf-8"),
             headers={"Content-Type": "application/json"},
             method="POST",
         )
-        try:
-            with request.urlopen(req, timeout=120) as response:
-                data = json.loads(response.read().decode("utf-8"))
-        except HTTPError as exc:
-            body = exc.read().decode("utf-8", errors="replace")
-            raise RuntimeError(f"Gemini {self.model_name} request failed with HTTP {exc.code}: {body}") from exc
+        with request.urlopen(req, timeout=120) as response:
+            data = json.loads(response.read().decode("utf-8"))
         return data["candidates"][0]["content"]["parts"][0].get("text", "").strip()
 
 
@@ -349,6 +421,19 @@ class FallbackChatLLM:
         except Exception as exc:
             print(f"Chunking primary LLM failed; using fallback. Reason: {type(exc).__name__}: {exc}", flush=True)
             return self.fallback.generate(system, user, max_new_tokens)
+
+    def generate_with_images(
+        self,
+        system: str,
+        user: str,
+        image_paths: list[Path],
+        max_new_tokens: int = 512,
+    ) -> str:
+        try:
+            return self.primary.generate_with_images(system, user, image_paths, max_new_tokens)
+        except Exception as exc:
+            print(f"Primary VLM failed; using fallback. Reason: {type(exc).__name__}: {exc}", flush=True)
+            return self.fallback.generate_with_images(system, user, image_paths, max_new_tokens)
 
 
 class PropositionChunker:
@@ -421,6 +506,43 @@ def _image_data_url(image_path: Path, target_bytes: int = 8_000) -> str:
             quality = max(60, quality - 5)
     encoded = base64.b64encode(data).decode("ascii")
     return f"data:image/jpeg;base64,{encoded}"
+
+
+def _gemini_image_part(image_path: Path, target_bytes: int = 1_000_000) -> dict:
+    with Image.open(image_path) as image:
+        image = image.convert("RGB")
+        max_side = 1400
+        quality = 85
+        while True:
+            candidate = _resize_image_to_max_side(image, max_side)
+            buffer = BytesIO()
+            candidate.save(buffer, format="JPEG", quality=quality, optimize=True)
+            data = buffer.getvalue()
+            if len(data) <= target_bytes or max_side <= 800:
+                break
+            max_side = int(max_side * 0.85)
+            quality = max(65, quality - 5)
+    return {
+        "inline_data": {
+            "mime_type": "image/jpeg",
+            "data": base64.b64encode(data).decode("ascii"),
+        }
+    }
+
+
+def _normalize_keys(api_key: str | list[str] | tuple[str, ...] | None) -> list[str]:
+    if api_key is None:
+        candidates: list[str | None] = []
+    elif isinstance(api_key, str):
+        candidates = [api_key]
+    else:
+        candidates = list(api_key)
+    keys: list[str] = []
+    for candidate in candidates:
+        value = (candidate or "").strip().strip('"')
+        if value and value not in keys:
+            keys.append(value)
+    return keys
 
 
 def _resize_image_to_max_side(image: Image.Image, max_side: int) -> Image.Image:

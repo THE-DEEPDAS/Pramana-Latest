@@ -9,7 +9,8 @@ from urllib.error import HTTPError, URLError
 
 from PIL import Image
 
-from powermind_rag.llm import LocalQwenVL
+from powermind_rag.llm import GeminiChatLLM, LocalQwenVL
+from powermind_rag.rate_limit import NVIDIA_RATE_LIMITER
 
 
 class NvidiaVisualPageAnalyzer:
@@ -85,6 +86,7 @@ class NvidiaVisualPageAnalyzer:
             },
             method="POST",
         )
+        NVIDIA_RATE_LIMITER.wait()
         try:
             with request.urlopen(req, timeout=self.timeout_seconds) as response:
                 data = json.loads(response.read().decode("utf-8"))
@@ -104,6 +106,100 @@ class NvidiaVisualPageAnalyzer:
         if not content:
             raise RuntimeError(f"NVIDIA VLM {self.model_name} returned an empty page analysis.")
         return content
+
+
+class GeminiVisualPageAnalyzer:
+    def __init__(
+        self,
+        api_keys: tuple[str, ...] | list[str],
+        model_name: str,
+        fallback: NvidiaVisualPageAnalyzer | None = None,
+        max_tokens: int = 4096,
+    ):
+        self.llm = GeminiChatLLM(api_key=api_keys, model_name=model_name)
+        self.model_name = model_name
+        self.fallback = fallback
+        self.max_tokens = max_tokens
+
+    def analyze_page(
+        self,
+        image_path: Path,
+        page_number: int,
+        doc_type: str,
+        section: str,
+        context: str,
+    ) -> str:
+        prompt = _analysis_prompt(
+            page_number=page_number,
+            doc_type=doc_type,
+            section=section,
+            context=context,
+        )
+        try:
+            content = self.llm.generate_with_images(
+                system=_strict_visual_system_prompt(),
+                user=prompt,
+                image_paths=[image_path.resolve()],
+                max_new_tokens=self.max_tokens,
+            ).strip()
+            if content:
+                return content
+            raise RuntimeError(f"Gemini {self.model_name} returned an empty page analysis.")
+        except Exception as exc:
+            if self.fallback is None:
+                raise
+            print(
+                f"Gemini VLM exhausted/failed for page {page_number}; using NVIDIA Phi fallback. "
+                f"Reason: {type(exc).__name__}: {exc}",
+                flush=True,
+            )
+            return self.fallback.analyze_page(
+                image_path=image_path,
+                page_number=page_number,
+                doc_type=doc_type,
+                section=section,
+                context=context,
+            )
+
+
+class NvidiaFirstVisualPageAnalyzer:
+    def __init__(
+        self,
+        primary: NvidiaVisualPageAnalyzer,
+        fallback: GeminiVisualPageAnalyzer,
+    ):
+        self.primary = primary
+        self.fallback = fallback
+
+    def analyze_page(
+        self,
+        image_path: Path,
+        page_number: int,
+        doc_type: str,
+        section: str,
+        context: str,
+    ) -> str:
+        try:
+            return self.primary.analyze_page(
+                image_path=image_path,
+                page_number=page_number,
+                doc_type=doc_type,
+                section=section,
+                context=context,
+            )
+        except Exception as exc:
+            print(
+                f"NVIDIA VLM failed for page {page_number}; using Gemini fallback. "
+                f"Reason: {type(exc).__name__}: {exc}",
+                flush=True,
+            )
+            return self.fallback.analyze_page(
+                image_path=image_path,
+                page_number=page_number,
+                doc_type=doc_type,
+                section=section,
+                context=context,
+            )
 
 
 class LocalQwenVLVisualPageAnalyzer:
@@ -132,11 +228,7 @@ class LocalQwenVLVisualPageAnalyzer:
         )
         content = self.llm.generate_with_images(
             system=(
-                "You are a precise document intelligence extractor. "
-                "Read the page image only. Preserve visible text, numbers, labels, units, "
-                "periods, and table relationships. "
-                "Extract all numeric and text data from charts and infographics exactly as shown. "
-                "Do not infer missing values."
+                _strict_visual_system_prompt()
             ),
             user=prompt,
             image_paths=[image_path.resolve()],
@@ -182,6 +274,17 @@ Rules:
 - If text is unreadable, write [unclear] rather than guessing.
 - Keep the result factual and dense for search retrieval.
 """.strip()
+
+
+def _strict_visual_system_prompt() -> str:
+    return (
+        "You are a precise document intelligence extractor. "
+        "Read the page image only. Preserve visible text, numbers, labels, units, "
+        "periods, and table relationships exactly as visible. "
+        "Extract all numeric and text data from charts, tables, diagrams, footnotes, "
+        "infographics, axes, legends, icons, and callouts. "
+        "Do not infer missing values, round numbers, normalize formatting, or use outside knowledge."
+    )
 
 
 def _image_data_url(image_path: Path, target_bytes: int, initial_max_side: int) -> str:

@@ -52,8 +52,8 @@ def main() -> None:
     args = parser.parse_args()
     if args.command == "ingest":
         pipeline = MultimodalRAGPipeline(RAGConfig.from_env())
-        pipeline.ingest_pdf(args.pdf, args.doc_type, args.section, args.context)
-        print("Ingestion complete.")
+        report = pipeline.ingest_pdf(args.pdf, args.doc_type, args.section, args.context)
+        _print_ingest_report(report)
     elif args.command == "ingest-dir":
         _ingest_folder(
             folder=args.folder,
@@ -146,7 +146,26 @@ def _ingest_folder(
             section,
             context or pdf.stem.replace("_", " "),
         )
+        _print_ingest_report(pipeline.last_ingest_report)
     print(f"Ingestion complete for {len(pdfs)} PDF(s).", flush=True)
+
+
+def _print_ingest_report(report: dict[str, object]) -> None:
+    failures = list(report.get("visual_failures", []) or [])
+    print(
+        "Ingestion complete. "
+        f"text_records={report.get('text_records', 0)} "
+        f"visual_pages_succeeded={report.get('visual_pages_succeeded', 0)} "
+        f"visual_pages_failed={report.get('visual_pages_failed', 0)}",
+        flush=True,
+    )
+    if not failures:
+        return
+    print("Pages where both visual models failed:", flush=True)
+    for failure in failures:
+        page_number = failure.get("page_number", "?")
+        error = failure.get("error", "")
+        print(f"- page {page_number}: {error}", flush=True)
 
 
 def _format_markdown(results: list[dict]) -> str:
