@@ -4,7 +4,7 @@ Pramana is an explainable multimodal RAG system for high-stakes document QA. It 
 
 The production pipeline lives in `service/src/powermind_rag` and is API-first by default: NVIDIA-hosted embeddings, Mistral OCR, Gemini/NVIDIA VLM page understanding, Gemini CRAG relevance grading, and NVIDIA/Gemini final visual fallback.
 
-It can be used as an MCP Server, read the `docs\mcp_server.md` file for the same.
+Pramana also runs as an MCP server. See the [MCP integration guide](docs/mcp_server.md) and [environment format](docs/env_format.md).
 
 ## What Pramana Does
 
@@ -28,6 +28,8 @@ It can be used as an MCP Server, read the `docs\mcp_server.md` file for the same
 - [Frontend Docs](docs/frontend.md)
 - [Backend Docs](docs/backend.md)
 - [AI Workflow Docs](docs/ai_workflow.md)
+- [MCP Integration](docs/mcp_server.md)
+- [Environment Format](docs/env_format.md)
 
 ![Pramana Architecture](Architecture.jpeg)
 

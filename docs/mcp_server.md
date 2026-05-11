@@ -4,6 +4,12 @@ Pramana can run as a local or remote MCP server with FastMCP. The preferred
 tool is `retrieve_evidence`: it returns cited evidence chunks and an answering
 contract, while the LLM in the calling MCP host performs the final inference.
 
+Deployed MCP endpoint:
+
+```text
+https://pramana.fastmcp.app/mcp
+```
+
 ## Install With uv
 
 ```powershell
@@ -40,6 +46,12 @@ MCP clients connect to:
 
 ```text
 http://localhost:8000/mcp/
+```
+
+The deployed server is available at:
+
+```text
+https://pramana.fastmcp.app/mcp
 ```
 
 Direct module form:
