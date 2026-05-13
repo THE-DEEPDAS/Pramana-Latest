@@ -30,8 +30,38 @@ Pramana also runs as an MCP server. See the [MCP integration guide](docs/mcp_ser
 - [AI Workflow Docs](docs/ai_workflow.md)
 - [MCP Integration](docs/mcp_server.md)
 - [Environment Format](docs/env_format.md)
+- **[Docker Guide](DOCKER_README.md)** - Start here for containerization and Docker Hub
 
 ![Pramana Architecture](Architecture.jpeg)
+
+## Docker (Containerization)
+
+Pramana RAG is fully containerized for reproducible deployment across systems.
+
+**Quick start:**
+
+```bash
+# Build image (~1.4GB, excludes large model files and generated data)
+docker build -f Dockerfile.service -t pramana-rag:1.0.0 .
+
+# Run with compose
+cp .env.example .env.docker  # Add API keys
+docker compose -f docker-compose.service.yml run --rm service \
+  python -m powermind_rag.cli ask "What is this document?"
+
+# Push to Docker Hub
+docker tag pramana-rag:1.0.0 yourusername/pramana-rag:1.0.0
+docker push yourusername/pramana-rag:1.0.0
+```
+
+**Features:**
+- Multi-stage builds with a small runtime image.
+- Volumes for models, input PDFs, and generated storage.
+- Secrets passed at runtime, never baked into the image.
+- Docker Compose orchestration with CLI and MCP modes.
+- Docker Hub publishing workflow.
+
+See **[DOCKER_README.md](DOCKER_README.md)** for full documentation: building, running CLI/MCP, volume management, publishing to Docker Hub, and troubleshooting.
 
 ## Current Architecture
 

@@ -1,0 +1,127 @@
+# Docker Compose configuration for the Pramana RAG service.
+#
+# Usage:
+#   1. Copy .env.example to .env.docker and fill in API keys.
+#   2. Build: docker compose -f docker-compose.service.yml build
+#   3. CLI:   docker compose -f docker-compose.service.yml run --rm service python -m powermind_rag.cli ask "your question"
+#   4. MCP:   docker compose -f docker-compose.service.yml --profile mcp up mcp
+
+services:
+  # ==========================================================================
+  # Pramana RAG Service
+  # ==========================================================================
+  service:
+    # Build from local Dockerfile
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    
+    # Service image name and tag
+    image: pramana-rag:1.0.0
+    
+    # ========================================================================
+    # Volume Mounts
+    # ========================================================================
+    volumes:
+      # REQUIRED: Storage directory (ingestion output, indexes, embeddings)
+      # All generated data is written here
+      - ./service/storage:/app/service/storage
+      
+      # REQUIRED: Data directory (input PDFs for ingestion)
+      # Place PDFs here, then run: ingest /app/service/data/yourfile.pdf
+      - ./service/data:/app/service/data:ro
+      
+      # OPTIONAL: Model files (only needed if POWERMIND_DEVICE=cuda)
+      # Mount these if you want to use local models instead of APIs
+      # - ./Qwen:/app/models/Qwen
+      # - ./Qwen_VL:/app/models/Qwen_VL
+      # - ./E5_Small:/app/models/E5_Small
+    
+    # ========================================================================
+    # Environment Variables (from .env.docker file)
+    # ========================================================================
+    env_file:
+      - path: .env.docker
+        required: false
+    
+    # Override or add specific variables
+    environment:
+      # Storage configuration
+      POWERMIND_STORAGE_DIR: /app/service/storage
+      PYTHONUNBUFFERED: 1
+      # Device mode: "api" (default, no GPU) or "cuda" (requires GPU + models)
+      POWERMIND_DEVICE: "api"
+      
+      PYTHONDONTWRITEBYTECODE: 1
+    
+    # ========================================================================
+    # Networking
+    # ========================================================================
+    networks:
+      - pramana-network
+    
+    # ========================================================================
+    # Resource Limits (optional, adjust based on your system)
+    # ========================================================================
+    # Uncomment to limit CPU and memory
+    # deploy:
+    #   resources:
+    #     limits:
+    #       cpus: '2'
+    #       memory: 4G
+    #     reservations:
+    #       cpus: '1'
+    #       memory: 2G
+    
+    # ========================================================================
+    # GPU Support (optional, only for CUDA mode)
+    # ========================================================================
+    # Uncomment to enable GPU access
+    # deploy:
+    #   resources:
+    #     reservations:
+    #       devices:
+    #         - driver: nvidia
+    #           count: 1
+    #           capabilities: [gpu]
+    
+    # ========================================================================
+    # Default Command
+    # ========================================================================
+    # Show help by default. Override with:
+    #   docker compose -f docker-compose.service.yml run --rm service python -m powermind_rag.cli ask "question"
+    command: python -m powermind_rag.cli --help
+
+  # HTTP MCP server using the same service image. It is opt-in so normal
+  # one-off CLI commands do not leave a long-running container behind.
+  mcp:
+    image: pramana-rag:1.0.0
+    build:
+      context: .
+      dockerfile: Dockerfile.service
+    profiles:
+      - mcp
+    volumes:
+      - ./service/storage:/app/service/storage
+      - ./service/data:/app/service/data:ro
+    env_file:
+      - path: .env.docker
+        required: false
+    environment:
+      POWERMIND_STORAGE_DIR: /app/service/storage
+      POWERMIND_DEVICE: "api"
+      PYTHONUNBUFFERED: 1
+      PYTHONDONTWRITEBYTECODE: 1
+    ports:
+      - "8000:8000"
+    networks:
+      - pramana-network
+    command: python -m powermind_rag.mcp_server --host 0.0.0.0 --port 8000
+
+# =============================================================================
+# Network
+# =============================================================================
+networks:
+  pramana-network:
+    driver: bridge
+

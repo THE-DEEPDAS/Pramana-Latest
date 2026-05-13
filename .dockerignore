@@ -1,0 +1,78 @@
+# Exclude files from the Docker build context.
+# Runtime data, generated outputs, local models, and secrets are mounted or
+# provided at container start instead of being baked into the image.
+
+# Large model files (mounted as volumes instead)
+Qwen/
+Qwen_VL/
+E5_Small/
+*.safetensors
+*.pth
+*.bin
+
+# User data (mounted as volumes instead)
+service/storage/
+service/data/
+service/service/storage/
+service/src/powermind_rag/storage/
+service/src/powermind_rag/data/
+service/processed_embeddings/
+service/pinecone_exports/
+service/outputs/
+backend/data/
+backend/processed_embeddings/
+backend/pinecone_exports/
+backend/*.db
+
+# Development files
+.git/
+.gitignore
+.env
+.env.local
+.env.*.local
+__pycache__/
+*.py[cod]
+*$py.class
+.pytest_cache/
+.coverage
+htmlcov/
+
+# IDE
+.vscode/
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+
+# Node (if frontend is included)
+node_modules/
+.next/
+
+# Build artifacts
+build/
+dist/
+*.egg-info/
+
+# Documentation
+docs/
+*.md
+README.md
+DOCKER_README.md
+Presentation.pdf
+Architecture.jpeg
+
+# CI/CD
+.github/
+.gitlab-ci.yml
+
+# OS
+*.log
+*.tmp
+Thumbs.db
+
+# Test outputs
+tests_results.json
+tests_results.md
+tests.json
+output.md
